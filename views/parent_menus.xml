@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<menuitem id="parent_menu_wechat_mall" name="微信小程序商城管理" parent=""  sequence="0" icon=""/>
+
+	</data>
+</odoo>

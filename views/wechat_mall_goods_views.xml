@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<record id="wechat_mall_goods_view_tree" model="ir.ui.view">
+			<field name="name">wechat_mall.goods.view_tree</field>
+			<field name="model">wechat_mall.goods</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+<tree string="商品">
+            <field name="category_id"/>
+            <field name="characteristic"/>
+            <field name="content"/>
+            <field name="logistics_id"/>
+            <field name="min_price"/>
+            <field name="name"/>
+            <field name="number_fav"/>
+            <field name="number_good_reputation"/>
+            <field name="number_order"/>
+            <field name="original_price"/>
+            <field name="pic"/>
+            <field name="recommend_status"/>
+            <field name="sort"/>
+            <field name="stores"/>
+            <field name="subshop_id"/>
+            <field name="views"/>
+</tree>
+			</field>
+		</record>
+		<record id="wechat_mall_goods_view_form" model="ir.ui.view">
+			<field name="name">wechat_mall.goods.view_form</field>
+			<field name="model">wechat_mall.goods</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+<form string="商品" version="7.0">
+  <sheet>
+    <group>
+            <field name="category_id"/>
+            <field name="characteristic"/>
+            <field name="content"/>
+            <field name="logistics_id"/>
+            <field name="min_price"/>
+            <field name="name"/>
+            <field name="number_fav"/>
+            <field name="number_good_reputation"/>
+            <field name="number_order"/>
+            <field name="original_price"/>
+            <field name="pic"/>
+            <field name="recommend_status"/>
+            <field name="sort"/>
+            <field name="stores"/>
+            <field name="subshop_id"/>
+            <field name="views"/>
+    </group>
+  </sheet>
+</form>
+			</field>
+		</record>
+        <record id="wechat_mall_goods_action_87" model="ir.actions.act_window">
+			<field name="name">商品</field>
+			<field name="res_model">wechat_mall.goods</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="target">current</field>
+			
+			
+			
+		</record>
+		
+<menuitem action="wechat_mall_goods_action_87" id="wechat_mall_goods_menuitem_75" name="商品" parent="parent_menu_wechat_mall" sequence="10"/>
+		
+	</data>
+</odoo>

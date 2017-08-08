@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
 {
     'name': "wechat_mall",
+    'application': True,
 
     'summary': """
-        Short (1 phrase/line) summary of the module's purpose, used as
-        subtitle on modules listing or apps.openerp.com""",
+        微信小程序商城管理后台""",
 
     'description': """
         Long description of module's purpose
     """,
 
-    'author': "My Company",
-    'website': "http://www.yourcompany.com",
+    'author': "Gzp",
+    'website': "http://www.elfgzp.cn",
 
     # Categories can be used to filter modules in modules listing
     # Check https://github.com/odoo/odoo/blob/master/odoo/addons/base/module/module_data.xml
@@ -25,8 +25,17 @@
     # always loaded
     'data': [
         # 'security/ir.model.access.csv',
-        'views/views.xml',
-        'views/templates.xml',
+        'views/parent_menus.xml',
+        'views/wechat_mall_banner_views.xml',
+        'views/wechat_mall_category_views.xml',
+        'views/wechat_mall_city_views.xml',
+        'views/wechat_mall_config_settings_views.xml',
+        'views/wechat_mall_district_views.xml',
+        'views/wechat_mall_goods_views.xml',
+        'views/wechat_mall_logistics_views.xml',
+        'views/wechat_mall_province_views.xml',
+        'views/wechat_mall_subshop_views.xml',
+        'views/wechat_mall_transportation_views.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

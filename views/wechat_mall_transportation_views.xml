@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<record id="wechat_mall_transportation_view_tree" model="ir.ui.view">
+			<field name="name">wechat_mall.transportation.view_tree</field>
+			<field name="model">wechat_mall.transportation</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+<tree string="运输费">
+            <field name="beyond_amount"/>
+            <field name="beyond_price"/>
+            <field name="city_id"/>
+            <field name="district_id"/>
+            <field name="less_amount"/>
+            <field name="less_price"/>
+            <field name="logistics_id"/>
+            <field name="province_id"/>
+            <field name="transport_type"/>
+</tree>
+			</field>
+		</record>
+		<record id="wechat_mall_transportation_view_form" model="ir.ui.view">
+			<field name="name">wechat_mall.transportation.view_form</field>
+			<field name="model">wechat_mall.transportation</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+<form string="运输费" version="7.0">
+  <sheet>
+    <group>
+            <field name="beyond_amount"/>
+            <field name="beyond_price"/>
+            <field name="city_id"/>
+            <field name="district_id"/>
+            <field name="less_amount"/>
+            <field name="less_price"/>
+            <field name="logistics_id"/>
+            <field name="province_id"/>
+            <field name="transport_type"/>
+    </group>
+  </sheet>
+</form>
+			</field>
+		</record>
+        <record id="wechat_mall_transportation_action_91" model="ir.actions.act_window">
+			<field name="name">运输费</field>
+			<field name="res_model">wechat_mall.transportation</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="target">current</field>
+			
+			
+			
+		</record>
+		
+<menuitem action="wechat_mall_transportation_action_91" id="wechat_mall_transportation_menuitem_79" name="运输费" parent="parent_menu_wechat_mall" sequence="10"/>
+		
+	</data>
+</odoo>

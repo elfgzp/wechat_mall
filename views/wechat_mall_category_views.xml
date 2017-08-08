@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<record id="wechat_mall_category_view_tree" model="ir.ui.view">
+			<field name="name">wechat_mall.category.view_tree</field>
+			<field name="model">wechat_mall.category</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+<tree string="商品分类">
+            <field name="category_type"/>
+            <field name="icon"/>
+            <field name="is_use"/>
+            <field name="key"/>
+            <field name="level"/>
+            <field name="name"/>
+            <field name="pid"/>
+            <field name="sort"/>
+</tree>
+			</field>
+		</record>
+		<record id="wechat_mall_category_view_form" model="ir.ui.view">
+			<field name="name">wechat_mall.category.view_form</field>
+			<field name="model">wechat_mall.category</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+<form string="商品分类" version="7.0">
+  <sheet>
+    <group>
+            <field name="category_type"/>
+            <field name="icon"/>
+            <field name="is_use"/>
+            <field name="key"/>
+            <field name="level"/>
+            <field name="name"/>
+            <field name="pid"/>
+            <field name="sort"/>
+    </group>
+  </sheet>
+</form>
+			</field>
+		</record>
+        <record id="wechat_mall_category_action_83" model="ir.actions.act_window">
+			<field name="name">商品分类</field>
+			<field name="res_model">wechat_mall.category</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="target">current</field>
+			
+			
+			
+		</record>
+		
+<menuitem action="wechat_mall_category_action_83" id="wechat_mall_category_menuitem_71" name="商品分类" parent="parent_menu_wechat_mall" sequence="10"/>
+		
+	</data>
+</odoo>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<record id="wechat_mall_province_view_tree" model="ir.ui.view">
+			<field name="name">wechat_mall.province.view_tree</field>
+			<field name="model">wechat_mall.province</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+<tree string="省">
+            <field name="name"/>
+</tree>
+			</field>
+		</record>
+		<record id="wechat_mall_province_view_form" model="ir.ui.view">
+			<field name="name">wechat_mall.province.view_form</field>
+			<field name="model">wechat_mall.province</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+<form string="省" version="7.0">
+  <sheet>
+    <group>
+            <field name="name"/>
+    </group>
+  </sheet>
+</form>
+			</field>
+		</record>
+        <record id="wechat_mall_province_action_89" model="ir.actions.act_window">
+			<field name="name">省</field>
+			<field name="res_model">wechat_mall.province</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="target">current</field>
+			
+			
+			
+		</record>
+		
+<menuitem action="wechat_mall_province_action_89" id="wechat_mall_province_menuitem_77" name="省" parent="parent_menu_wechat_mall" sequence="10"/>
+		
+	</data>
+</odoo>

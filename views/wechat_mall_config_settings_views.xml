@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="wechat_mall_config_settings_view_tree" model="ir.ui.view">
+            <field name="name">wechat_mall.config.settings.view_tree</field>
+            <field name="model">wechat_mall.config.settings</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="基本设置">
+                    <field name="mall_name"/>
+                </tree>
+            </field>
+        </record>
+        <record id="wechat_mall_config_settings_view_form" model="ir.ui.view">
+            <field name="name">wechat_mall.config.settings.view_form</field>
+            <field name="model">wechat_mall.config.settings</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form class="oe_form_configuration" string="基本设置" version="7.0">
+                    <header>
+                        <button string="应用" type="object" name="execute" class="oe_highlight"/>
+                        <button string="取消" type="object" name="cancel" class="oe_link"/>
+                    </header>
+                    <group string="商城名称">
+                        <field name="mall_name" class="oe_inline"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="wechat_mall_config_settings_action_85" model="ir.actions.act_window">
+            <field name="name">基本设置</field>
+            <field name="res_model">wechat_mall.config.settings</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">inline</field>
+            <field name="context">{'no_view_cache': True}</field>
+        </record>
+
+        <menuitem action="wechat_mall_config_settings_action_85" id="wechat_mall_config_settings_menuitem_73"
+                  name="基本设置" parent="parent_menu_wechat_mall" sequence="-1"/>
+
+    </data>
+</odoo>
