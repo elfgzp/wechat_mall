@@ -7,7 +7,6 @@ class Goods(models.Model):
     _name = 'wechat_mall.goods'
     _description = u'商品'
 
-    user_id = fields.Many2one('res.users', string='所属用户')
     subshop_id = fields.Many2one('wechat_mall.subshop', string='所属店铺')
     category_id = fields.Many2one('wechat_mall.category', string='商品分类')
     name = fields.Char('商品名称')

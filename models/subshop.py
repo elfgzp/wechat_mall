@@ -7,7 +7,6 @@ class SubShop(models.Model):
     _name = 'wechat_mall.subshop'
     _description = u'商铺'
 
-    user_id = fields.Many2one('res.users', string='所属用户')
     shop_type = fields.Char('店铺类型')
     province_id = fields.Many2one('wechat_mall.province', string='省', required=True)
     city_id = fields.Many2one('wechat_mall.city', string='市', required=True)
@@ -18,7 +17,7 @@ class SubShop(models.Model):
     introduce = fields.Text('店铺介绍')
     characteristic = fields.Text('店铺特色')
     sort = fields.Integer('排序')
-    pic = fields.Binary('图片', attachment=True)
+    pic = fields.Many2one('ir.attachment', string='图片')
     activity = fields.Char('打折优惠信息')
     latitude = fields.Float('纬度')
     longitude = fields.Float('经度')

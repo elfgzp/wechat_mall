@@ -9,7 +9,6 @@ class Transportation(models.Model):
     _name = 'wechat_mall.transportation'
     _description = u'运输费'
 
-    user_id = fields.Many2one('res.users', string='所属用户')
     logistics_id = fields.Many2one('wechat_mall.logistics', string='物流')
     transport_type = fields.Selection(defs.TransportType.attrs.items(), string='运输方式', required=True)
     province_id = fields.Many2one('wechat_mall.province', string='省', required=True)

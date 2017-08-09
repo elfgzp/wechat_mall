@@ -11,3 +11,4 @@ from . import order
 from . import province
 from . import subshop
 from . import transportation
+from . import ir_attachment

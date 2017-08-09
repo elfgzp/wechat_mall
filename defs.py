@@ -3,6 +3,11 @@
 from .utils import Const
 
 
+class BannerStatus(Const):
+    visible = (True, u'显示')
+    invisible = (False, u'不显示')
+
+
 class LogisticsValuationType(Const):
     by_piece = ('by_piece', u'按件')
 

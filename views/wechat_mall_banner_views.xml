@@ -12,6 +12,7 @@
                     <field name="link_url"/>
                     <field name="pic"/>
                     <field name="remark"/>
+                    <field name="status"/>
                     <field name="sort"/>
                     <field name="title"/>
                     <field name="type_mark"/>
@@ -28,8 +29,9 @@
                         <group>
                             <field name="business_id"/>
                             <field name="link_url"/>
-                            <field name="pic"/>
+                            <field name="pic" domain="[('create_uid', '=', uid)]"/>
                             <field name="remark"/>
+                            <field name="status"/>
                             <field name="sort"/>
                             <field name="title"/>
                             <field name="type_mark"/>

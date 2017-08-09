@@ -7,7 +7,6 @@ class Category(models.Model):
     _name = 'wechat_mall.category'
     _description = u'商品分类'
 
-    user_id = fields.Many2one('res.users', string='所属用户')
     name = fields.Char(string='名称')
     category_type = fields.Char(string='类型')
     pid = fields.Many2one('wechat_mall.category', string='上级分类')

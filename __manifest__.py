@@ -24,7 +24,8 @@
 
     # always loaded
     'data': [
-        # 'security/ir.model.access.csv',
+        'security/ir.model.access.csv',
+        'views/ir_attachment_view.xml',
         'views/parent_menus.xml',
         'views/wechat_mall_banner_views.xml',
         'views/wechat_mall_category_views.xml',

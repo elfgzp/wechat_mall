@@ -1,2 +1,12 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_wechat_mall_wechat_mall,wechat_mall.wechat_mall,model_wechat_mall_wechat_mall,,1,0,0,0
+id_access_wechat_mall_banner,name_access_wechat_mall_banner,model_wechat_mall_banner,,1,0,0,0
+id_access_wechat_mall_category,name_access_wechat_mall_category,model_wechat_mall_category,,1,0,0,0
+id_access_wechat_mall_city,name_access_wechat_mall_city,model_wechat_mall_city,,1,0,0,0
+id_access_wechat_mall_district,name_access_wechat_mall_district,model_wechat_mall_district,,1,0,0,0
+id_access_wechat_mall_goods,name_access_wechat_mall_goods,model_wechat_mall_goods,,1,0,0,0
+id_access_wechat_mall_logistics,name_access_wechat_mall_logistics,model_wechat_mall_logistics,,1,0,0,0
+id_access_wechat_mall_province,name_access_wechat_mall_province,model_wechat_mall_province,,1,0,0,0
+id_access_wechat_mall_subshop,name_access_wechat_mall_subshop,model_wechat_mall_subshop,,1,0,0,0
+id_access_wechat_mall_transportation,name_access_wechat_mall_transportation,model_wechat_mall_transportation,,1,0,0,0
+id_access_ir_attachment,name_access_ir_attachment,model_ir_attachment,,1,0,0,0
+,,,,,,

@@ -7,8 +7,8 @@ from odoo import http
 from .error_code import error_code
 
 
-class Config(http.Controller):
-    @http.route('/<model("res.users"):user>/config/get-value', auth='public')
+class ConfigGetValue(http.Controller):
+    @http.route('/<model("res.users"):user>/config/get_value', auth='public')
     def get(self, user, key=None):
         if not key:
             return json.dumps({'code': 300, 'msg': error_code[300]})
