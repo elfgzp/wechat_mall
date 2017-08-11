@@ -13,12 +13,12 @@ class ConfigGetValue(http.Controller):
     def get(self, user, key=None):
         try:
             if not key:
-                return json.dumps({'code': 300, 'msg': error_code[300].format('key')})
+                return request.make_response(json.dumps({'code': 300, 'msg': error_code[300].format('key')}))
 
             config = request.env['wechat_mall.config.settings']
             value_obj = config.get_config(key, uid=user.id, obj=True)
             if not value_obj:
-                return json.dumps({'code': 404, 'msg': error_code[404]})
+                return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
 
             response = request.make_response(
                 headers={

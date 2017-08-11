@@ -17,7 +17,7 @@ class BannerList(http.Controller):
                 ('create_uid', '=', user.id)
             ])
             if not banner_list:
-                return json.dumps({'code': 404, 'msg': error_code[404]})
+                return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
 
             response = request.make_response(
                 headers={

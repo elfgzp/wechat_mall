@@ -19,41 +19,49 @@ class GoodsList(http.Controller):
                  ('category_id', '=', int(category_id))] if category_id else [('create_uid', '=', user.id)])
 
             if not goods_list:
-                return json.dumps({'code': 404, 'msg': error_code[404]})
+                return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
 
-            return json.dumps({
-                "code": 0,
-                "data": [
-                    {
-                        "categoryId": each_goods.category_id.id,
-                        "characteristic": each_goods.characteristic,
-                        "dateAdd": each_goods.create_date,
-                        "dateUpdate": each_goods.write_date,
-                        "id": each_goods.id,
-                        "logisticsId": each_goods.logistics_id.id,
-                        "minPrice": each_goods.min_price,
-                        "name": each_goods.name,
-                        "numberFav": each_goods.number_fav,
-                        "numberGoodReputation": each_goods.number_good_reputation,
-                        "numberOrders": each_goods.number_order,
-                        "originalPrice": each_goods.original_price,
-                        "paixu": each_goods.sort or 0,
-                        "pic": each_goods.pic[0].static_link() if each_goods.pic else '',
-                        "recommendStatus": 0 if not each_goods.recommend_status else 1,
-                        "recommendStatusStr": defs.GoodsRecommendStatus.attrs[each_goods.recommend_status],
-                        "shopId": each_goods.subshop_id.id if each_goods.subshop_id else 0,
-                        "status": 0 if each_goods.status else 1,
-                        "statusStr": defs.GoodsStatus.attrs[each_goods.status],
-                        "stores": each_goods.stores,
-                        "userId": each_goods.create_uid.id,
-                        "views": each_goods.views,
-                        "weight": each_goods.weight
-                    } for each_goods in goods_list
-                ],
-                "msg": "success"
-            })
+            response = request.make_response(
+                headers={
+                    "Content-Type": "json"
+                },
+                data=json.dumps({
+                    "code": 0,
+                    "data": [
+                        {
+                            "categoryId": each_goods.category_id.id,
+                            "characteristic": each_goods.characteristic,
+                            "dateAdd": each_goods.create_date,
+                            "dateUpdate": each_goods.write_date,
+                            "id": each_goods.id,
+                            "logisticsId": each_goods.logistics_id.id,
+                            "minPrice": each_goods.min_price,
+                            "name": each_goods.name,
+                            "numberFav": each_goods.number_fav,
+                            "numberGoodReputation": each_goods.number_good_reputation,
+                            "numberOrders": each_goods.number_order,
+                            "originalPrice": each_goods.original_price,
+                            "paixu": each_goods.sort or 0,
+                            "pic": each_goods.pic[0].static_link() if each_goods.pic else '',
+                            "recommendStatus": 0 if not each_goods.recommend_status else 1,
+                            "recommendStatusStr": defs.GoodsRecommendStatus.attrs[each_goods.recommend_status],
+                            "shopId": each_goods.subshop_id.id if each_goods.subshop_id else 0,
+                            "status": 0 if each_goods.status else 1,
+                            "statusStr": defs.GoodsStatus.attrs[each_goods.status],
+                            "stores": each_goods.stores,
+                            "userId": each_goods.create_uid.id,
+                            "views": each_goods.views,
+                            "weight": each_goods.weight
+                        } for each_goods in goods_list
+                    ],
+                    "msg": "success"
+                })
+            )
+
+            return response
+
         except Exception as e:
-            return json.dumps({'code': -1, 'msg': error_code[-1], 'data': e.message})
+            return request.make_response(json.dumps({'code': -1, 'msg': error_code[-1], 'data': e.message}))
 
 
 class GoodsDetail(http.Controller):
@@ -61,15 +69,15 @@ class GoodsDetail(http.Controller):
     def get(self, user, goods_id=False):
         try:
             if not goods_id:
-                return json.dumps({'code': 300, 'msg': error_code[300].format('goods_id')})
+                return request.make_response(json.dumps({'code': 300, 'msg': error_code[300].format('goods_id')}))
 
             goods = request.env['wechat_mall.goods'].browse(int(goods_id))
 
             if not goods:
-                return json.dumps({'code': 404, 'msg': error_code[404]})
+                return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
 
             if goods.create_uid.id != user.id:
-                return json.dumps({'code': 404, 'msg': error_code[404]})
+                return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
 
             response = request.make_response(
                 headers={
@@ -164,11 +172,11 @@ class GoodPrice(http.Controller):
     def get(self, user, goods_id=False, property_child_ids=False):
         try:
             if not goods_id:
-                return json.dumps({'code': 300, 'msg': error_code[300].format('goods_id')})
+                return request.make_response(json.dumps({'code': 300, 'msg': error_code[300].format('goods_id')}))
 
             if not property_child_ids:
-                return json.dumps({'code': 300, 'msg': error_code[300].format('property_child_ids')})
+                return request.make_response(
+                    json.dumps({'code': 300, 'msg': error_code[300].format('property_child_ids')}))
 
         except Exception as e:
             return request.make_response(json.dumps({'code': -1, 'msg': error_code[-1], 'data': e.message}))
-
