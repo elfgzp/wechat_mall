@@ -24,6 +24,7 @@
 
     # always loaded
     'data': [
+        'security/wechat_mall_security.xml',
         'security/ir.model.access.csv',
         'views/ir_attachment_view.xml',
         'views/parent_menus.xml',

@@ -6,14 +6,15 @@ from odoo import models, fields, api
 class Category(models.Model):
     _name = 'wechat_mall.category'
     _description = u'商品分类'
+    _order = 'sort'
 
-    name = fields.Char(string='名称')
+    name = fields.Char(string='名称', required=True)
     category_type = fields.Char(string='类型')
     pid = fields.Many2one('wechat_mall.category', string='上级分类', ondelete='cascade')
     key = fields.Char(string='编号')
     icon = fields.Many2one('ir.attachment', string='图标')
     level = fields.Integer(string='分类级别', compute='_compute_level')
-    is_use = fields.Boolean(string='是否启用')
+    is_use = fields.Boolean(string='是否启用', default=True, required=True)
     sort = fields.Integer(string='排序')
 
     @api.one

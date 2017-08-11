@@ -14,7 +14,8 @@ class BannerList(http.Controller):
     def get(self, user):
         try:
             banner_list = request.env['wechat_mall.banner'].search([
-                ('create_uid', '=', user.id)
+                ('create_uid', '=', user.id),
+                ('status', '=', True)
             ])
             if not banner_list:
                 return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))

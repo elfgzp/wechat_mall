@@ -1,49 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-	<data>
+    <data>
 
-		<record id="wechat_mall_logistics_view_tree" model="ir.ui.view">
-			<field name="name">wechat_mall.logistics.view_tree</field>
-			<field name="model">wechat_mall.logistics</field>
-			<field name="type">tree</field>
-			<field name="arch" type="xml">
-<tree string="物流">
-            <field name="free"/>
-            <field name="name"/>
-            <field name="transportation_ids"/>
-            <field name="valuation_type"/>
-</tree>
-			</field>
-		</record>
-		<record id="wechat_mall_logistics_view_form" model="ir.ui.view">
-			<field name="name">wechat_mall.logistics.view_form</field>
-			<field name="model">wechat_mall.logistics</field>
-			<field name="type">form</field>
-			<field name="arch" type="xml">
-<form string="物流" version="7.0">
-  <sheet>
-    <group>
-            <field name="free"/>
-            <field name="name"/>
-            <field name="transportation_ids"/>
-            <field name="valuation_type"/>
-    </group>
-  </sheet>
-</form>
-			</field>
-		</record>
+        <record id="wechat_mall_logistics_view_tree" model="ir.ui.view">
+            <field name="name">wechat_mall.logistics.view_tree</field>
+            <field name="model">wechat_mall.logistics</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="物流">
+                    <field name="free"/>
+                    <field name="name"/>
+                    <field name="transportation_ids"/>
+                    <field name="valuation_type"/>
+                </tree>
+            </field>
+        </record>
+        <record id="wechat_mall_logistics_view_form" model="ir.ui.view">
+            <field name="name">wechat_mall.logistics.view_form</field>
+            <field name="model">wechat_mall.logistics</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="物流" version="7.0">
+                    <sheet>
+                        <group>
+                            <field name="free"/>
+                            <field name="name"/>
+                            <field name="transportation_ids" domain="[('create_uid', '=', uid)]"/>
+                            <field name="valuation_type"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
         <record id="wechat_mall_logistics_action_88" model="ir.actions.act_window">
-			<field name="name">物流</field>
-			<field name="res_model">wechat_mall.logistics</field>
-			<field name="view_type">form</field>
-			<field name="view_mode">tree,form</field>
-			<field name="target">current</field>
-			
-			
-			
-		</record>
-		
-<menuitem action="wechat_mall_logistics_action_88" id="wechat_mall_logistics_menuitem_76" name="物流" parent="parent_menu_wechat_mall" sequence="10"/>
-		
-	</data>
+            <field name="name">物流</field>
+            <field name="res_model">wechat_mall.logistics</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+            <field name="domain">[('create_uid', '=', uid)]</field>
+        </record>
+
+        <menuitem action="wechat_mall_logistics_action_88" id="wechat_mall_logistics_menuitem_76" name="物流"
+                  parent="parent_menu_wechat_mall" sequence="5" groups="wechat_mall.group_wechat_mall_user"/>
+
+    </data>
 </odoo>

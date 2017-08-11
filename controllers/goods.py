@@ -16,7 +16,9 @@ class GoodsList(http.Controller):
         try:
             goods_list = request.env['wechat_mall.goods'].search(
                 [('create_uid', '=', user.id),
-                 ('category_id', '=', int(category_id))] if category_id else [('create_uid', '=', user.id)])
+                 ('status', '=', True),
+                 ('category_id', '=', int(category_id))]
+                if category_id else [('create_uid', '=', user.id), ('status', '=', True)])
 
             if not goods_list:
                 return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
@@ -76,7 +78,7 @@ class GoodsDetail(http.Controller):
             if not goods:
                 return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
 
-            if goods.create_uid.id != user.id:
+            if goods.create_uid.id != user.id or not goods.status:
                 return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
 
             response = request.make_response(
@@ -127,7 +129,7 @@ class GoodsDetail(http.Controller):
                                 "name": each_property.name,
                                 "paixu": each_property.sort or 0,
                                 "userId": each_property.create_uid.id
-                            } for each_property in goods.property_ids
+                            } for each_property in goods.property_ids if each_property.child_ids
                         ],
                         "basicInfo": {
                             "categoryId": goods.category_id.id,
@@ -177,6 +179,42 @@ class GoodPrice(http.Controller):
             if not property_child_ids:
                 return request.make_response(
                     json.dumps({'code': 300, 'msg': error_code[300].format('property_child_ids')}))
+
+            goods = request.env['wechat_mall.goods'].browse(int(goods_id))
+
+            if not goods:
+                return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
+
+            if goods.create_uid.id != user.id:
+                return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
+
+            price = request.env['wechat_mall.goods.property_child.price'].search([
+                ('goods_id', '=', goods.id),
+                ('property_child_ids', '=', property_child_ids)
+            ])
+
+            if not price:
+                return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
+
+            response = request.make_response(
+                headers={
+                    "Content-Type": "json"
+                },
+                data=json.dumps({
+                    "code": 0,
+                    "data": {
+                        "goodsId": goods.id,
+                        "id": price.id,
+                        "originalPrice": price.original_price,
+                        "price": price.price,
+                        "propertyChildIds": price.property_child_ids,
+                        "stores": price.stores
+                    },
+                    "msg": "success"
+                })
+            )
+
+            return response
 
         except Exception as e:
             return request.make_response(json.dumps({'code': -1, 'msg': error_code[-1], 'data': e.message}))

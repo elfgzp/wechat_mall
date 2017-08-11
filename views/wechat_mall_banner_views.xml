@@ -46,12 +46,11 @@
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="target">current</field>
-
-
+            <field name="domain">[('create_uid', '=', uid)]</field>
         </record>
 
         <menuitem action="wechat_mall_banner_action_82" id="wechat_mall_banner_menuitem_70" name="横幅"
-                  parent="parent_menu_wechat_mall" sequence="10"/>
+                  parent="parent_menu_wechat_mall" sequence="0" groups="wechat_mall.group_wechat_mall_user"/>
 
     </data>
 </odoo>

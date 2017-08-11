@@ -14,7 +14,8 @@ class AllCategory(http.Controller):
     def get(self, user):
         try:
             all_category = request.env['wechat_mall.category'].search([
-                ('create_uid', '=', user.id)
+                ('create_uid', '=', user.id),
+                ('is_use', '=', True)
             ])
             if not all_category:
                 return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))

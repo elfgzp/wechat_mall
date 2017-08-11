@@ -24,7 +24,7 @@ class ConfigGetValue(http.Controller):
                 headers={
                     "Content-Type": "json"
                 },
-                data={
+                data=json.dumps({
                     'code': 0,
                     'data': {
                         'creatAt': value_obj.create_date,
@@ -37,9 +37,11 @@ class ConfigGetValue(http.Controller):
                         'value': config.get_config(key, uid=user.id)
                     },
                     'msg': 'success'
-                }
+                })
             )
             return response
+        except AttributeError:
+            return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
 
         except Exception as e:
             return request.make_response(json.dumps({'code': -1, 'msg': error_code[-1], 'data': e.message}))

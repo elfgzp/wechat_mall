@@ -2,28 +2,71 @@
 
 from odoo import models, fields, api
 
+from custom_model import CustomModel
 
-class ConfigSettings(models.Model):
+
+class ConfigSettingWizard(models.TransientModel):
     _name = 'wechat_mall.config.settings'
     _description = u'基本设置'
-    _inherit = 'res.config.settings'
 
     mall_name = fields.Char('商城名称', help='显示在小程序顶部')
 
-    @api.model
-    def default_get(self, fields_list):
-        return {field: self.get_config(field) for field in fields_list}
+    @api.multi
+    def cancel(self):
+        # ignore the current record, and send the action to reopen the view
+        actions = self.env['ir.actions.act_window'].search([('res_model', '=', self._name)], limit=1)
+        if actions:
+            return actions.read()[0]
+        return {}
 
     @api.multi
-    def set_default_all(self):
-        self.env['ir.values'].set_default('wechat_mall.config.settings', 'mall_name_{uid}'.format(uid=self.env.uid),
-                                          self.mall_name)
+    def execute(self):
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'reload',
+        }
 
-    def get_config(self, config_name, uid=False, obj=False):
-        uid = uid if uid else self.env.uid
+    @api.model
+    def default_get(self, fields_list):
+        config = self.env['wechat_mall.config'].search([('create_uid', '=', self.env.uid)])
+        result = super(ConfigSettingWizard, self).default_get(fields_list)
+
+        if config:
+            config.ensure_one()
+            result.update({
+                f: config.__getattribute__(f) if not isinstance(config.__getattribute__(f), models.Model)
+                else config.get_relative_field_val(f)
+                for f in fields_list})
+            return result
+        else:
+            return result
+
+    @api.model
+    def create(self, vals):
+        config = self.env['wechat_mall.config'].search([('create_uid', '=', self.env.uid)])
+        if config:
+            config.ensure_one()
+            config.write(vals)
+        else:
+            config.create(vals)
+
+        return super(ConfigSettingWizard, self).create(vals)
+
+    def get_config(self, key, uid, obj=False):
+        config = self.env['wechat_mall.config'].search([('create_uid', '=', uid)])
         if obj:
-            return self.env['ir.values'].search([('name', '=', '{config_name}_{uid}'.format(uid=uid,
-                                                                                            config_name=config_name))])
-        return self.env['ir.values'].get_default(model=self._name,
-                                                 field_name='{config_name}_{uid}'.format(uid=uid,
-                                                                                         config_name=config_name))
+            return config
+
+        if config:
+            config.ensure_one()
+            return config.__getattribute__(key) if not isinstance(config.__getattribute__(key), models.Model)\
+                else config.get_relative_field_val(key)
+        else:
+            return False
+
+
+class ConfigSettings(CustomModel, models.Model):
+    _name = 'wechat_mall.config'
+    _description = u'基本设置'
+
+    mall_name = fields.Char('商城名称', help='显示在小程序顶部')

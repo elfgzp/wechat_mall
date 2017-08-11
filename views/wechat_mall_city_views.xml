@@ -1,45 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-	<data>
+    <data>
 
-		<record id="wechat_mall_city_view_tree" model="ir.ui.view">
-			<field name="name">wechat_mall.city.view_tree</field>
-			<field name="model">wechat_mall.city</field>
-			<field name="type">tree</field>
-			<field name="arch" type="xml">
-<tree string="市">
-            <field name="name"/>
-            <field name="pid"/>
-</tree>
-			</field>
-		</record>
-		<record id="wechat_mall_city_view_form" model="ir.ui.view">
-			<field name="name">wechat_mall.city.view_form</field>
-			<field name="model">wechat_mall.city</field>
-			<field name="type">form</field>
-			<field name="arch" type="xml">
-<form string="市" version="7.0">
-  <sheet>
-    <group>
-            <field name="name"/>
-            <field name="pid"/>
-    </group>
-  </sheet>
-</form>
-			</field>
-		</record>
+        <record id="wechat_mall_city_view_tree" model="ir.ui.view">
+            <field name="name">wechat_mall.city.view_tree</field>
+            <field name="model">wechat_mall.city</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="市">
+                    <field name="name"/>
+                    <field name="pid"/>
+                </tree>
+            </field>
+        </record>
+        <record id="wechat_mall_city_view_form" model="ir.ui.view">
+            <field name="name">wechat_mall.city.view_form</field>
+            <field name="model">wechat_mall.city</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="市" version="7.0">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="pid"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
         <record id="wechat_mall_city_action_84" model="ir.actions.act_window">
-			<field name="name">市</field>
-			<field name="res_model">wechat_mall.city</field>
-			<field name="view_type">form</field>
-			<field name="view_mode">tree,form</field>
-			<field name="target">current</field>
-			
-			
-			
-		</record>
-		
-<menuitem action="wechat_mall_city_action_84" id="wechat_mall_city_menuitem_72" name="市" parent="parent_menu_wechat_mall" sequence="10"/>
-		
-	</data>
+            <field name="name">市</field>
+            <field name="res_model">wechat_mall.city</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+
+
+        </record>
+
+        <menuitem action="wechat_mall_city_action_84" id="wechat_mall_city_menuitem_72" name="市"
+                  parent="parent_menu_wechat_mall" sequence="10"/>
+
+    </data>
 </odoo>

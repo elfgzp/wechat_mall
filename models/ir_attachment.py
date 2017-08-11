@@ -7,6 +7,27 @@ class IrAttachment(models.Model):
     _inherit = 'ir.attachment'
 
     @api.model
+    def search_read(self, domain=None, fields=None, offset=0, limit=None, order=None):
+        domain = domain if domain else []
+        if not self.env.user._is_superuser():
+            domain += [('create_uid', '=', self.env.uid)]
+        return super(IrAttachment, self).search_read(domain=domain, fields=fields, offset=offset,
+                                                     limit=limit, order=order)
+
+    @api.model
+    def search_count(self, args):
+        if not self.env.user._is_superuser():
+            args += [('create_uid', '=', self.env.uid)]
+        return super(IrAttachment, self).search_count(args)
+
+    @api.model
+    def name_search(self, name='', args=None, operator='ilike', limit=100):
+        args = args if args else []
+        if not self.env.user._is_superuser():
+            args += [('create_uid', '=', self.env.uid)]
+        return super(IrAttachment, self).name_search(name=name, args=args, operator=operator, limit=limit)
+
+    @api.model
     def default_get(self, fields_list):
         default_fields = super(IrAttachment, self).default_get(fields_list)
         default_fields['public'] = True
@@ -23,7 +44,3 @@ class IrAttachment(models.Model):
             base_url=self.env['ir.config_parameter'].sudo().get_param('web.base.url'),
             attachment_id=self.id
         ).replace('\n', '').replace(' ', '')
-
-    @api.model
-    def check_access_rights(self, operation, raise_exception=True):
-        return super(IrAttachment, self).check_access_rights(operation=operation, raise_exception=raise_exception)

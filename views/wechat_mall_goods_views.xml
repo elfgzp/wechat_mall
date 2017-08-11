@@ -36,19 +36,19 @@
                 <form string="商品" version="7.0">
                     <sheet>
                         <group>
-                            <field name="subshop_id"/>
-                            <field name="category_id"/>
+                            <field name="subshop_id" domain="[('create_uid', '=', uid)]"/>
+                            <field name="category_id" domain="[('create_uid', '=', uid)]"/>
                             <field name="name"/>
                             <field name="characteristic"/>
                             <field name="content"/>
-                            <field name="logistics_id"/>
+                            <field name="logistics_id" domain="[('create_uid', '=', uid)]"/>
                             <field name="min_price"/>
                             <field name="number_fav"/>
                             <field name="number_good_reputation"/>
                             <field name="number_order"/>
                             <field name="original_price"/>
-                            <field name="pic">
-                                <tree editable='top'>
+                            <field name="pic" domain="[('create_uid', '=', uid)]">
+                                <tree>
                                     <field name="name"/>
                                     <field name="type"/>
                                     <field name="datas" filename="datas_fname"
@@ -69,7 +69,58 @@
                             </field>
                             <field name="status"/>
                             <field name="recommend_status"/>
-                            <field name="property_ids" widget="many2many_tags"/>
+                            <field name="property_ids" domain="[('create_uid', '=', uid)]">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="child_ids">
+                                        <tree editable="button">
+                                            <field name="name"/>
+                                            <field name="sort"/>
+                                            <field name="remark"/>
+                                        </tree>
+                                        <form>
+                                            <field name="name"/>
+                                            <field name="sort"/>
+                                            <field name="remark"/>
+                                        </form>
+                                    </field>
+                                    <field name="sort"/>
+                                </tree>
+                                <form>
+                                    <group>
+                                        <field name="name"/>
+                                        <field name="sort"/>
+                                        <field name="child_ids">
+                                            <tree editable="button">
+                                                <field name="name"/>
+                                                <field name="sort"/>
+                                                <field name="remark"/>
+                                            </tree>
+                                            <form>
+                                                <field name="name"/>
+                                                <field name="sort"/>
+                                                <field name="remark"/>
+                                            </form>
+                                        </field>
+                                    </group>
+                                </form>
+                            </field>
+                            <field name="price_ids" attrs="{'invisible': [('price_ids', '=', [])]}">
+                                <tree editable="button" create="false" delete="false">
+                                    <field name="name"/>
+                                    <field name="original_price"/>
+                                    <field name="price"/>
+                                    <field name="stores"/>
+                                </tree>
+                                <form>
+                                    <group>
+                                        <field name="name" string="规格名称"/>
+                                        <field name="original_price" string="原价"/>
+                                        <field name="price" string="现价"/>
+                                        <field name="stores" string="库存"/>
+                                    </group>
+                                </form>
+                            </field>
                             <field name="sort"/>
                             <field name="stores"/>
                             <field name="views" readonly="1"/>
@@ -79,6 +130,18 @@
             </field>
         </record>
 
+        <record id="wechat_mall_goods_property_view_tree" model="ir.ui.view">
+            <field name="name">wechat_mall.goods.property.view_tree</field>
+            <field name="model">wechat_mall.goods.property</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="商品规格">
+                    <field name="name"/>
+                    <field name="child_ids"/>
+                    <field name="sort"/>
+                </tree>
+            </field>
+        </record>
         <record id="wechat_mall_goods_property_view_form" model="ir.ui.view">
             <field name="name">wechat_mall.goods.property.view_form</field>
             <field name="model">wechat_mall.goods.property</field>
@@ -89,20 +152,14 @@
                         <group>
                             <field name="name"/>
                             <field name="sort"/>
-                            <field name="child_ids">
-                                <tree editable='top'>
+                            <field name="child_ids" domain="[('create_uid', '=', uid)]">
+                                <tree editable='bottom'>
                                     <field name="name"/>
-                                    <field name="original_price"/>
-                                    <field name="price"/>
-                                    <field name="stores"/>
                                     <field name="sort"/>
                                     <field name="remark"/>
                                 </tree>
                                 <form>
                                     <field name="name"/>
-                                    <field name="original_price"/>
-                                    <field name="price"/>
-                                    <field name="stores"/>
                                     <field name="sort"/>
                                     <field name="remark"/>
                                 </form>
@@ -119,11 +176,21 @@
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="target">current</field>
-
-
+            <field name="domain">[('create_uid', '=', uid)]</field>
         </record>
+        <record id="wechat_mall_goods_property_action_1" model="ir.actions.act_window">
+            <field name="name">商品规格</field>
+            <field name="res_model">wechat_mall.goods.property</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+            <field name="domain">[('create_uid', '=', uid)]</field>
+        </record>
+
         <menuitem action="wechat_mall_goods_action_87" id="wechat_mall_goods_menuitem_75" name="商品"
-                  parent="parent_menu_wechat_mall" sequence="10"/>
+                  parent="parent_menu_wechat_mall" sequence="3" groups="wechat_mall.group_wechat_mall_user"/>
+        <menuitem action="wechat_mall_goods_property_action_1" id="wechat_mall_goods_property_menuitem_1" name="商品规格"
+                  parent="parent_menu_wechat_mall" sequence="4" groups="wechat_mall.group_wechat_mall_user"/>
 
     </data>
 </odoo>

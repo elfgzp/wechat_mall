@@ -6,6 +6,7 @@ from odoo import models, fields, api
 class SubShop(models.Model):
     _name = 'wechat_mall.subshop'
     _description = u'商铺'
+    _order = 'sort'
 
     shop_type = fields.Char('店铺类型')
     province_id = fields.Many2one('wechat_mall.province', string='省', required=True)

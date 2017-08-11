@@ -20,7 +20,6 @@
                 <form class="oe_form_configuration" string="基本设置" version="7.0">
                     <header>
                         <button string="应用" type="object" name="execute" class="oe_highlight"/>
-                        <button string="取消" type="object" name="cancel" class="oe_link"/>
                     </header>
                     <group string="商城名称">
                         <field name="mall_name" class="oe_inline"/>
