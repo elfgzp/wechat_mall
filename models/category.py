@@ -9,9 +9,24 @@ class Category(models.Model):
 
     name = fields.Char(string='名称')
     category_type = fields.Char(string='类型')
-    pid = fields.Many2one('wechat_mall.category', string='上级分类')
+    pid = fields.Many2one('wechat_mall.category', string='上级分类', ondelete='cascade')
     key = fields.Char(string='编号')
-    icon = fields.Binary(string='图标')
-    level = fields.Integer(string='分类级别')
+    icon = fields.Many2one('ir.attachment', string='图标')
+    level = fields.Integer(string='分类级别', compute='_compute_level')
     is_use = fields.Boolean(string='是否启用')
     sort = fields.Integer(string='排序')
+
+    @api.one
+    @api.depends('pid')
+    def _compute_level(self):
+        level = 0
+        pid = self.pid
+        while True:
+            if not pid:
+                break
+
+            pid = pid.pid
+
+            level += 1
+
+        self.level = level

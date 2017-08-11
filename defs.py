@@ -8,6 +8,16 @@ class BannerStatus(Const):
     invisible = (False, u'不显示')
 
 
+class GoodsRecommendStatus(Const):
+    normal = (False, u'普通')
+    recommend = (True, u'推荐')
+
+
+class GoodsStatus(Const):
+    put_away = (True, u'上架')
+    sold_out = (False, u'下架')
+
+
 class LogisticsValuationType(Const):
     by_piece = ('by_piece', u'按件')
 

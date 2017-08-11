@@ -8,6 +8,7 @@ from .. import defs
 class Banner(models.Model):
     _name = 'wechat_mall.banner'
     _description = u'横幅'
+    _rec_name = 'title'
 
     type_mark = fields.Integer(string='类型标记(用于扩展)')
     business_id = fields.Integer(string='业务编号')
