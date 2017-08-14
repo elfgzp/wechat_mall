@@ -32,7 +32,17 @@ class Goods(models.Model):
 
     @api.multi
     def write(self, vals):
-        result = super(Goods, self.with_context({'recompute': False, 'goods_id': self.id})).write(vals)
+        if 'price_ids' in vals.keys() and self.price_ids:
+            price_ids = self.env['wechat_mall.goods.property_child.price'].search([
+                ('id', 'in', [each[1] for each in vals['price_ids']])
+            ])
+            vals['price_ids'] = [each for each in vals['price_ids'] if each[1] in price_ids.ids + [0]]
+            if not vals['price_ids']:
+                vals.pop('price_ids')
+
+        result = super(Goods, self.with_context(
+            {'recompute': self._context.get('recompute', False), 'goods_id': self.id})).write(vals)
+
         self.env['wechat_mall.goods.property_child.price'].search([('goods_id', '=', False)]).unlink()
         return result
 
@@ -82,7 +92,8 @@ class Property(models.Model):
             for each_record in self:
                 if 'sort' in vals.keys() and vals.get('sort') != each_record.sort:
                     each_record._write(vals)
-                    goods_ids = self.env['wechat_mall.goods'].browse(each_record._goods_ids())
+                    goods_ids = self.env['wechat_mall.goods'].with_context({'recompute': True}).browse(
+                        each_record._goods_ids())
                     if goods_ids:
                         for goods_id in goods_ids:
                             goods_id.write({'price_ids': [(6, 0, goods_id._price_ids().ids)]})
@@ -143,6 +154,7 @@ class PropertyChildPrice(models.Model):
         goods_id = self._context.get('goods_id')
         if goods_id:
             vals['goods_id'] = goods_id
+
         result = super(PropertyChildPrice, self).write(vals)
         return result
 

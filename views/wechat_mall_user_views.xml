@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="wechat_mall_user_view_tree" model="ir.ui.view">
+            <field name="name">wechat_mall.user.view_tree</field>
+            <field name="model">wechat_mall.user</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="微信用户" create="0" open="false">
+                    <field name="register_type"/>
+                    <field name="phone"/>
+                    <field name="name"/>
+                    <field name="country"/>
+                    <field name="province"/>
+                    <field name="city"/>
+                    <field name="avatar"/>
+                    <field name="create_date" string="注册时间"/>
+                    <field name="register_ip"/>
+                    <field name="ip"/>
+                    <field name="last_login"/>
+                    <field name="language"/>
+                    <field name="status"/>
+                </tree>
+            </field>
+        </record>
+        <record id="wechat_mall_user_view_form" model="ir.ui.view">
+            <field name="name">wechat_mall.user.view_form</field>
+            <field name="model">wechat_mall.user</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="微信用户" version="7.0">
+                    <sheet>
+                        <group>
+                            <field name="register_type" readonly="1"/>
+                            <field name="phone" readonly="1"/>
+                            <field name="name" readonly="1"/>
+                            <field name="country" readonly="1"/>
+                            <field name="province" readonly="1"/>
+                            <field name="city" readonly="1"/>
+                            <field name="avatar" readonly="1"/>
+                            <field name="create_date" string="注册时间" readonly="1"/>
+                            <field name="register_ip" readonly="1"/>
+                            <field name="ip" readonly="1"/>
+                            <field name="last_login" readonly="1"/>
+                            <field name="language" readonly="1"/>
+                            <field name="status" readonly="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="wechat_mall_user_action_96" model="ir.actions.act_window">
+            <field name="name">微信用户</field>
+            <field name="res_model">wechat_mall.user</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+            <field name="domain">[('create_uid', '=', uid)]</field>
+
+        </record>
+
+        <menuitem action="wechat_mall_user_action_96" id="wechat_mall_user_menuitem_93" name="微信用户"
+                  parent="parent_menu_wechat_mall" sequence="7"/>
+
+    </data>
+</openerp>

@@ -12,6 +12,7 @@ _logger = logging.getLogger(__name__)
 
 
 class CustomModel:
+
     _formatted_name = None
     _formatted_name_fields = []
     _rec_name = None
@@ -77,8 +78,7 @@ class CustomModel:
         fields = map(models.fix_import_export_id_paths, fields)
         fg = self.fields_get()
 
-        ids = []
-        messages = []
+        ids, messages = [], []
         ModelData = self.env['ir.model.data']
         ModelData.clear_caches()
         extracted = self._extract_records(fields, data, log=messages.append)
@@ -243,23 +243,38 @@ class CustomModel:
                 self._table,
                 str(tuple(unique_fields + fields + ['create_uid', 'create_date', 'write_uid', 'write_date'])).replace(
                     '\'', '"'),
-                tuple(["{%s}" % f for f in unique_fields + fields] + [self.env.uid, now, self.env.uid, now]),
+                str(tuple(["{%s}" % f for f in unique_fields + fields] +
+                          [self.env.uid, now, self.env.uid, now])).replace("'{", '{').replace("}'", '}'),
                 str(tuple(unique_fields)).replace('\'', '"'))
         else:
             query = u'INSERT INTO {}{} VALUES {} ON conflict{} DO UPDATE SET {};'.format(
                 self._table,
                 str(tuple(unique_fields + fields + ['create_uid', 'create_date', 'write_uid', 'write_date'])).replace(
                     '\'', '"'),
-                tuple(["{%s}" % f for f in unique_fields + fields] + [self.env.uid, now, self.env.uid, now]),
+                str(tuple(["{%s}" % f for f in unique_fields + fields] +
+                          [self.env.uid, now, self.env.uid, now])).replace("'{", '{').replace("}'", '}'),
                 str(tuple(unique_fields)).replace('\'', '"'),
-                ','.join(["%s='{%s}'" % (f, f) for f in fields]) + ', write_uid={}, write_date=\'{}\''.format(
+                ','.join(["%s={%s}" % (f, f) for f in fields]) + ', write_uid={}, write_date=\'{}\''.format(
                     self.env.uid, now))
 
         queries = u'\n'.join(
-            [query.format(**r).replace("\'None\'", 'Null').replace("\'False\'", 'Null') for r in records]).replace(',)',
-                                                                                                                   ')')
+            [query.format(**{k: self.escape_srting(v) for k, v in r.iteritems()}) for r in records]).replace(',)', ')')
         cr = self._cr
         cr.execute(queries)
+
+    def escape_srting(self, arg):
+        if arg is None or arg is False:
+            return 'Null'
+        if isinstance(arg, int):
+            return arg
+
+        if isinstance(arg, float):
+            return arg
+
+        if isinstance(arg, basestring):
+            return '\'%s\'' % arg.replace("'", "''")
+
+        return '\'%s\'' % str(arg)
 
     @api.multi
     def to_dict(self, fields=None, exclude=None):
@@ -289,3 +304,6 @@ class CustomModel:
             return self.__getattribute__(field).id
         else:
             return self.__getattribute__(field).ids
+
+
+

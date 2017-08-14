@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from . import access_token
 from . import banner
 from . import category
 from . import city
@@ -12,3 +13,4 @@ from . import province
 from . import subshop
 from . import transportation
 from . import ir_attachment
+from . import wechat_user

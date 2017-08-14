@@ -26,3 +26,11 @@ class TransportType(Const):
     express = ('express', u'快递')
     ems = ('ems', u'EMS')
     post = ('post', u'平邮')
+
+
+class WechatUserRegisterType(Const):
+    app = ('app', u'小程序')
+
+
+class WechatUserStatus(Const):
+    default = ('default', u'默认')
