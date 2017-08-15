@@ -10,13 +10,13 @@ class WechatUser(models.Model):
     _description = u'微信用户'
 
     name = fields.Char('昵称')
-    open_id = fields.Char('OpenId', required=True)
+    open_id = fields.Char('OpenId', required=True, index=True)
     union_id = fields.Char('UnionId')
     gender = fields.Integer('gender')
     language = fields.Char('语言')
     register_type = fields.Selection(defs.WechatUserRegisterType.attrs.items(), string='注册来源',
                                      default=defs.WechatUserRegisterType.app)
-    phone = fields.Integer('手机号码')
+    phone = fields.Char('手机号码')
     country = fields.Char('国家')
     province = fields.Char('省份')
     city = fields.Char('城市')
@@ -27,6 +27,8 @@ class WechatUser(models.Model):
     ip = fields.Char('登陆IP')
     status = fields.Selection(defs.WechatUserStatus.attrs.items(), string='状态',
                               default=defs.WechatUserStatus.default)
+
+    address_ids = fields.One2many('wechat_mall.address', 'wechat_user_id', string='收货地址')
 
     _sql_constraints = [(
         'wechat_mall_user_union_id_unique',

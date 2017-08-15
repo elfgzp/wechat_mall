@@ -18,7 +18,7 @@ class WechatUserCheckToken(http.Controller):
             if not token:
                 return request.make_response(json.dumps({'code': 300, 'msg': error_code[300].format('token')}))
 
-            access_token = request.env['wechat_mall.access_token'].search([
+            access_token = request.env(user=user.id)['wechat_mall.access_token'].search([
                 ('token', '=', token),
                 ('create_uid', '=', user.id)
             ])

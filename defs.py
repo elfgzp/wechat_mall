@@ -18,9 +18,19 @@ class GoodsStatus(Const):
     sold_out = (False, u'下架')
 
 
+class AddressStatus(Const):
+    regular = (True, u'正常')
+    irregular = (False, u'禁用')
+
+
 class LogisticsValuationType(Const):
     by_piece = ('by_piece', u'按件')
     by_weight = ('by_weight', u'按重量')
+
+
+class LogisticsValuationApiType(Const):
+    by_piece = ('by_piece', 0)
+    by_weight = ('by_weight', 1)
 
 
 class TransportationUnit(Const):
@@ -32,6 +42,12 @@ class TransportType(Const):
     express = ('express', u'快递')
     ems = ('ems', u'EMS')
     post = ('post', u'平邮')
+
+
+class TransportApiType(Const):
+    express = ('express', 0)
+    ems = ('ems', 1)
+    post = ('post', 2)
 
 
 class WechatUserRegisterType(Const):

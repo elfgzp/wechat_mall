@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="wechat_mall_address_view_tree" model="ir.ui.view">
+            <field name="name">wechat_mall.address.view_tree</field>
+            <field name="model">wechat_mall.address</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="用户收货地址" create="0">
+                    <field name="id" string="编号"/>
+                    <field name="wechat_user_id"/>
+                    <field name="is_default"/>
+                    <field name="province_id"/>
+                    <field name="city_id"/>
+                    <field name="district_id"/>
+                    <field name="address"/>
+                    <field name="linkman"/>
+                    <field name="phone"/>
+                    <field name="postcode"/>
+                    <field name="status_str"/>
+                    <field name="create_date" string="添加时间"/>
+                    <field name="write_date" string="更新时间"/>
+                </tree>
+            </field>
+        </record>
+        <record id="wechat_mall_address_view_form" model="ir.ui.view">
+            <field name="name">wechat_mall.address.view_form</field>
+            <field name="model">wechat_mall.address</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="用户收货地址" version="7.0">
+                    <sheet>
+                        <group>
+                            <group colspan="2" string="所在地">
+                                <div>
+                                    <label for="province_id" string="省"/>
+                                    <field name="province_id"
+                                           options="{'no_open': True, 'no_create': True}"
+                                           class="oe_inline"/>
+                                    <field name="city_domain_ids" invisible="1"/>
+                                    <label for="city_id" string=" 市"
+                                           attrs="{'invisible': [('city_domain_ids', '=', [])]}"/>
+                                    <field name="city_id"
+                                           attrs="{'invisible': [('city_domain_ids', '=', [])]}"
+                                           options="{'no_open': True, 'no_create': True}"
+                                           class="oe_inline"/>
+                                    <field name="district_domain_ids" invisible="1"/>
+                                    <label for="city_id" string=" 区"
+                                           attrs="{'invisible': [('district_domain_ids', '=', [])]}"/>
+                                    <field name="district_id"
+                                           attrs="{'invisible': [('district_domain_ids', '=', [])]}"
+                                           options="{'no_open': True, 'no_create': True}"
+                                           class="oe_inline"/>
+                                </div>
+                            </group>
+                            <group colspan="2" string="详细信息">
+                                <field name="linkman"/>
+                                <field name="address"/>
+                                <field name="phone"/>
+                                <field name="postcode"/>
+                                <field name="status"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="wechat_mall_address_action_98" model="ir.actions.act_window">
+            <field name="name">用户收货地址</field>
+            <field name="res_model">wechat_mall.address</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+
+
+        </record>
+
+        <menuitem action="wechat_mall_address_action_98" id="wechat_mall_address_menuitem_95" name="用户收货地址"
+                  parent="parent_menu_wechat_mall" sequence="8"/>
+
+    </data>
+</openerp>

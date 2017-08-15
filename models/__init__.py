@@ -14,3 +14,4 @@ from . import subshop
 from . import transportation
 from . import ir_attachment
 from . import wechat_user
+from . import address

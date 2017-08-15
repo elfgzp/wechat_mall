@@ -38,6 +38,7 @@
         'views/wechat_mall_province_views.xml',
         'views/wechat_mall_subshop_views.xml',
         'views/wechat_mall_user_views.xml',
+        'views/wechat_mall_address_views.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

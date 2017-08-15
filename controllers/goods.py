@@ -108,6 +108,20 @@ class GoodsDetail(http.Controller):
                                 "pic": each_pic.static_link()
                             } for each_pic in goods.pic
                         ],
+                        "logistics": {
+                            "isFree": goods.logistics_id.free,
+                            "feeType": defs.LogisticsValuationApiType.attrs[goods.logistics_id.valuation_type],
+                            "feeTypeStr": defs.LogisticsValuationType.attrs[goods.logistics_id.valuation_type],
+                            "details": [
+                                {
+                                    "addAmount": each_transportation.increase_amount,
+                                    "addNumber": each_transportation.increase_price,
+                                    "firstAmount": each_transportation.less_amount,
+                                    "firstNumber": each_transportation.less_price,
+                                    "type": defs.TransportApiType.attrs[each_transportation.transport_type]
+                                } for each_transportation in goods.logistics_id.transportation_ids
+                            ]
+                        },
                         "content": convert_static_link(request, goods.content) if goods.content else '',
                         "properties": [
                             {
