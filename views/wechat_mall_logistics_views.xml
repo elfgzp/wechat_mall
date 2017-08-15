@@ -140,7 +140,7 @@
             </field>
         </record>
         <record id="wechat_mall_logistics_action_88" model="ir.actions.act_window">
-            <field name="name">物流</field>
+            <field name="name">物流模版</field>
             <field name="res_model">wechat_mall.logistics</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>

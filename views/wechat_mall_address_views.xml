@@ -73,8 +73,7 @@
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="target">current</field>
-
-
+            <field name="domain">[('create_uid', '=', uid)]</field>
         </record>
 
         <menuitem action="wechat_mall_address_action_98" id="wechat_mall_address_menuitem_95" name="用户收货地址"
