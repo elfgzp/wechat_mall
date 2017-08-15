@@ -20,6 +20,12 @@ class GoodsStatus(Const):
 
 class LogisticsValuationType(Const):
     by_piece = ('by_piece', u'按件')
+    by_weight = ('by_weight', u'按重量')
+
+
+class TransportationUnit(Const):
+    by_piece = ('by_piece', u'件')
+    by_weight = ('by_weight', u'KG')
 
 
 class TransportType(Const):

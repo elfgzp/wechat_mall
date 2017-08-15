@@ -9,3 +9,5 @@ class City(models.Model):
 
     pid = fields.Many2one('wechat_mall.province', string='省')
     name = fields.Char('名称')
+    child_ids = fields.One2many('wechat_mall.district', 'pid', string='区')
+

@@ -8,10 +8,10 @@
             <field name="type">tree</field>
             <field name="arch" type="xml">
                 <tree string="物流">
-                    <field name="free"/>
                     <field name="name"/>
-                    <field name="transportation_ids"/>
+                    <field name="free"/>
                     <field name="valuation_type"/>
+                    <field name="transportation_ids"/>
                 </tree>
             </field>
         </record>
@@ -22,11 +22,126 @@
             <field name="arch" type="xml">
                 <form string="物流" version="7.0">
                     <sheet>
-                        <group>
+                        <group colspan="2">
+                            <field name="name" class="oe_inline"/>
+                        </group>
+                        <group colspan="1">
                             <field name="free"/>
-                            <field name="name"/>
-                            <field name="transportation_ids" domain="[('create_uid', '=', uid)]"/>
+                        </group>
+                        <group colspan="1">
                             <field name="valuation_type"/>
+                        </group>
+                        <group srting="运送费用设置" colspan="2">
+                            <field name="transportation_ids" nolabel="1" context="{'default_unit': valuation_type}">
+                                <tree>
+                                    <field name="transport_type"/>
+                                    <field name="unit" readonly="1"/>
+                                    <field name="less_amount"/>
+                                    <field name="less_price"/>
+                                    <field name="increase_amount"/>
+                                    <field name="increase_price"/>
+                                    <field name="district_transportation_ids"
+                                           context="{'default_unit': unit
+                                                     'default_transport_type': transport_type}">
+                                        <tree>
+                                            <field name="transport_type"/>
+                                            <field name="unit"/>
+                                            <field name="less_amount"/>
+                                            <field name="less_price"/>
+                                            <field name="increase_amount"/>
+                                            <field name="increase_price"/>
+                                        </tree>
+                                        <form>
+                                            <field name="transport_type" readonly="1"/>
+                                            <field name="unit" readonly="1"/>
+                                            <field name="less_amount"/>
+                                            <field name="less_price"/>
+                                            <field name="increase_amount"/>
+                                            <field name="increase_price"/>
+                                        </form>
+                                    </field>
+                                </tree>
+                                <form>
+                                    <group>
+                                        <group string="运输方式">
+                                            <field name="transport_type"/>
+                                        </group>
+                                        <group colspan="2" string="默认收费设置">
+                                            <div>
+                                                <field name="less_amount" class="oe_inline"/>
+                                                <field name="unit" readonly="1" class="oe_inline"/>
+                                                <span>内</span>
+                                                <field name="less_price" class="oe_inline"/>
+                                                <span>元,</span>
+                                                <span>每增加</span>
+                                                <field name="increase_amount" class="oe_inline"/>
+                                                <span>,增加运费</span>
+                                                <field name="increase_price" class="oe_inline"/>
+                                                <span>元</span>
+                                            </div>
+                                        </group>
+
+                                        <group colspan="2" string="区域收费设置">
+                                            <field name="district_transportation_ids"
+                                                   context="{'default_unit': unit,
+                                                     'default_transport_type': transport_type}"
+                                                   nolabel="1">
+                                                <tree>
+                                                    <field name="area"/>
+                                                    <field name="transport_type" invisible="1"/>
+                                                    <field name="less_amount"/>
+                                                    <field name="unit" readonly="1"/>
+                                                    <field name="less_price"/>
+                                                    <field name="increase_amount"/>
+                                                    <field name="unit" readonly="1"/>
+                                                    <field name="increase_price"/>
+                                                </tree>
+                                                <form>
+                                                    <group string="区域设置">
+                                                        <div>
+                                                            <field name="area" invisible="1"/>
+                                                            <label for="province_id" string="省"/>
+                                                            <field name="province_id"
+                                                                   options="{'no_open': True, 'no_create': True}"
+                                                                   class="oe_inline"/>
+                                                            <field name="city_domain_ids" invisible="1"/>
+                                                            <label for="city_id" string=" 市"
+                                                                   attrs="{'invisible': [('city_domain_ids', '=', [])]}"/>
+                                                            <field name="city_id"
+                                                                   attrs="{'invisible': [('city_domain_ids', '=', [])]}"
+                                                                   options="{'no_open': True, 'no_create': True}"
+                                                                   class="oe_inline"/>
+                                                            <field name="district_domain_ids" invisible="1"/>
+                                                            <label for="city_id" string=" 区"
+                                                                   attrs="{'invisible': [('district_domain_ids', '=', [])]}"/>
+                                                            <field name="district_id"
+                                                                   attrs="{'invisible': [('district_domain_ids', '=', [])]}"
+                                                                   options="{'no_open': True, 'no_create': True}"
+                                                                   class="oe_inline"/>
+                                                        </div>
+                                                    </group>
+                                                    <group string="收费设置">
+                                                        <div>
+                                                            <field name="transport_type" invisible="1"/>
+                                                            <field name="less_amount" class="oe_inline"/>
+                                                            <field name="unit" readonly="1" class="oe_inline"/>
+                                                            <span>内</span>
+                                                            <field name="less_price" class="oe_inline"/>
+                                                            <span>元,</span>
+                                                            <span>每增加</span>
+                                                            <field name="increase_amount" class="oe_inline"/>
+                                                            <span>,增加运费</span>
+                                                            <field name="increase_price" class="oe_inline"/>
+                                                            <span>元</span>
+                                                        </div>
+                                                    </group>
+                                                </form>
+                                            </field>
+                                        </group>
+
+                                    </group>
+                                </form>
+                            </field>
                         </group>
                     </sheet>
                 </form>

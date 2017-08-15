@@ -8,3 +8,4 @@ class Province(models.Model):
     _description = u'省'
 
     name = fields.Char('名称')
+    child_ids = fields.One2many('wechat_mall.city', 'pid', string='市')
