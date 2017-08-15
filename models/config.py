@@ -33,7 +33,7 @@ class ConfigSettingWizard(models.TransientModel):
     @api.model
     def default_get(self, fields_list):
         config = self.env['wechat_mall.config'].search([('create_uid', '=', self.env.uid)])
-        result = super(ConfigSettingWizard, self).default_get(fields_list)
+        result = {}
 
         if config:
             config.ensure_one()
