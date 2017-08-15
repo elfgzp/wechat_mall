@@ -28,9 +28,14 @@ class LogisticsValuationType(Const):
     by_weight = ('by_weight', u'按重量')
 
 
-class LogisticsValuationApiType(Const):
+class LogisticsValuationResponseType(Const):
     by_piece = ('by_piece', 0)
     by_weight = ('by_weight', 1)
+
+
+class LogisticsValuationRequestType(Const):
+    by_piece = (0, 'by_piece')
+    by_weight = (1, 'by_weight')
 
 
 class TransportationUnit(Const):
@@ -40,14 +45,20 @@ class TransportationUnit(Const):
 
 class TransportType(Const):
     express = ('express', u'快递')
-    ems = ('ems', u'EMS')
-    post = ('post', u'平邮')
+    # ems = ('ems', u'EMS')
+    # post = ('post', u'平邮')
 
 
-class TransportApiType(Const):
+class TransportResponseType(Const):
     express = ('express', 0)
     ems = ('ems', 1)
     post = ('post', 2)
+
+
+class TransportRequestType(Const):
+    express = (0, 'express')
+    ems = (1, 'ems')
+    post = (2, 'post')
 
 
 class WechatUserRegisterType(Const):

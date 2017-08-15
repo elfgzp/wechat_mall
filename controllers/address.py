@@ -163,8 +163,7 @@ class AddressUpdate(http.Controller):
                 'phone': kwargs['phone'] if kwargs.get('phone') else address.phone,
                 'province_id': int(kwargs['province_id']) if kwargs.get('province_id') else address.province_id.id,
                 'city_id': int(kwargs['city_id']) if kwargs.get('city_id') else address.city_id.id,
-                'district_id': int(kwargs['district_id']) if kwargs.get('district') else False
-                if kwargs.get('district_id') else address.district_id.id,
+                'district_id': int(kwargs['district_id']) if kwargs.get('district_id') else address.district_id.id,
                 'address': kwargs['address'] if kwargs.get('address') else address.address,
                 'postcode': kwargs['postcode'] if kwargs.get('postcode') else address.postcode,
                 'is_default': json.loads(kwargs['is_default'])

@@ -9,7 +9,7 @@ class Goods(models.Model):
     _order = 'sort'
 
     subshop_id = fields.Many2one('wechat_mall.subshop', string='所属店铺')
-    category_id = fields.Many2one('wechat_mall.category', string='商品分类', required=True)
+    category_id = fields.Many2one('wechat_mall.category', string='商品分类', ondelete='set null')
     name = fields.Char('商品名称')
     characteristic = fields.Text('商品特色')
     logistics_id = fields.Many2one('wechat_mall.logistics', string='物流模板', required=True)

@@ -110,15 +110,15 @@ class GoodsDetail(http.Controller):
                         ],
                         "logistics": {
                             "isFree": goods.logistics_id.free,
-                            "feeType": defs.LogisticsValuationApiType.attrs[goods.logistics_id.valuation_type],
+                            "feeType": defs.LogisticsValuationResponseType.attrs[goods.logistics_id.valuation_type],
                             "feeTypeStr": defs.LogisticsValuationType.attrs[goods.logistics_id.valuation_type],
                             "details": [
                                 {
-                                    "addAmount": each_transportation.increase_amount,
-                                    "addNumber": each_transportation.increase_price,
-                                    "firstAmount": each_transportation.less_amount,
-                                    "firstNumber": each_transportation.less_price,
-                                    "type": defs.TransportApiType.attrs[each_transportation.transport_type]
+                                    "addAmount": each_transportation.increase_price,
+                                    "addNumber": each_transportation.increase_amount,
+                                    "firstAmount": each_transportation.less_price,
+                                    "firstNumber": each_transportation.less_amount,
+                                    "type": defs.TransportResponseType.attrs[each_transportation.transport_type]
                                 } for each_transportation in goods.logistics_id.transportation_ids
                             ]
                         },
@@ -183,7 +183,7 @@ class GoodsDetail(http.Controller):
             return request.make_response(json.dumps({'code': -1, 'msg': error_code[-1], 'data': e.message}))
 
 
-class GoodPrice(http.Controller):
+class GoodsPrice(http.Controller):
     @http.route('/<model("res.users"):user>/shop/goods/price', auth='public', methods=['GET'])
     def get(self, user, goods_id=False, property_child_ids=False):
         try:
@@ -223,6 +223,56 @@ class GoodPrice(http.Controller):
                         "price": price.price,
                         "propertyChildIds": price.property_child_ids,
                         "stores": price.stores
+                    },
+                    "msg": "success"
+                })
+            )
+
+            return response
+
+        except Exception as e:
+            return request.make_response(json.dumps({'code': -1, 'msg': error_code[-1], 'data': e.message}))
+
+
+class GoodsPriceFreight(http.Controller):
+    @http.route('/<model("res.users"):user>/shop/goods/price/freight', auth='public', methods=['GET'])
+    def get(self, user, **kwargs):
+        try:
+            args_key_set = {'logistics_id', 'transport_type', 'province_id', 'city_id', 'district_id'}
+
+            missing_args_key = args_key_set - set(kwargs.keys())
+            if missing_args_key:
+                return request.make_response(
+                    json.dumps({'code': 300, 'msg': error_code[300].format(','.join(missing_args_key))}))
+
+            transport = request.env(user=user.id)['wechat_mall.district.transportation'].search([
+                ('create_uid', '=', user.id),
+                ('default_transportation_id.logistics_id', '=', int(kwargs['logistics_id'])),
+                ('default_transportation_id.transport_type', '=',
+                 defs.TransportRequestType.attrs[int(kwargs.get('transport_type'))]),
+                ('province_id', '=', int(kwargs['province_id'])),
+                ('city_id', '=', int(kwargs['city_id'])),
+                ('district_id', 'in', [int(kwargs['district_id']) if kwargs['district_id'] else False, False]),
+            ], limit=1)
+
+            if not transport:
+                transport = request.env(user=user.id)['wechat_mall.transportation'].search([
+                    ('create_uid', '=', user.id),
+                    ('logistics_id', '=', int(kwargs['logistics_id'])),
+                    ('transport_type', '=', defs.TransportRequestType.attrs[int(kwargs.get('transport_type'))]),
+                ], limit=1)
+
+            response = request.make_response(
+                headers={
+                    "Content-Type": "json"
+                },
+                data=json.dumps({
+                    "code": 0,
+                    "data": {
+                        "firstNumber": transport.less_amount or 0,
+                        "addAmount": transport.increase_price or 0,
+                        "firstAmount": transport.less_price or 0,
+                        "addNumber": transport.increase_amount or 0,
                     },
                     "msg": "success"
                 })

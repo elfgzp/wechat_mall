@@ -9,8 +9,9 @@ class Transportation(models.Model):
     _name = 'wechat_mall.transportation'
     _description = u'运输费'
 
-    logistics_id = fields.Many2one('wechat_mall.logistics', string='物流', required=True)
-    transport_type = fields.Selection(defs.TransportType.attrs.items(), string='运输方式', required=True)
+    logistics_id = fields.Many2one('wechat_mall.logistics', string='物流', required=True, ondelete='cascade')
+    transport_type = fields.Selection(defs.TransportType.attrs.items(), string='运输方式',
+                                      default='express', required=True)
     unit = fields.Selection(defs.TransportationUnit.attrs.items(), string='单位', compute='_compute_unit')
     less_amount = fields.Integer('数量', required=True, default=0)
     less_price = fields.Float('数量内价格', required=True, default=0)
@@ -38,13 +39,15 @@ class DistrictTransportation(models.Model):
     _name = 'wechat_mall.district.transportation'
     _description = u'区域运输费'
     logistics_id = fields.Many2one('wechat_mall.logistics', string='物流',
-                                   compute='_compute_logistics_id', store=True, required=True)
+                                   compute='_compute_logistics_id', store=True)
 
     default_transportation_id = fields.Many2one('wechat_mall.transportation', string='默认运输费'
-                                                , required=True)
+                                                , required=True, ondelete='cascade')
 
-    transport_type = fields.Selection(defs.TransportType.attrs.items(), string='运输方式', required=True)
-    unit = fields.Selection(defs.TransportationUnit.attrs.items(), string='单位')
+    transport_type = fields.Selection(defs.TransportType.attrs.items(), string='运输方式',
+                                      compute='_compute_transport_type', store=True)
+    unit = fields.Selection(defs.TransportationUnit.attrs.items(), string='单位',
+                            related='default_transportation_id.unit')
     area = fields.Char('地区', compute='_compute_area')
     province_id = fields.Many2one('wechat_mall.province', string='省', required=True)
     city_id = fields.Many2one('wechat_mall.city', string='市')
@@ -57,34 +60,15 @@ class DistrictTransportation(models.Model):
     city_domain_ids = fields.One2many('wechat_mall.city', compute='_compute_city_domain_ids')
     district_domain_ids = fields.One2many('wechat_mall.district', compute='_compute_district_domain_ids')
 
-    _sql_constraints = [(
-        'wechat_mall_district_transportation_logistics_transport_type_province_unique',
-        'UNIQUE (logistics_id, transport_type, province_id)',
-        '该省已存在相同类型的运输方式！'
-    ),
-        (
-            'wechat_mall_district_transportation_logistics_transport_type_province_city_unique',
-            'UNIQUE (logistics_id, transport_type, province_id, city_id)',
-            '该市已存在相同类型的运输方式！'
-        ),
-        (
-            'wechat_mall_district_transportation_logistics_transport_type_province_city_district_unique',
-            'UNIQUE (logistics_id, transport_type, province_id, city_id, district_id)',
-            '该区已存在相同类型的运输方式！'
-        )
-    ]
-
-    @api.multi
-    @api.depends('default_transportation_id')
-    def _compute_unit(self):
-        for each_record in self:
-            each_record.unit = each_record.default_transportation_id.unit
-
-    @api.multi
     @api.depends('default_transportation_id')
     def _compute_logistics_id(self):
         for each_record in self:
             each_record.logistics_id = each_record.default_transportation_id.logistics_id
+
+    @api.depends('default_transportation_id')
+    def _compute_transport_type(self):
+        for each_record in self:
+            each_record.transport_type = each_record.default_transportation_id.transport_type
 
     @api.multi
     @api.depends('province_id', 'city_id', 'district_id')

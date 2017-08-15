@@ -32,19 +32,16 @@
                             <field name="valuation_type"/>
                         </group>
                         <group srting="运送费用设置" colspan="2">
-                            <field name="transportation_ids" nolabel="1" context="{'default_unit': valuation_type}">
+                            <field name="transportation_ids" nolabel="1">
                                 <tree>
                                     <field name="transport_type"/>
-                                    <field name="unit" readonly="1"/>
+                                    <field name="unit"/>
                                     <field name="less_amount"/>
                                     <field name="less_price"/>
                                     <field name="increase_amount"/>
                                     <field name="increase_price"/>
-                                    <field name="district_transportation_ids"
-                                           context="{'default_unit': unit
-                                                     'default_transport_type': transport_type}">
+                                    <field name="district_transportation_ids">
                                         <tree>
-                                            <field name="transport_type"/>
                                             <field name="unit"/>
                                             <field name="less_amount"/>
                                             <field name="less_price"/>
@@ -52,8 +49,7 @@
                                             <field name="increase_price"/>
                                         </tree>
                                         <form>
-                                            <field name="transport_type" readonly="1"/>
-                                            <field name="unit" readonly="1"/>
+                                            <field name="unit"/>
                                             <field name="less_amount"/>
                                             <field name="less_price"/>
                                             <field name="increase_amount"/>
@@ -83,12 +79,9 @@
 
                                         <group colspan="2" string="区域收费设置">
                                             <field name="district_transportation_ids"
-                                                   context="{'default_unit': unit,
-                                                     'default_transport_type': transport_type}"
                                                    nolabel="1">
                                                 <tree>
                                                     <field name="area"/>
-                                                    <field name="transport_type" invisible="1"/>
                                                     <field name="less_amount"/>
                                                     <field name="unit" readonly="1"/>
                                                     <field name="less_price"/>
@@ -122,7 +115,6 @@
                                                     </group>
                                                     <group string="收费设置">
                                                         <div>
-                                                            <field name="transport_type" invisible="1"/>
                                                             <field name="less_amount" class="oe_inline"/>
                                                             <field name="unit" readonly="1" class="oe_inline"/>
                                                             <span>内</span>

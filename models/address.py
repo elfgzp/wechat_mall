@@ -10,7 +10,7 @@ class Address(models.Model):
     _description = u'用户收货地址'
     _rec_name = 'linkman'
 
-    wechat_user_id = fields.Many2one('wechat_mall.user', string='微信用户')
+    wechat_user_id = fields.Many2one('wechat_mall.user', string='微信用户', ondelete='cascade')
 
     linkman = fields.Char('联系人')
     phone = fields.Char('手机号码')
