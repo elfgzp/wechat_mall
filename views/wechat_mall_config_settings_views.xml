@@ -23,6 +23,7 @@
                     </header>
                     <group string="商城名称">
                         <field name="mall_name" class="oe_inline"/>
+                        <field name="sub_domain" class="oe_inline"/>
                     </group>
                     <group string="微信设置">
                         <field name="app_id" string="AppId" class="oe_inline"/>

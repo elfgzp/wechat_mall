@@ -15,7 +15,7 @@ class WechatUserCheckToken(http.Controller):
     @http.route('/<string:sub_domain>/user/check-token', auth='public', methods=['GET'])
     def get(self, sub_domain, token=None):
         try:
-            user = request.env['res.users'].search([('sub_domain', '=', sub_domain)])
+            user = request.env['res.users'].sudo().search([('sub_domain', '=', sub_domain)])
             if not user:
                 return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
 
@@ -40,7 +40,7 @@ class WeChatUserLogin(http.Controller):
     @http.route('/<string:sub_domain>/user/wxapp/login', auth='public', methods=['GET'])
     def get(self, sub_domain, code=None):
         try:
-            user = request.env['res.users'].search([('sub_domain', '=', sub_domain)])
+            user = request.env['res.users'].sudo().search([('sub_domain', '=', sub_domain)])
             if not user:
                 return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
 
@@ -105,7 +105,7 @@ class WeChatUserRegisterComplex(http.Controller):
     @http.route('/<string:sub_domain>/user/wxapp/register/complex', auth='public', methods=['GET'])
     def get(self, sub_domain, code=None, encrypted_data=None, iv=None):
         try:
-            user = request.env['res.users'].search([('sub_domain', '=', sub_domain)])
+            user = request.env['res.users'].sudo().search([('sub_domain', '=', sub_domain)])
             if not user:
                 return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
 

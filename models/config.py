@@ -9,6 +9,9 @@ class ConfigSettingWizard(models.TransientModel):
     _name = 'wechat_mall.config.settings'
     _description = u'基本设置'
 
+    sub_domain = fields.Char('小程序接口子域名', help='用于小程序接口', readonly=True,
+                             default=lambda self: self.env.user.sub_domain)
+
     mall_name = fields.Char('商城名称', help='显示在小程序顶部')
     app_id = fields.Char('appid')
     secret = fields.Char('secret')
@@ -33,14 +36,13 @@ class ConfigSettingWizard(models.TransientModel):
     @api.model
     def default_get(self, fields_list):
         config = self.env['wechat_mall.config'].search([('create_uid', '=', self.env.uid)])
-        result = {}
-
+        result = super(ConfigSettingWizard, self).default_get(fields_list)
         if config:
             config.ensure_one()
             result.update({
                 f: config.__getattribute__(f) if not isinstance(config.__getattribute__(f), models.Model)
                 else config.get_relative_field_val(f)
-                for f in fields_list})
+                for f in fields_list if f not in result.keys()})
             return result
         else:
             return result
@@ -63,7 +65,7 @@ class ConfigSettingWizard(models.TransientModel):
 
         if config:
             config.ensure_one()
-            return config.__getattribute__(key) if not isinstance(config.__getattribute__(key), models.Model)\
+            return config.__getattribute__(key) if not isinstance(config.__getattribute__(key), models.Model) \
                 else config.get_relative_field_val(key)
         else:
             return False

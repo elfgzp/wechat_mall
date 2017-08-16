@@ -13,7 +13,7 @@ class AddressList(http.Controller):
     @http.route('/<string:sub_domain>/user/shipping-address/list', auth='public', methods=['GET'])
     def get(self, sub_domain, token=None):
         try:
-            user = request.env['res.users'].search([('sub_domain', '=', sub_domain)])
+            user = request.env['res.users'].sudo().search([('sub_domain', '=', sub_domain)])
             if not user:
                 return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
 
@@ -78,7 +78,7 @@ class AddressAdd(http.Controller):
     @http.route('/<string:sub_domain>/user/shipping-address/add', auth='public', methods=['GET'])
     def get(self, sub_domain, token=None, **kwargs):
         try:
-            user = request.env['res.users'].search([('sub_domain', '=', sub_domain)])
+            user = request.env['res.users'].sudo().search([('sub_domain', '=', sub_domain)])
             if not user:
                 return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
 
@@ -135,7 +135,7 @@ class AddressUpdate(http.Controller):
     @http.route('/<string:sub_domain>/user/shipping-address/update', auth='public', methods=['GET'])
     def get(self, sub_domain, token=None, **kwargs):
         try:
-            user = request.env['res.users'].search([('sub_domain', '=', sub_domain)])
+            user = request.env['res.users'].sudo().search([('sub_domain', '=', sub_domain)])
             if not user:
                 return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
 
@@ -195,7 +195,7 @@ class AddressDelete(http.Controller):
     @http.route('/<string:sub_domain>/user/shipping-address/delete', auth='public', methods=['GET'])
     def get(self, sub_domain, token=None, address_id=None):
         try:
-            user = request.env['res.users'].search([('sub_domain', '=', sub_domain)])
+            user = request.env['res.users'].sudo().search([('sub_domain', '=', sub_domain)])
             if not user:
                 return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
 
@@ -244,7 +244,7 @@ class AddressDefault(http.Controller):
     @http.route('/<string:sub_domain>/user/shipping-address/default', auth='public', methods=['GET'])
     def get(self, sub_domain, token=None):
         try:
-            user = request.env['res.users'].search([('sub_domain', '=', sub_domain)])
+            user = request.env['res.users'].sudo().search([('sub_domain', '=', sub_domain)])
             if not user:
                 return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
 
@@ -315,7 +315,7 @@ class AddressDetail(http.Controller):
     @http.route('/<string:sub_domain>/user/shipping-address/detail', auth='public', methods=['GET'])
     def get(self, sub_domain, token=None, address_id=None):
         try:
-            user = request.env['res.users'].search([('sub_domain', '=', sub_domain)])
+            user = request.env['res.users'].sudo().search([('sub_domain', '=', sub_domain)])
             if not user:
                 return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
 

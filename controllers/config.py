@@ -12,7 +12,7 @@ class ConfigGetValue(http.Controller):
     @http.route('/<string:sub_domain>/config/get_value', auth='public', methods=['GET'])
     def get(self, sub_domain, key=None):
         try:
-            user = request.env['res.users'].search([('sub_domain', '=', sub_domain)])
+            user = request.env['res.users'].sudo().search([('sub_domain', '=', sub_domain)])
             if not user:
                 return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
 
