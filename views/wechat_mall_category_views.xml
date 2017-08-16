@@ -8,12 +8,12 @@
             <field name="type">tree</field>
             <field name="arch" type="xml">
                 <tree string="商品分类">
+                    <field name="name"/>
+                    <field name="key"/>
                     <field name="category_type"/>
                     <field name="icon"/>
                     <field name="is_use"/>
-                    <field name="key"/>
                     <field name="level"/>
-                    <field name="name"/>
                     <field name="pid"/>
                     <field name="sort"/>
                 </tree>
@@ -27,13 +27,14 @@
                 <form string="商品分类" version="7.0">
                     <sheet>
                         <group>
+                            <field name="name"/>
+                            <field name="pid"
+                                   domain="['|', ('pid', '!=', id), ('pid', '=', False), ('id', '!=', id), ('create_uid', '=', uid)]"/>
+                            <field name="key"/>
                             <field name="category_type"/>
                             <field name="icon" domain="[('create_uid', '=', uid)]"/>
                             <field name="is_use"/>
-                            <field name="key"/>
                             <field name="level"/>
-                            <field name="name"/>
-                            <field name="pid" domain="[('create_uid', '=', uid)]"/>
                             <field name="sort"/>
                         </group>
                     </sheet>

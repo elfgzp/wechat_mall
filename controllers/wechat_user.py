@@ -12,9 +12,13 @@ from ..tools import get_wechat_session_info, get_wechat_user_info
 
 
 class WechatUserCheckToken(http.Controller):
-    @http.route('/<model("res.users"):user>/user/check-token', auth='public', methods=['GET'])
-    def get(self, user, token=None):
+    @http.route('/<string:sub_domain>/user/check-token', auth='public', methods=['GET'])
+    def get(self, sub_domain, token=None):
         try:
+            user = request.env['res.users'].search([('sub_domain', '=', sub_domain)])
+            if not user:
+                return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
+
             if not token:
                 return request.make_response(json.dumps({'code': 300, 'msg': error_code[300].format('token')}))
 
@@ -33,9 +37,13 @@ class WechatUserCheckToken(http.Controller):
 
 
 class WeChatUserLogin(http.Controller):
-    @http.route('/<model("res.users"):user>/user/wxapp/login', auth='public', methods=['GET'])
-    def get(self, user, code=None):
+    @http.route('/<string:sub_domain>/user/wxapp/login', auth='public', methods=['GET'])
+    def get(self, sub_domain, code=None):
         try:
+            user = request.env['res.users'].search([('sub_domain', '=', sub_domain)])
+            if not user:
+                return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
+
             config = request.env['wechat_mall.config.settings']
 
             if not code:
@@ -94,9 +102,13 @@ class WeChatUserLogin(http.Controller):
 
 
 class WeChatUserRegisterComplex(http.Controller):
-    @http.route('/<model("res.users"):user>/user/wxapp/register/complex', auth='public', methods=['GET'])
-    def get(self, user, code=None, encrypted_data=None, iv=None):
+    @http.route('/<string:sub_domain>/user/wxapp/register/complex', auth='public', methods=['GET'])
+    def get(self, sub_domain, code=None, encrypted_data=None, iv=None):
         try:
+            user = request.env['res.users'].search([('sub_domain', '=', sub_domain)])
+            if not user:
+                return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
+
             config = request.env['wechat_mall.config.settings']
 
             if not code:

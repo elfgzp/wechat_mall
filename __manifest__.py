@@ -3,24 +3,24 @@
     'name': "wechat_mall",
     'application': True,
 
-    'summary': """
+    'summary': u"""
         微信小程序商城管理后台""",
 
-    'description': """
-        Long description of module's purpose
+    'description': u"""
+        微信小程序商城管理后台
     """,
 
     'author': "Gzp",
-    'website': "http://www.elfgzp.cn",
+    'website': "http://wechat.elfgzp.cn",
 
     # Categories can be used to filter modules in modules listing
     # Check https://github.com/odoo/odoo/blob/master/odoo/addons/base/module/module_data.xml
     # for the full list
-    'category': 'Uncategorized',
+    'category': 'Website',
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base'],
+    'depends': ['base', 'mail'],
 
     # always loaded
     'data': [
@@ -39,6 +39,8 @@
         'views/wechat_mall_subshop_views.xml',
         'views/wechat_mall_user_views.xml',
         'views/wechat_mall_address_views.xml',
+        'views/wechat_mall_order_views.xml',
+        'data/order_num_sequence.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

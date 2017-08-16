@@ -67,3 +67,27 @@ class WechatUserRegisterType(Const):
 
 class WechatUserStatus(Const):
     default = ('default', u'默认')
+
+
+class OrderStatus(Const):
+    closed = ('closed', u'已关闭')
+    unpaid = ('unpaid', u'待支付')
+    pending = ('pending', u'待发货')
+    unconfirmed = ('unconfirmed', u'待收货')
+    completed = ('completed', u'已完成')
+
+
+class OrderRequestStatus(Const):
+    closed = (-1, 'closed')
+    unpaid = (0, 'unpaid')
+    pending = (1, 'pending')
+    unconfirmed = (2, 'unconfirmed')
+    completed = (4, 'completed')
+
+
+class OrderResponseStatus(Const):
+    closed = ('closed', -1)
+    unpaid = ('unpaid', 0)
+    pending = ('pending', 1)
+    unconfirmed = ('unconfirmed', 2)
+    completed = ('completed', 4)

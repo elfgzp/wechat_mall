@@ -10,8 +10,12 @@ from .error_code import error_code
 
 
 class AllCategory(http.Controller):
-    @http.route('/<model("res.users"):user>/shop/goods/category/all', auth='public', methods=['GET'])
-    def get(self, user):
+    @http.route('/<string:sub_domain>/shop/goods/category/all', auth='public', methods=['GET'])
+    def get(self, sub_domain):
+        user = request.env['res.users'].search([('sub_domain', '=', sub_domain)])
+        if not user:
+            return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
+
         try:
             all_category = request.env['wechat_mall.category'].search([
                 ('create_uid', '=', user.id),

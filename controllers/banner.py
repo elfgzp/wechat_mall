@@ -10,9 +10,13 @@ from .error_code import error_code
 
 
 class BannerList(http.Controller):
-    @http.route('/<model("res.users"):user>/banner/list', auth='public', methods=['GET'])
-    def get(self, user):
+    @http.route('/<string:sub_domain>/banner/list', auth='public', methods=['GET'])
+    def get(self, sub_domain):
         try:
+            user = request.env['res.users'].search([('sub_domain', '=', sub_domain)])
+            if not user:
+                return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
+
             banner_list = request.env['wechat_mall.banner'].search([
                 ('create_uid', '=', user.id),
                 ('status', '=', True)
@@ -28,7 +32,7 @@ class BannerList(http.Controller):
                     "code": 0,
                     "data": [
                         {
-                            "businessId": each_banner.business_id,
+                            "businessId": each_banner.business_id.id,
                             "dateAdd": each_banner.create_date,
                             "dateUpdate": each_banner.write_date,
                             "id": each_banner.id,

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="wechat_mall_order_create" model="mail.template">
+        <field name="name">新订单产生</field>
+        <field name="model_id" ref="wechat_mall.model_wechat_mall_order"/>
+        <field name="email_from"></field>
+        <field name="email_to">${object.create_uid.email}</field>
+        <field name="subject">您有一个新的订单</field>
+        <field name="body_html"><![CDATA[
+
+        你有一个新的订单产生了!
+
+            ]]></field>
+    </record>
+</odoo>

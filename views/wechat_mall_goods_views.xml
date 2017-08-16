@@ -7,24 +7,20 @@
             <field name="type">tree</field>
             <field name="arch" type="xml">
                 <tree string="商品">
+                    <field name="id" string="商品编号"/>
                     <field name="subshop_id"/>
                     <field name="category_id"/>
                     <field name="name"/>
-                    <field name="characteristic"/>
-                    <field name="logistics_id"/>
-                    <field name="min_price"/>
-                    <field name="name"/>
-                    <field name="number_fav"/>
-                    <field name="number_good_reputation"/>
-                    <field name="number_order"/>
-                    <field name="original_price"/>
-                    <field name="pic"/>
+                    <field name="display_pic"/>
                     <field name="status"/>
                     <field name="recommend_status"/>
-                    <field name="sort"/>
                     <field name="stores"/>
-                    <field name="subshop_id"/>
+                    <field name="original_price"/>
+                    <field name="min_price"/>
                     <field name="views"/>
+                    <field name="number_fav"/>
+                    <field name="number_order"/>
+                    <field name="number_good_reputation"/>
                 </tree>
             </field>
         </record>
@@ -36,39 +32,15 @@
                 <form string="商品" version="7.0">
                     <sheet>
                         <group>
-                            <field name="subshop_id" domain="[('create_uid', '=', uid)]"/>
-                            <field name="category_id" domain="[('create_uid', '=', uid)]"/>
                             <field name="name"/>
-                            <field name="characteristic"/>
-                            <field name="content"/>
-                            <field name="logistics_id" domain="[('create_uid', '=', uid)]"/>
-                            <field name="min_price"/>
-                            <field name="number_fav"/>
-                            <field name="number_good_reputation"/>
-                            <field name="number_order"/>
-                            <field name="original_price"/>
-                            <field name="pic" domain="[('create_uid', '=', uid)]">
-                                <tree>
-                                    <field name="name"/>
-                                    <field name="type"/>
-                                    <field name="datas" filename="datas_fname"
-                                           attrs="{'invisible':[('type','=','url')]}"/>
-                                    <field name="datas_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}"
-                                           class="oe_inline oe_right"/>
-                                    <field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
-                                </tree>
-                                <form>
-                                    <field name="name"/>
-                                    <field name="type"/>
-                                    <field name="datas" filename="datas_fname"
-                                           attrs="{'invisible':[('type','=','url')]}"/>
-                                    <field name="datas_fname" invisible="1"
-                                           attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
-                                    <field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
-                                </form>
-                            </field>
+                            <field name="category_id" domain="[('create_uid', '=', uid)]"/>
+                            <field name="subshop_id" domain="[('create_uid', '=', uid)]"/>
                             <field name="status"/>
                             <field name="recommend_status"/>
+                            <field name="stores"/>
+                            <field name="original_price"/>
+                            <field name="min_price"/>
+                            <field name="logistics_id" domain="[('create_uid', '=', uid)]"/>
                             <field name="property_ids" domain="[('create_uid', '=', uid)]">
                                 <tree>
                                     <field name="name"/>
@@ -121,9 +93,33 @@
                                     </group>
                                 </form>
                             </field>
-                            <field name="sort"/>
-                            <field name="stores"/>
+                            <field name="pic" domain="[('create_uid', '=', uid)]">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="type"/>
+                                    <field name="datas" filename="datas_fname"
+                                           attrs="{'invisible':[('type','=','url')]}"/>
+                                    <field name="datas_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}"
+                                           class="oe_inline oe_right"/>
+                                    <field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
+                                </tree>
+                                <form>
+                                    <field name="name"/>
+                                    <field name="type"/>
+                                    <field name="datas" filename="datas_fname"
+                                           attrs="{'invisible':[('type','=','url')]}"/>
+                                    <field name="datas_fname" invisible="1"
+                                           attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
+                                    <field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
+                                </form>
+                            </field>
+                            <field name="characteristic"/>
+                            <field name="content"/>
                             <field name="views" readonly="1"/>
+                            <field name="number_fav" readonly="1"/>
+                            <field name="number_good_reputation" readonly="1"/>
+                            <field name="number_order"/>
+                            <field name="sort"/>
                         </group>
                     </sheet>
                 </form>

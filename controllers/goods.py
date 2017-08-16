@@ -11,13 +11,18 @@ from ..tools import convert_static_link
 
 
 class GoodsList(http.Controller):
-    @http.route('/<model("res.users"):user>/shop/goods/list', auth='public', methods=['GET'])
-    def get(self, user, category_id=False):
+    @http.route('/<string:sub_domain>/shop/goods/list', auth='public', methods=['GET'])
+    def get(self, sub_domain, category_id=False):
         try:
+            user = request.env['res.users'].search([('sub_domain', '=', sub_domain)])
+            if not user:
+                return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
+
             goods_list = request.env['wechat_mall.goods'].search(
                 [('create_uid', '=', user.id),
                  ('status', '=', True),
-                 ('category_id', '=', int(category_id))]
+                 ('category_id', 'in',
+                  [int(category_id)] + request.env['wechat_mall.category'].browse(int(category_id)).child_ids.ids)]
                 if category_id else [('create_uid', '=', user.id), ('status', '=', True)])
 
             if not goods_list:
@@ -67,9 +72,13 @@ class GoodsList(http.Controller):
 
 
 class GoodsDetail(http.Controller):
-    @http.route('/<model("res.users"):user>/shop/goods/detail', auth='public', methods=['GET'])
-    def get(self, user, goods_id=False):
+    @http.route('/<string:sub_domain>/shop/goods/detail', auth='public', methods=['GET'])
+    def get(self, sub_domain, goods_id=False):
         try:
+            user = request.env['res.users'].search([('sub_domain', '=', sub_domain)])
+            if not user:
+                return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
+
             if not goods_id:
                 return request.make_response(json.dumps({'code': 300, 'msg': error_code[300].format('goods_id')}))
 
@@ -184,9 +193,13 @@ class GoodsDetail(http.Controller):
 
 
 class GoodsPrice(http.Controller):
-    @http.route('/<model("res.users"):user>/shop/goods/price', auth='public', methods=['GET'])
-    def get(self, user, goods_id=False, property_child_ids=False):
+    @http.route('/<string:sub_domain>/shop/goods/price', auth='public', methods=['GET'])
+    def get(self, sub_domain, goods_id=False, property_child_ids=False):
         try:
+            user = request.env['res.users'].search([('sub_domain', '=', sub_domain)])
+            if not user:
+                return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
+
             if not goods_id:
                 return request.make_response(json.dumps({'code': 300, 'msg': error_code[300].format('goods_id')}))
 
@@ -235,9 +248,13 @@ class GoodsPrice(http.Controller):
 
 
 class GoodsPriceFreight(http.Controller):
-    @http.route('/<model("res.users"):user>/shop/goods/price/freight', auth='public', methods=['GET'])
-    def get(self, user, **kwargs):
+    @http.route('/<string:sub_domain>/shop/goods/price/freight', auth='public', methods=['GET'])
+    def get(self, sub_domain, **kwargs):
         try:
+            user = request.env['res.users'].search([('sub_domain', '=', sub_domain)])
+            if not user:
+                return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
+
             args_key_set = {'logistics_id', 'transport_type', 'province_id', 'city_id', 'district_id'}
 
             missing_args_key = args_key_set - set(kwargs.keys())

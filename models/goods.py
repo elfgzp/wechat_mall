@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 
+import logging
+
 from odoo import models, fields, api, exceptions
+
+_logger = logging.getLogger(__name__)
 
 
 class Goods(models.Model):
@@ -9,42 +13,55 @@ class Goods(models.Model):
     _order = 'sort'
 
     subshop_id = fields.Many2one('wechat_mall.subshop', string='所属店铺')
-    category_id = fields.Many2one('wechat_mall.category', string='商品分类', ondelete='set null')
-    name = fields.Char('商品名称')
+    category_id = fields.Many2one('wechat_mall.category', string='商品分类', required=True, ondelete='set null')
+    name = fields.Char('商品名称', required=True)
     characteristic = fields.Text('商品特色')
     logistics_id = fields.Many2one('wechat_mall.logistics', string='物流模板', required=True)
     sort = fields.Integer('排序', default=0)
     recommend_status = fields.Boolean('是否推荐')
-    status = fields.Boolean('是否上架')
+    status = fields.Boolean('是否上架', default=True)
+    display_pic = fields.Html('图片', compute='_compute_display_pic')
     pic = fields.Many2many('ir.attachment', string='图片')
     content = fields.Html('详细介绍')
-    property_ids = fields.Many2many('wechat_mall.goods.property', 'goods_id', string='商品规格')
+    property_ids = fields.Many2many('wechat_mall.goods.property', string='商品规格')
     price_ids = fields.One2many('wechat_mall.goods.property_child.price', 'goods_id', string='商品不同规格价格',
                                 compute='_compute_property_ids', readonly=False, store=True)
     original_price = fields.Float('原价', default=0, required=True)
     min_price = fields.Float('最低价', default=0, required=True)
     stores = fields.Integer('库存', default=0, required=True)
     number_good_reputation = fields.Integer('好评数', default=0, required=True)
-    number_order = fields.Integer('订单数', default=0, required=True)
+    order_ids = fields.Many2many('wechat_mall.order', string='订单')
+    number_order = fields.Integer('订单数', compute='_compute_number_order')
     number_fav = fields.Integer('收藏数', default=0, required=True)
     views = fields.Integer('浏览量', default=0, required=True)
     weight = fields.Float(default=0, required=True)
 
     @api.multi
     def write(self, vals):
-        if 'price_ids' in vals.keys() and self.price_ids:
-            price_ids = self.env['wechat_mall.goods.property_child.price'].search([
-                ('id', 'in', [each[1] for each in vals['price_ids']])
-            ])
-            vals['price_ids'] = [each for each in vals['price_ids'] if each[1] in price_ids.ids + [0]]
-            if not vals['price_ids']:
-                vals.pop('price_ids')
-
         result = super(Goods, self.with_context(
             {'recompute': self._context.get('recompute', False), 'goods_id': self.id})).write(vals)
 
-        self.env['wechat_mall.goods.property_child.price'].search([('goods_id', '=', False)]).unlink()
+        try:
+            self.env['wechat_mall.goods.property_child.price'].search([('goods_id', '=', False)]).unlink()
+        except Exception as e:
+            logging.warning(e)
+
         return result
+
+    @api.depends('pic')
+    def _compute_display_pic(self):
+        for each_record in self:
+            if each_record.pic:
+                each_record.display_pic = """
+                <img src="{pic}" style="max-width:100px;">
+                """.format(pic=each_record.pic[0].static_link())
+            else:
+                each_record.display_pic = False
+
+    @api.depends('order_ids')
+    def _compute_number_order(self):
+        for each_record in self:
+            each_record.number_order = len(each_record.order_ids)
 
     @api.depends('property_ids')
     @api.onchange('property_ids')
@@ -82,7 +99,7 @@ class Property(models.Model):
     _order = 'sort'
 
     name = fields.Char('规格名称', required=True)
-    goods_ids = fields.Many2many('wechat_mall.goods', 'property_ids', string='关联商品')
+    goods_ids = fields.Many2many('wechat_mall.goods', string='关联商品')
     child_ids = fields.One2many('wechat_mall.goods.property_child', 'property_id', string='子属性')
     sort = fields.Integer('排序', default=0)
 

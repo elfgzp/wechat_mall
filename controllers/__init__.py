@@ -6,3 +6,4 @@ from . import category
 from . import goods
 from . import wechat_user
 from . import address
+from . import order

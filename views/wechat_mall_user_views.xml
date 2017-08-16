@@ -19,7 +19,6 @@
                     <field name="register_ip"/>
                     <field name="ip"/>
                     <field name="last_login"/>
-                    <field name="language"/>
                     <field name="status"/>
                 </tree>
             </field>
@@ -43,7 +42,6 @@
                             <field name="register_ip" readonly="1"/>
                             <field name="ip" readonly="1"/>
                             <field name="last_login" readonly="1"/>
-                            <field name="language" readonly="1"/>
                             <field name="status" readonly="1"/>
                         </group>
                     </sheet>

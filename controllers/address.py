@@ -10,9 +10,13 @@ from .. import defs
 
 
 class AddressList(http.Controller):
-    @http.route('/<model("res.users"):user>/user/shipping-address/list', auth='public', methods=['GET'])
-    def get(self, user, token=None):
+    @http.route('/<string:sub_domain>/user/shipping-address/list', auth='public', methods=['GET'])
+    def get(self, sub_domain, token=None):
         try:
+            user = request.env['res.users'].search([('sub_domain', '=', sub_domain)])
+            if not user:
+                return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
+
             if not token:
                 return request.make_response(json.dumps({'code': 300, 'msg': error_code[300].format('token')}))
 
@@ -39,29 +43,29 @@ class AddressList(http.Controller):
                     "Content-Type": "json"
                 },
                 data=json.dumps({
-                        "code": 0,
-                        "data": [{
-                            "address": each_address.address,
-                            "areaStr": each_address.district_id.name or '',
-                            "cityId": each_address.city_id.id,
-                            "cityStr": each_address.city_id.name,
-                            "code": each_address.postcode,
-                            "dateAdd": each_address.create_date,
-                            "dateUpdate": each_address.write_date,
-                            "districtId": each_address.district_id.id or False,
-                            "id": each_address.id,
-                            "isDefault": each_address.is_default,
-                            "linkMan": each_address.linkman,
-                            "mobile": each_address.phone,
-                            "provinceId": each_address.province_id.id,
-                            "provinceStr": each_address.province_id.name,
-                            "status": 0 if each_address.status else 1,
-                            "statusStr": defs.AddressStatus.attrs[each_address.status],
-                            "uid": each_address.create_uid.id,
-                            "userId": each_address.wechat_user_id.id
-                        } for each_address in wechat_user.address_ids.filtered(lambda r: r.status)],
-                        "msg": "success"
-                    })
+                    "code": 0,
+                    "data": [{
+                        "address": each_address.address,
+                        "areaStr": each_address.district_id.name or '',
+                        "cityId": each_address.city_id.id,
+                        "cityStr": each_address.city_id.name,
+                        "code": each_address.postcode,
+                        "dateAdd": each_address.create_date,
+                        "dateUpdate": each_address.write_date,
+                        "districtId": each_address.district_id.id or False,
+                        "id": each_address.id,
+                        "isDefault": each_address.is_default,
+                        "linkMan": each_address.linkman,
+                        "mobile": each_address.phone,
+                        "provinceId": each_address.province_id.id,
+                        "provinceStr": each_address.province_id.name,
+                        "status": 0 if each_address.status else 1,
+                        "statusStr": defs.AddressStatus.attrs[each_address.status],
+                        "uid": each_address.create_uid.id,
+                        "userId": each_address.wechat_user_id.id
+                    } for each_address in wechat_user.address_ids.filtered(lambda r: r.status)],
+                    "msg": "success"
+                })
             )
 
             return response
@@ -71,9 +75,13 @@ class AddressList(http.Controller):
 
 
 class AddressAdd(http.Controller):
-    @http.route('/<model("res.users"):user>/user/shipping-address/add', auth='public', methods=['GET'])
-    def get(self, user, token=None, **kwargs):
+    @http.route('/<string:sub_domain>/user/shipping-address/add', auth='public', methods=['GET'])
+    def get(self, sub_domain, token=None, **kwargs):
         try:
+            user = request.env['res.users'].search([('sub_domain', '=', sub_domain)])
+            if not user:
+                return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
+
             if not token:
                 return request.make_response(json.dumps({'code': 300, 'msg': error_code[300].format('token')}))
 
@@ -124,9 +132,13 @@ class AddressAdd(http.Controller):
 
 
 class AddressUpdate(http.Controller):
-    @http.route('/<model("res.users"):user>/user/shipping-address/update', auth='public', methods=['GET'])
-    def get(self, user, token=None, **kwargs):
+    @http.route('/<string:sub_domain>/user/shipping-address/update', auth='public', methods=['GET'])
+    def get(self, sub_domain, token=None, **kwargs):
         try:
+            user = request.env['res.users'].search([('sub_domain', '=', sub_domain)])
+            if not user:
+                return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
+
             if not token:
                 return request.make_response(json.dumps({'code': 300, 'msg': error_code[300].format('token')}))
 
@@ -180,9 +192,13 @@ class AddressUpdate(http.Controller):
 
 
 class AddressDelete(http.Controller):
-    @http.route('/<model("res.users"):user>/user/shipping-address/delete', auth='public', methods=['GET'])
-    def get(self, user, token=None, address_id=None):
+    @http.route('/<string:sub_domain>/user/shipping-address/delete', auth='public', methods=['GET'])
+    def get(self, sub_domain, token=None, address_id=None):
         try:
+            user = request.env['res.users'].search([('sub_domain', '=', sub_domain)])
+            if not user:
+                return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
+
             if not token:
                 return request.make_response(json.dumps({'code': 300, 'msg': error_code[300].format('token')}))
 
@@ -225,9 +241,13 @@ class AddressDelete(http.Controller):
 
 
 class AddressDefault(http.Controller):
-    @http.route('/<model("res.users"):user>/user/shipping-address/default', auth='public', methods=['GET'])
-    def get(self, user, token=None):
+    @http.route('/<string:sub_domain>/user/shipping-address/default', auth='public', methods=['GET'])
+    def get(self, sub_domain, token=None):
         try:
+            user = request.env['res.users'].search([('sub_domain', '=', sub_domain)])
+            if not user:
+                return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
+
             if not token:
                 return request.make_response(json.dumps({'code': 300, 'msg': error_code[300].format('token')}))
 
@@ -260,29 +280,29 @@ class AddressDefault(http.Controller):
                     "Content-Type": "json"
                 },
                 data=json.dumps({
-                        "code": 0,
-                        "data": {
-                            "address": address.address,
-                            "areaStr": address.district_id.name or '',
-                            "cityId": address.city_id.id,
-                            "cityStr": address.city_id.name,
-                            "code": address.postcode,
-                            "dateAdd": address.create_date,
-                            "dateUpdate": address.write_date,
-                            "districtId": address.district_id.id or False,
-                            "id": address.id,
-                            "isDefault": address.is_default,
-                            "linkMan": address.linkman,
-                            "mobile": address.phone,
-                            "provinceId": address.province_id.id,
-                            "provinceStr": address.province_id.name,
-                            "status": 0 if address.status else 1,
-                            "statusStr": defs.AddressStatus.attrs[address.status],
-                            "uid": address.create_uid.id,
-                            "userId": address.wechat_user_id.id
-                        },
-                        "msg": "success"
-                    })
+                    "code": 0,
+                    "data": {
+                        "address": address.address,
+                        "areaStr": address.district_id.name or '',
+                        "cityId": address.city_id.id,
+                        "cityStr": address.city_id.name,
+                        "code": address.postcode,
+                        "dateAdd": address.create_date,
+                        "dateUpdate": address.write_date,
+                        "districtId": address.district_id.id or False,
+                        "id": address.id,
+                        "isDefault": address.is_default,
+                        "linkMan": address.linkman,
+                        "mobile": address.phone,
+                        "provinceId": address.province_id.id,
+                        "provinceStr": address.province_id.name,
+                        "status": 0 if address.status else 1,
+                        "statusStr": defs.AddressStatus.attrs[address.status],
+                        "uid": address.create_uid.id,
+                        "userId": address.wechat_user_id.id
+                    },
+                    "msg": "success"
+                })
             )
 
             return response
@@ -292,9 +312,13 @@ class AddressDefault(http.Controller):
 
 
 class AddressDetail(http.Controller):
-    @http.route('/<model("res.users"):user>/user/shipping-address/detail', auth='public', methods=['GET'])
-    def get(self, user, token=None, address_id=None):
+    @http.route('/<string:sub_domain>/user/shipping-address/detail', auth='public', methods=['GET'])
+    def get(self, sub_domain, token=None, address_id=None):
         try:
+            user = request.env['res.users'].search([('sub_domain', '=', sub_domain)])
+            if not user:
+                return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
+
             if not token:
                 return request.make_response(json.dumps({'code': 300, 'msg': error_code[300].format('token')}))
 
@@ -319,29 +343,29 @@ class AddressDetail(http.Controller):
                     "Content-Type": "json"
                 },
                 data=json.dumps({
-                        "code": 0,
-                        "data": {
-                            "address": address.address,
-                            "areaStr": address.district_id.name or '',
-                            "cityId": address.city_id.id,
-                            "cityStr": address.city_id.name,
-                            "code": address.postcode,
-                            "dateAdd": address.create_date,
-                            "dateUpdate": address.write_date,
-                            "districtId": address.district_id.id or False,
-                            "id": address.id,
-                            "isDefault": address.is_default,
-                            "linkMan": address.linkman,
-                            "mobile": address.phone,
-                            "provinceId": address.province_id.id,
-                            "provinceStr": address.province_id.name,
-                            "status": 0 if address.status else 1,
-                            "statusStr": defs.AddressStatus.attrs[address.status],
-                            "uid": address.create_uid.id,
-                            "userId": address.wechat_user_id.id
-                        },
-                        "msg": "success"
-                    })
+                    "code": 0,
+                    "data": {
+                        "address": address.address,
+                        "areaStr": address.district_id.name or '',
+                        "cityId": address.city_id.id,
+                        "cityStr": address.city_id.name,
+                        "code": address.postcode,
+                        "dateAdd": address.create_date,
+                        "dateUpdate": address.write_date,
+                        "districtId": address.district_id.id or False,
+                        "id": address.id,
+                        "isDefault": address.is_default,
+                        "linkMan": address.linkman,
+                        "mobile": address.phone,
+                        "provinceId": address.province_id.id,
+                        "provinceStr": address.province_id.name,
+                        "status": 0 if address.status else 1,
+                        "statusStr": defs.AddressStatus.attrs[address.status],
+                        "uid": address.create_uid.id,
+                        "userId": address.wechat_user_id.id
+                    },
+                    "msg": "success"
+                })
             )
 
             return response

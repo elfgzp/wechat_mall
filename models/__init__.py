@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from . import res_users
 from . import access_token
 from . import banner
 from . import category
