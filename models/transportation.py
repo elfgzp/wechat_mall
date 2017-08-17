@@ -54,7 +54,7 @@ class DistrictTransportation(models.Model):
     district_id = fields.Many2one('wechat_mall.district', string='区')
     less_amount = fields.Integer('数量', required=True, default=0)
     less_price = fields.Float('数量内价格', required=True, default=0)
-    increase_amount = fields.Integer('超过数量', required=True, default=0)
+    increase_amount = fields.Integer('递增数量', required=True, default=0)
     increase_price = fields.Float('递增价格', required=True, default=0)
 
     city_domain_ids = fields.One2many('wechat_mall.city', compute='_compute_city_domain_ids')

@@ -16,3 +16,4 @@ from . import transportation
 from . import ir_attachment
 from . import wechat_user
 from . import address
+from . import confirm_wizard

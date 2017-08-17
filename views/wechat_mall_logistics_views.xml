@@ -20,7 +20,7 @@
             <field name="model">wechat_mall.logistics</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                <form string="物流" version="7.0">
+                <form string="物流" version="7.0" duplicate="0">
                     <sheet>
                         <group colspan="2">
                             <field name="name" class="oe_inline"/>

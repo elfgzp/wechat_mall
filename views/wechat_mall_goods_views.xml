@@ -40,7 +40,10 @@
                             <field name="stores"/>
                             <field name="original_price"/>
                             <field name="min_price"/>
+                            <field name="weight"
+                                   attrs="{'invisible': [('logistics_valuation_type', '!=', 'by_weight')]}"/>
                             <field name="logistics_id" domain="[('create_uid', '=', uid)]"/>
+                            <field name="logistics_valuation_type" invisible="1"/>
                             <field name="property_ids" domain="[('create_uid', '=', uid)]">
                                 <tree>
                                     <field name="name"/>

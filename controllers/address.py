@@ -75,23 +75,25 @@ class AddressList(http.Controller):
 
 
 class AddressAdd(http.Controller):
-    @http.route('/<string:sub_domain>/user/shipping-address/add', auth='public', methods=['GET'])
-    def get(self, sub_domain, token=None, **kwargs):
+    @http.route('/<string:sub_domain>/user/shipping-address/add',
+                auth='public', methods=['POST'], csrf=False, type='http')
+    def post(self, sub_domain, **kwargs):
         try:
             user = request.env['res.users'].sudo().search([('sub_domain', '=', sub_domain)])
             if not user:
                 return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
 
-            if not token:
+            if 'token' not in kwargs.keys():
                 return request.make_response(json.dumps({'code': 300, 'msg': error_code[300].format('token')}))
+
+            token = kwargs['token']
 
             args_key_set = {'address_id', 'province_id', 'city_id', 'district_id',
                             'linkMan', 'address', 'phone', 'postcode', 'is_default'}
 
             missing_args_key = args_key_set - set(kwargs.keys())
             if missing_args_key:
-                return request.make_response(
-                    json.dumps({'code': 300, 'msg': error_code[300].format(','.join(missing_args_key))}))
+                return request.make_response(json.dumps({'code': 600, 'msg': error_code[600]}))
 
             access_token = request.env(user=user.id)['wechat_mall.access_token'].search([
                 ('token', '=', token),
@@ -132,22 +134,24 @@ class AddressAdd(http.Controller):
 
 
 class AddressUpdate(http.Controller):
-    @http.route('/<string:sub_domain>/user/shipping-address/update', auth='public', methods=['GET'])
-    def get(self, sub_domain, token=None, **kwargs):
+    @http.route('/<string:sub_domain>/user/shipping-address/update',
+                auth='public', methods=['POST'], csrf=False, type='http')
+    def post(self, sub_domain, **kwargs):
         try:
             user = request.env['res.users'].sudo().search([('sub_domain', '=', sub_domain)])
             if not user:
                 return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
 
-            if not token:
+            if 'token' not in kwargs.keys():
                 return request.make_response(json.dumps({'code': 300, 'msg': error_code[300].format('token')}))
+
+            token = kwargs['token']
 
             args_key_set = {'address_id', 'is_default'}
 
             missing_args_key = args_key_set - set(kwargs.keys())
             if missing_args_key:
-                return request.make_response(
-                    json.dumps({'code': 300, 'msg': error_code[300].format(','.join(missing_args_key))}))
+                return request.make_response(json.dumps({'code': 600, 'msg': error_code[600]}))
 
             access_token = request.env(user=user.id)['wechat_mall.access_token'].search([
                 ('token', '=', token),

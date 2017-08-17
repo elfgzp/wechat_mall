@@ -262,6 +262,7 @@ class GoodsPriceFreight(http.Controller):
                 return request.make_response(
                     json.dumps({'code': 300, 'msg': error_code[300].format(','.join(missing_args_key))}))
 
+            # 使用order保证运输费是最精确的地址匹配
             transport = request.env(user=user.id)['wechat_mall.district.transportation'].search([
                 ('create_uid', '=', user.id),
                 ('default_transportation_id.logistics_id', '=', int(kwargs['logistics_id'])),
@@ -270,7 +271,7 @@ class GoodsPriceFreight(http.Controller):
                 ('province_id', '=', int(kwargs['province_id'])),
                 ('city_id', '=', int(kwargs['city_id'])),
                 ('district_id', 'in', [int(kwargs['district_id']) if kwargs['district_id'] else False, False]),
-            ], limit=1)
+            ], limit=1, order='district_id asc')
 
             if not transport:
                 transport = request.env(user=user.id)['wechat_mall.transportation'].search([
@@ -286,6 +287,7 @@ class GoodsPriceFreight(http.Controller):
                 data=json.dumps({
                     "code": 0,
                     "data": {
+                        "transport_type": int(kwargs.get('transport_type')),
                         "firstNumber": transport.less_amount or 0,
                         "addAmount": transport.increase_price or 0,
                         "firstAmount": transport.less_price or 0,

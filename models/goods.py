@@ -4,6 +4,8 @@ import logging
 
 from odoo import models, fields, api, exceptions
 
+from .. import defs
+
 _logger = logging.getLogger(__name__)
 
 
@@ -17,6 +19,8 @@ class Goods(models.Model):
     name = fields.Char('商品名称', required=True)
     characteristic = fields.Text('商品特色')
     logistics_id = fields.Many2one('wechat_mall.logistics', string='物流模板', required=True)
+    logistics_valuation_type = fields.Selection(defs.LogisticsValuationType, string='物流计价方式',
+                                                related='logistics_id.valuation_type')
     sort = fields.Integer('排序', default=0)
     recommend_status = fields.Boolean('是否推荐')
     status = fields.Boolean('是否上架', default=True)
@@ -34,17 +38,12 @@ class Goods(models.Model):
     number_order = fields.Integer('订单数', compute='_compute_number_order')
     number_fav = fields.Integer('收藏数', default=0, required=True)
     views = fields.Integer('浏览量', default=0, required=True)
-    weight = fields.Float(default=0, required=True)
+    weight = fields.Float('商品重量(KG)', default=0, required=True)
 
     @api.multi
     def write(self, vals):
         result = super(Goods, self.with_context(
             {'recompute': self._context.get('recompute', False), 'goods_id': self.id})).write(vals)
-
-        try:
-            self.env['wechat_mall.goods.property_child.price'].search([('goods_id', '=', False)]).unlink()
-        except Exception as e:
-            logging.warning(e)
 
         return result
 
@@ -152,7 +151,7 @@ class PropertyChildPrice(models.Model):
     _name = 'wechat_mall.goods.property_child.price'
     _description = u'商品不同规格价格'
 
-    name = fields.Char('规格名称', compute='_compute_name')
+    name = fields.Char('规格名称', compute='_compute_name', store=True)
     goods_id = fields.Many2one('wechat_mall.goods', string='关联商品', ondelete='cascade')
 
     property_child_ids = fields.Char('商品规格', index=1, required=True)

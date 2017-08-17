@@ -7,14 +7,14 @@
             <field name="model">wechat_mall.order</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
-                <tree string="订单">
+                <tree string="订单" create="0" delete="0">
                     <field name="wechat_user_id"/>
                     <field name="order_num"/>
                     <field name="number_goods"/>
                     <field name="status" srting='状态'/>
-                    <field name="amount"/>
-                    <field name="amount_logistics"/>
-                    <field name="amount_real"/>
+                    <field name="goods_price"/>
+                    <field name="logistics_price"/>
+                    <field name="total"/>
                     <field name="create_date" string="下单时间"/>
                     <field name="write_date" string="最后更新"/>
 
@@ -26,17 +26,25 @@
             <field name="model">wechat_mall.order</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                <form string="订单" version="7.0">
+                <form string="订单" version="7.0" create="0" delete="0" duplicate="0">
                     <sheet>
                         <group>
-                            <field name="wechat_user_id"/>
+                            <field name="wechat_user_id" readonly="1"/>
                             <field name="order_num" attrs="{'invisible': [('order_num', '=', False)]}" readonly="1"/>
-                            <field name="number_goods"/>
-                            <field name="goods_ids"/>
-                            <field name="status"/>
-                            <field name="amount"/>
-                            <field name="amount_logistics"/>
-                            <field name="amount_real"/>
+                            <field name="number_goods" readonly="1"/>
+                            <field name="order_goods_ids" readonly="1">
+                                <tree>
+                                    <field name="display_pic"/>
+                                    <field name="name"/>
+                                    <field name="property_str"/>
+                                    <field name="amount"/>
+                                    <field name="total"/>
+                                </tree>
+                            </field>
+                            <field name="status" readonly="1"/>
+                            <field name="goods_price" readonly="1"/>
+                            <field name="logistics_price" readonly="1"/>
+                            <field name="total"/>
                             <field name="create_date" string="下单时间" attrs="{'invisible': [('create_date', '=', False)]}" readonly="1"/>
                             <field name="write_date" string="最后更新" attrs="{'invisible': [('write_date', '=', False)]}" readonly="1"/>
                         </group>

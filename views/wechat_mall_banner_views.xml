@@ -23,7 +23,7 @@
             <field name="model">wechat_mall.banner</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                <form string="横幅" version="7.0">
+                <form string="横幅" version="7.0" duplicate="0">
                     <sheet>
                         <group>
                             <field name="title"/>
