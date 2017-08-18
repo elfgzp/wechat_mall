@@ -12,7 +12,7 @@ from ..tools import convert_static_link
 
 class GoodsList(http.Controller):
     @http.route('/<string:sub_domain>/shop/goods/list', auth='public', methods=['GET'])
-    def get(self, sub_domain, category_id=False):
+    def get(self, sub_domain, category_id=False, **kwargs):
         try:
             user = request.env['res.users'].sudo().search([('sub_domain', '=', sub_domain)])
             if not user:
@@ -73,7 +73,7 @@ class GoodsList(http.Controller):
 
 class GoodsDetail(http.Controller):
     @http.route('/<string:sub_domain>/shop/goods/detail', auth='public', methods=['GET'])
-    def get(self, sub_domain, goods_id=False):
+    def get(self, sub_domain, goods_id=False, **kwargs):
         try:
             user = request.env['res.users'].sudo().search([('sub_domain', '=', sub_domain)])
             if not user:
@@ -194,7 +194,7 @@ class GoodsDetail(http.Controller):
 
 class GoodsPrice(http.Controller):
     @http.route('/<string:sub_domain>/shop/goods/price', auth='public', methods=['GET'])
-    def get(self, sub_domain, goods_id=False, property_child_ids=False):
+    def get(self, sub_domain, goods_id=False, property_child_ids=False, **kwargs):
         try:
             user = request.env['res.users'].sudo().search([('sub_domain', '=', sub_domain)])
             if not user:

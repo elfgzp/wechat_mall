@@ -191,7 +191,7 @@ class OrderCreate(http.Controller):
 
 class OrderStatistics(http.Controller):
     @http.route('/<string:sub_domain>/order/statistics', auth='public', method=['GET'])
-    def get(self, sub_domain, token):
+    def get(self, sub_domain, token=None, **kwargs):
         try:
             user = request.env['res.users'].sudo().search([('sub_domain', '=', sub_domain)])
             if not user:
@@ -243,7 +243,7 @@ class OrderStatistics(http.Controller):
 
 class OrderList(http.Controller):
     @http.route('/<string:sub_domain>/order/list', auth='public', method=['GET'])
-    def get(self, sub_domain, token, status=None):
+    def get(self, sub_domain, token=None, status=None, **kwargs):
         try:
             user = request.env['res.users'].sudo().search([('sub_domain', '=', sub_domain)])
             if not user:
@@ -264,6 +264,9 @@ class OrderList(http.Controller):
                 ('open_id', '=', access_token.open_id),
                 ('create_uid', '=', user.id)
             ])
+
+            if not wechat_user:
+                return request.make_response(json.dumps({'code': 10000, 'msg': error_code[10000]}))
 
             if status is not None:
                 orders = wechat_user.order_ids.filtered(
@@ -302,3 +305,235 @@ class OrderList(http.Controller):
 
         except Exception as e:
             return request.make_response(json.dumps({'code': -1, 'msg': error_code[-1], 'data': e.message}))
+
+
+class OrderDetail(http.Controller):
+    @http.route('/<string:sub_domain>/order/detail', auth='public', method=['GET'])
+    def get(self, sub_domain, token=None, order_id=None, **kwargs):
+        try:
+            user = request.env['res.users'].sudo().search([('sub_domain', '=', sub_domain)])
+            if not user:
+                return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
+
+            if not token:
+                return request.make_response(json.dumps({'code': 300, 'msg': error_code[300].format('token')}))
+
+            if not order_id:
+                return request.make_response(json.dumps({'code': 300, 'msg': error_code[300].format('order_id')}))
+
+            access_token = request.env(user=user.id)['wechat_mall.access_token'].search([
+                ('token', '=', token),
+                ('create_uid', '=', user.id)
+            ])
+
+            if not access_token:
+                return request.make_response(json.dumps({'code': 901, 'msg': error_code[901]}))
+
+            wechat_user = request.env(user=user.id)['wechat_mall.user'].search([
+                ('open_id', '=', access_token.open_id),
+                ('create_uid', '=', user.id)
+            ])
+
+            if not wechat_user:
+                return request.make_response(json.dumps({'code': 10000, 'msg': error_code[10000]}))
+
+            order = wechat_user.order_ids.filtered(lambda r: r.id == int(order_id))
+
+            if not order:
+                return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
+
+            traces = json.loads(order.traces).get('data', {})
+
+            data = {
+                "code": 0,
+                "data": {
+                    "orderInfo": {
+                        "amount": order.goods_price,
+                        "amountLogistics": order.logistics_price,
+                        "amountReal": order.total,
+                        "dateAdd": order.create_date,
+                        "dateUpdate": order.write_date,
+                        "goodsNumber": order.number_goods,
+                        "id": order.id,
+                        "orderNumber": order.order_num,
+                        "remark": order.remark,
+                        "status": defs.OrderResponseStatus.attrs[order.status],
+                        "statusStr": defs.OrderStatus.attrs[order.status],
+                        "type": 0,
+                        "uid": user.id,
+                        "userId": wechat_user.id
+                    },
+                    "goods": [
+                        {
+                            "amount": each_goods.price,
+                            "goodsId": each_goods.goods_id,
+                            "goodsName": each_goods.name,
+                            "id": each_goods.id,
+                            "number": each_goods.amount,
+                            "orderId": order.id,
+                            "pic": each_goods.pic.static_link() if each_goods.pic else '',
+                            "property": each_goods.property_str
+                        } for each_goods in order.order_goods_ids
+                    ],
+                    "logistics": {
+                        "address": order.address,
+                        "cityId": order.city_id.id,
+                        "code": order.postcode,
+                        "dateUpdate": order.write_date,
+                        "districtId": order.district_id.id or 0,
+                        "linkMan": order.linkman,
+                        "mobile": order.phone,
+                        "provinceId": order.province_id.id,
+                        "shipperCode": order.shipper_id.code if order.shipper_id else '',
+                        "shipperName": order.shipper_id.name if order.shipper_id else '',
+                        "status": int(traces.get('State', 0)) if order.shipper_id else '',
+                        "trackingNumber": order.tracking_number if order.tracking_number else ''
+                    },
+                },
+                "msg": "success"
+            }
+            traces_list = traces.get('Traces')
+            if traces_list:
+                data["logisticsTraces"] = traces_list
+
+            response = request.make_response(
+                headers={
+                    "Content-Type": "json"
+                },
+                data=json.dumps(data)
+            )
+
+            return response
+
+        except Exception as e:
+            return request.make_response(json.dumps({'code': -1, 'msg': error_code[-1], 'data': e.message}))
+
+
+class OrderClose(http.Controller):
+    @http.route('/<string:sub_domain>/order/close', auth='public', method=['GET'])
+    def get(self, sub_domain, token=None, order_id=None, **kwargs):
+        try:
+            user = request.env['res.users'].sudo().search([('sub_domain', '=', sub_domain)])
+            if not user:
+                return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
+
+            if not token:
+                return request.make_response(json.dumps({'code': 300, 'msg': error_code[300].format('token')}))
+
+            if not order_id:
+                return request.make_response(json.dumps({'code': 300, 'msg': error_code[300].format('order_id')}))
+
+            access_token = request.env(user=user.id)['wechat_mall.access_token'].search([
+                ('token', '=', token),
+                ('create_uid', '=', user.id)
+            ])
+
+            if not access_token:
+                return request.make_response(json.dumps({'code': 901, 'msg': error_code[901]}))
+
+            wechat_user = request.env(user=user.id)['wechat_mall.user'].search([
+                ('open_id', '=', access_token.open_id),
+                ('create_uid', '=', user.id)
+            ])
+
+            if not wechat_user:
+                return request.make_response(json.dumps({'code': 10000, 'msg': error_code[10000]}))
+
+            order = wechat_user.order_ids.filtered(lambda r: r.id == int(order_id))
+
+            if not order:
+                return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
+
+            order.write({'status': 'closed'})
+
+            return request.make_response(json.dumps({'code': 0, 'msg': 'success'}))
+
+        except Exception as e:
+            return request.make_response(json.dumps({'code': -1, 'msg': error_code[-1], 'data': e.message}))
+
+
+class OrderDelivery(http.Controller):
+    @http.route('/<string:sub_domain>/order/delivery', auth='public', method=['GET'])
+    def get(self, sub_domain, token=None, order_id=None, **kwargs):
+        try:
+            user = request.env['res.users'].sudo().search([('sub_domain', '=', sub_domain)])
+            if not user:
+                return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
+
+            if not token:
+                return request.make_response(json.dumps({'code': 300, 'msg': error_code[300].format('token')}))
+
+            if not order_id:
+                return request.make_response(json.dumps({'code': 300, 'msg': error_code[300].format('order_id')}))
+
+            access_token = request.env(user=user.id)['wechat_mall.access_token'].search([
+                ('token', '=', token),
+                ('create_uid', '=', user.id)
+            ])
+
+            if not access_token:
+                return request.make_response(json.dumps({'code': 901, 'msg': error_code[901]}))
+
+            wechat_user = request.env(user=user.id)['wechat_mall.user'].search([
+                ('open_id', '=', access_token.open_id),
+                ('create_uid', '=', user.id)
+            ])
+
+            if not wechat_user:
+                return request.make_response(json.dumps({'code': 10000, 'msg': error_code[10000]}))
+
+            order = wechat_user.order_ids.filtered(lambda r: r.id == int(order_id))
+
+            if not order:
+                return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
+
+            order.write({'status': 'unevaluated'})
+
+            return request.make_response(json.dumps({'code': 0, 'msg': 'success'}))
+
+        except Exception as e:
+            return request.make_response(json.dumps({'code': -1, 'msg': error_code[-1], 'data': e.message}))
+
+
+class OrderReputation(http.Controller):
+    @http.route('/<string:sub_domain>/order/reputation', auth='public', method=['GET'])
+    def get(self, sub_domain, token=None, order_id=None, reputation=2, **kwargs):
+        try:
+            user = request.env['res.users'].sudo().search([('sub_domain', '=', sub_domain)])
+            if not user:
+                return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
+
+            if not token:
+                return request.make_response(json.dumps({'code': 300, 'msg': error_code[300].format('token')}))
+
+            if not order_id:
+                return request.make_response(json.dumps({'code': 300, 'msg': error_code[300].format('order_id')}))
+
+            access_token = request.env(user=user.id)['wechat_mall.access_token'].search([
+                ('token', '=', token),
+                ('create_uid', '=', user.id)
+            ])
+
+            if not access_token:
+                return request.make_response(json.dumps({'code': 901, 'msg': error_code[901]}))
+
+            wechat_user = request.env(user=user.id)['wechat_mall.user'].search([
+                ('open_id', '=', access_token.open_id),
+                ('create_uid', '=', user.id)
+            ])
+
+            if not wechat_user:
+                return request.make_response(json.dumps({'code': 10000, 'msg': error_code[10000]}))
+
+            order = wechat_user.order_ids.filtered(lambda r: r.id == int(order_id))
+
+            if not order:
+                return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
+
+            order.write({'status': 'completed'})
+
+            return request.make_response(json.dumps({'code': 0, 'msg': 'success'}))
+
+        except Exception as e:
+            return request.make_response(json.dumps({'code': -1, 'msg': error_code[-1], 'data': e.message}))
+

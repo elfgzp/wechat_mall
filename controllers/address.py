@@ -197,7 +197,7 @@ class AddressUpdate(http.Controller):
 
 class AddressDelete(http.Controller):
     @http.route('/<string:sub_domain>/user/shipping-address/delete', auth='public', methods=['GET'])
-    def get(self, sub_domain, token=None, address_id=None):
+    def get(self, sub_domain, token=None, address_id=None, **kwargs):
         try:
             user = request.env['res.users'].sudo().search([('sub_domain', '=', sub_domain)])
             if not user:
@@ -246,7 +246,7 @@ class AddressDelete(http.Controller):
 
 class AddressDefault(http.Controller):
     @http.route('/<string:sub_domain>/user/shipping-address/default', auth='public', methods=['GET'])
-    def get(self, sub_domain, token=None):
+    def get(self, sub_domain, token=None, **kwargs):
         try:
             user = request.env['res.users'].sudo().search([('sub_domain', '=', sub_domain)])
             if not user:
@@ -317,7 +317,7 @@ class AddressDefault(http.Controller):
 
 class AddressDetail(http.Controller):
     @http.route('/<string:sub_domain>/user/shipping-address/detail', auth='public', methods=['GET'])
-    def get(self, sub_domain, token=None, address_id=None):
+    def get(self, sub_domain, token=None, address_id=None, **kwargs):
         try:
             user = request.env['res.users'].sudo().search([('sub_domain', '=', sub_domain)])
             if not user:

@@ -13,7 +13,7 @@ from ..tools import get_wechat_session_info, get_wechat_user_info
 
 class WechatUserCheckToken(http.Controller):
     @http.route('/<string:sub_domain>/user/check-token', auth='public', methods=['GET'])
-    def get(self, sub_domain, token=None):
+    def get(self, sub_domain, token=None, **kwargs):
         try:
             user = request.env['res.users'].sudo().search([('sub_domain', '=', sub_domain)])
             if not user:
@@ -38,7 +38,7 @@ class WechatUserCheckToken(http.Controller):
 
 class WeChatUserLogin(http.Controller):
     @http.route('/<string:sub_domain>/user/wxapp/login', auth='public', methods=['GET'])
-    def get(self, sub_domain, code=None):
+    def get(self, sub_domain, code=None, **kwargs):
         try:
             user = request.env['res.users'].sudo().search([('sub_domain', '=', sub_domain)])
             if not user:
@@ -103,7 +103,7 @@ class WeChatUserLogin(http.Controller):
 
 class WeChatUserRegisterComplex(http.Controller):
     @http.route('/<string:sub_domain>/user/wxapp/register/complex', auth='public', methods=['GET'])
-    def get(self, sub_domain, code=None, encrypted_data=None, iv=None):
+    def get(self, sub_domain, code=None, encrypted_data=None, iv=None, **kwargs):
         try:
             user = request.env['res.users'].sudo().search([('sub_domain', '=', sub_domain)])
             if not user:

@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import json
+
 from odoo import models, fields, api
 from kdniao.client import KdNiaoClient
 
@@ -78,7 +80,6 @@ class Order(models.Model):
             else:
                 self.display_traces = r_data['Reason']
 
-
     @api.one
     @api.depends('shipper_id', 'tracking_number')
     def _compute_traces(self):
@@ -91,7 +92,7 @@ class Order(models.Model):
             self.traces = '{}'
         else:
             traces = KdNiaoClient(kdniao_app_id, kdniao_app_key).track(self.tracking_number, self.shipper_id.code)
-            self.traces = traces
+            self.traces = json.dumps(traces)
 
     # todo 订单邮件提醒
     def send_create_email(self):
