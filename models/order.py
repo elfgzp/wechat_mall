@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api
+from kdniao.client import KdNiaoClient
 
 from .. import defs
 
@@ -30,17 +31,69 @@ class Order(models.Model):
     city_id = fields.Many2one('wechat_mall.city', string='市', required=True)
     district_id = fields.Many2one('wechat_mall.district', string='区')
     address = fields.Char('详细地址')
+    full_address = fields.Char('联系人地址', compute='_compute_full_address')
     postcode = fields.Char('邮政编码', requried=True)
+
+    shipper_id = fields.Many2one('wechat_mall.shipper', string='快递承运商', track_visibility='onchange')
+    tracking_number = fields.Char('运单号', track_visibility='onchange')
+    display_traces = fields.Text('物流信息', compute='_compute_display_traces')
+    traces = fields.Text('物流信息', compute='_compute_traces')
 
     @api.model
     def create(self, vals):
         vals['order_num'] = self.env['ir.sequence'].next_by_code('wechat_mall.order_num')
         return super(Order, self).create(vals)
 
-    def make_order(self, goods_json_str, remark, province_id, city_id, address,
-                   link_man, phone, postcode, district_id=False):
-        pass
+    @api.one
+    @api.depends('province_id', 'city_id', 'district_id', 'address')
+    def _compute_full_address(self):
+        self.full_address = '{province_name} {city_name} {district_name} {address}'.format(
+            province_name=self.province_id.name,
+            city_name=self.city_id.name,
+            district_name=self.district_id.name or '',
+            address=self.address
+        )
 
+    @api.one
+    @api.depends('shipper_id', 'tracking_number')
+    def _compute_display_traces(self):
+        config = self.env['wechat_mall.config.settings']
+        kdniao_app_id = config.get_config('kdniao_app_id')
+        kdniao_app_key = config.get_config('kdniao_app_key')
+        if not kdniao_app_id or not kdniao_app_key:
+            self.display_traces = '无法查询物流信息，请检查基本设置中的"快递鸟物流查询设置"是否设置完整。'
+        elif not self.shipper_id or not self.tracking_number:
+            self.display_traces = '无法查询物流信息，请检查订单中的"快递承运商"和"运单号"是否设置完整。'
+        else:
+            traces = KdNiaoClient(kdniao_app_id, kdniao_app_key).track(self.tracking_number, self.shipper_id.code)
+            r = traces or {}
+
+            r_data = r.get('data', {})
+            trace_list = r_data.get('Traces', [])
+
+            if trace_list:
+                msg_temp = '%s - %s'
+                msg_list = [msg_temp % (i['AcceptTime'], i['AcceptStation']) for i in trace_list]
+                self.display_traces = '\n'.join(msg_list)
+            else:
+                self.display_traces = r_data['Reason']
+
+
+    @api.one
+    @api.depends('shipper_id', 'tracking_number')
+    def _compute_traces(self):
+        config = self.env['wechat_mall.config.settings']
+        kdniao_app_id = config.get_config('kdniao_app_id')
+        kdniao_app_key = config.get_config('kdniao_app_key')
+        if not kdniao_app_id or not kdniao_app_key:
+            self.traces = '{}'
+        elif not self.shipper_id or not self.tracking_number:
+            self.traces = '{}'
+        else:
+            traces = KdNiaoClient(kdniao_app_id, kdniao_app_key).track(self.tracking_number, self.shipper_id.code)
+            self.traces = traces
+
+    # todo 订单邮件提醒
     def send_create_email(self):
         pass
 

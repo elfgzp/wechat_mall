@@ -28,7 +28,7 @@
             <field name="arch" type="xml">
                 <form string="订单" version="7.0" create="0" delete="0" duplicate="0">
                     <sheet>
-                        <group>
+                        <group colspan="2" string="订单信息">
                             <field name="wechat_user_id" readonly="1"/>
                             <field name="order_num" attrs="{'invisible': [('order_num', '=', False)]}" readonly="1"/>
                             <field name="number_goods" readonly="1"/>
@@ -48,6 +48,18 @@
                             <field name="create_date" string="下单时间" attrs="{'invisible': [('create_date', '=', False)]}" readonly="1"/>
                             <field name="write_date" string="最后更新" attrs="{'invisible': [('write_date', '=', False)]}" readonly="1"/>
                         </group>
+                        <group colspan="2" string="联系人信息">
+                            <field name="wechat_user_id" readonly="1"/>
+                            <field name="linkman" readonly="1"/>
+                            <field name="phone" readonly="1"/>
+                            <field name="full_address" readonly="1"/>
+                            <field name="postcode" readonly="1"/>
+                        </group>
+                        <group colspan="2" string="物流信息">
+                            <field name="shipper_id" options="{'no_open': True, 'no_create': True}"/>
+                            <field name="tracking_number"/>
+                            <field name="display_traces"/>
+                        </group>
                     </sheet>
                     <div class="oe_chatter">
                         <field name="message_follower_ids" widget="mail_followers"/>
@@ -66,7 +78,7 @@
         </record>
 
         <menuitem action="wechat_mall_order_action_134" id="wechat_mall_order_menuitem_118" name="订单"
-                  parent="parent_menu_wechat_mall" sequence="10"/>
+                  parent="parent_menu_wechat_mall" sequence="9"/>
 
     </data>
 </openerp>

@@ -74,6 +74,7 @@ class OrderStatus(Const):
     unpaid = ('unpaid', u'待支付')
     pending = ('pending', u'待发货')
     unconfirmed = ('unconfirmed', u'待收货')
+    unevaluated = ('unevaluated', u'待评价')
     completed = ('completed', u'已完成')
 
 
@@ -82,6 +83,7 @@ class OrderRequestStatus(Const):
     unpaid = (0, 'unpaid')
     pending = (1, 'pending')
     unconfirmed = (2, 'unconfirmed')
+    unevaluated = (3, 'unevaluated')
     completed = (4, 'completed')
 
 
@@ -90,4 +92,5 @@ class OrderResponseStatus(Const):
     unpaid = ('unpaid', 0)
     pending = ('pending', 1)
     unconfirmed = ('unconfirmed', 2)
+    unevaluated = ('unevaluated', 3)
     completed = ('completed', 4)

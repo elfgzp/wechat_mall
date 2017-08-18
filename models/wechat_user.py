@@ -29,6 +29,7 @@ class WechatUser(models.Model):
                               default=defs.WechatUserStatus.default)
 
     address_ids = fields.One2many('wechat_mall.address', 'wechat_user_id', string='收货地址')
+    order_ids = fields.One2many('wechat_mall.order', 'wechat_user_id', string='订单')
 
     _sql_constraints = [(
         'wechat_mall_user_union_id_unique',

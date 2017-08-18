@@ -187,3 +187,118 @@ class OrderCreate(http.Controller):
         else:
             return transport.less_price + \
                    int(((amount - transport.less_amount) / transport.increase_amount)) * transport.increase_price
+
+
+class OrderStatistics(http.Controller):
+    @http.route('/<string:sub_domain>/order/statistics', auth='public', method=['GET'])
+    def get(self, sub_domain, token):
+        try:
+            user = request.env['res.users'].sudo().search([('sub_domain', '=', sub_domain)])
+            if not user:
+                return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
+
+            if not token:
+                return request.make_response(json.dumps({'code': 300, 'msg': error_code[300].format('token')}))
+
+            access_token = request.env(user=user.id)['wechat_mall.access_token'].search([
+                ('token', '=', token),
+                ('create_uid', '=', user.id)
+            ])
+
+            if not access_token:
+                return request.make_response(json.dumps({'code': 901, 'msg': error_code[901]}))
+
+            wechat_user = request.env(user=user.id)['wechat_mall.user'].search([
+                ('open_id', '=', access_token.open_id),
+                ('create_uid', '=', user.id)
+            ])
+
+            order_statistics_dict = {order_status: 0 for order_status in defs.OrderStatus.attrs.keys()}
+            for each_order in wechat_user.order_ids:
+                order_statistics_dict[each_order.status] += 1
+
+            response = request.make_response(
+                headers={
+                    "Content-Type": "json"
+                },
+                data=json.dumps({
+                    "code": 0,
+                    "data": {
+                        "count_id_no_reputation": order_statistics_dict['unevaluated'],
+                        "count_id_no_transfer": order_statistics_dict['pending'],
+                        "count_id_close": order_statistics_dict['closed'],
+                        "count_id_no_pay": order_statistics_dict['unpaid'],
+                        "count_id_no_confirm": order_statistics_dict['unconfirmed'],
+                        "count_id_success": order_statistics_dict['completed']
+                    },
+                    "msg": "success"
+                })
+            )
+
+            return response
+
+        except Exception as e:
+            return request.make_response(json.dumps({'code': -1, 'msg': error_code[-1], 'data': e.message}))
+
+
+class OrderList(http.Controller):
+    @http.route('/<string:sub_domain>/order/list', auth='public', method=['GET'])
+    def get(self, sub_domain, token, status=None):
+        try:
+            user = request.env['res.users'].sudo().search([('sub_domain', '=', sub_domain)])
+            if not user:
+                return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
+
+            if not token:
+                return request.make_response(json.dumps({'code': 300, 'msg': error_code[300].format('token')}))
+
+            access_token = request.env(user=user.id)['wechat_mall.access_token'].search([
+                ('token', '=', token),
+                ('create_uid', '=', user.id)
+            ])
+
+            if not access_token:
+                return request.make_response(json.dumps({'code': 901, 'msg': error_code[901]}))
+
+            wechat_user = request.env(user=user.id)['wechat_mall.user'].search([
+                ('open_id', '=', access_token.open_id),
+                ('create_uid', '=', user.id)
+            ])
+
+            if status is not None:
+                orders = wechat_user.order_ids.filtered(
+                    lambda r: r.status == defs.OrderRequestStatus.attrs[int(status)]
+                )
+            else:
+                orders = wechat_user.order_ids
+
+            response = request.make_response(
+                headers={
+                    "Content-Type": "json"
+                },
+                data=json.dumps({
+                    "code": 0,
+                    "data": {
+                        "orderList": [{
+                            "amountReal": each_order.total,
+                            "dateAdd": each_order.create_date,
+                            "id": each_order.id,
+                            "orderNumber": each_order.order_num,
+                            "status": defs.OrderResponseStatus.attrs[each_order.status],
+                            "statusStr": defs.OrderStatus.attrs[each_order.status],
+                        } for each_order in orders],
+                        "goodsMap": {
+                            each_order.id: [
+                                {
+                                    "pic": each_goods.pic.static_link() if each_goods.pic else '',
+                                } for each_goods in each_order.order_goods_ids]
+                            for each_order in orders}
+                    },
+                    "msg": "success"
+                })
+            )
+
+            return response
+
+        except Exception as e:
+            return request.make_response(json.dumps({'code': -1, 'msg': error_code[-1], 'data': e.message}))

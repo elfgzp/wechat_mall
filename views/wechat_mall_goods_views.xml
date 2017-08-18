@@ -8,7 +8,7 @@
             <field name="arch" type="xml">
                 <tree string="商品">
                     <field name="id" string="商品编号"/>
-                    <field name="subshop_id"/>
+                    <field name="subshop_id" groups="base.group_system"/>
                     <field name="category_id"/>
                     <field name="name"/>
                     <field name="display_pic"/>
@@ -34,7 +34,7 @@
                         <group>
                             <field name="name"/>
                             <field name="category_id" domain="[('create_uid', '=', uid)]"/>
-                            <field name="subshop_id" domain="[('create_uid', '=', uid)]"/>
+                            <field name="subshop_id" domain="[('create_uid', '=', uid)]" groups="base.group_system"/>
                             <field name="status"/>
                             <field name="recommend_status"/>
                             <field name="stores"/>

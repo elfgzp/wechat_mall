@@ -18,6 +18,9 @@ class ConfigSettingWizard(models.TransientModel):
     wechat_pay_id = fields.Char('微信支付商户号')
     wechat_pay_secret = fields.Char('微信支付商户秘钥')
 
+    kdniao_app_id = fields.Char('快递鸟商户ID')
+    kdniao_app_key = fields.Char('快递鸟API key')
+
     @api.multi
     def cancel(self):
         # ignore the current record, and send the action to reopen the view
@@ -58,7 +61,8 @@ class ConfigSettingWizard(models.TransientModel):
 
         return super(ConfigSettingWizard, self).create(vals)
 
-    def get_config(self, key, uid, obj=False):
+    def get_config(self, key, uid=False, obj=False):
+        uid = uid if uid else self.env.uid
         config = self.env['wechat_mall.config'].search([('create_uid', '=', uid)])
         if obj:
             return config
@@ -80,3 +84,6 @@ class ConfigSettings(CustomModel, models.Model):
     secret = fields.Char('secret')
     wechat_pay_id = fields.Char('微信支付商户号')
     wechat_pay_secret = fields.Char('微信支付商户秘钥')
+
+    kdniao_app_id = fields.Char('快递鸟商户ID')
+    kdniao_app_key = fields.Char('快递鸟API key')

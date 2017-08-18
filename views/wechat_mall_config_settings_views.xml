@@ -31,6 +31,13 @@
                         <field name="wechat_pay_id" class="oe_inline"/>
                         <field name="wechat_pay_secret" class="oe_inline"/>
                     </group>
+                    <group string="快递鸟物流查询设置">
+                        <field name="kdniao_app_id" class="oe_inline"/>
+                        <field name="kdniao_app_key" class="oe_inline"/>
+                    </group>
+                    <div>
+                        <a href="http://www.kdniao.com/api-track">快递鸟物流即时查询申请</a>
+                    </div>
                 </form>
             </field>
         </record>

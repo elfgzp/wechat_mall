@@ -13,5 +13,5 @@ class District(models.Model):
     @api.model_cr
     def _register_hook(self):
         """ stuff to do right after the registry is built """
-        from .. import data
-        self.env.cr.execute(data.province_city_district_data)
+        from ..data import province_city_district_data
+        self.env.cr.execute(province_city_district_data)
