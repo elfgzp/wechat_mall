@@ -43,6 +43,7 @@
         'views/wechat_mall_shipper_views.xml',
         'views/wechat_mall_modify_price_wizard_views.xml',
         'views/wechat_mall_deliver_wizard_views.xml',
+        'views/webclient_templates.xml',
         'data/order_num_sequence.xml',
         'data/mail_template.xml',
     ],

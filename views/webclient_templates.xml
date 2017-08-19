@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <template id="wechat_mall.login" inherit_id="web.login" name="Sign in - Login">
+        <xpath expr="//form[@class='oe_login_form']" position="before">
+            <div class="row">
+                <div class="mt32 col-md-12 text-center">
+                    <div class="mb0 mt8 col-md-12 login-title" style="font-size: 1.5em;">
+                        <p>微信小程序商城管理后台</p>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="wechat_mall.login_layout" inherit_id="web.login_layout" name="Login Layout">
+        <xpath expr="//div[contains(@class, 'o_database_list')]" position="before">
+            <t t-set="disable_footer" t-value="true"/>
+        </xpath>
+    </template>
+
+</odoo>
