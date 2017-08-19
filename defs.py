@@ -44,21 +44,24 @@ class TransportationUnit(Const):
 
 
 class TransportType(Const):
-    express = ('express', u'快递')
+    express = ('express', u'快递(或商家配送)')
     # ems = ('ems', u'EMS')
     # post = ('post', u'平邮')
+    # by_self = ('self', u'商家配送')
 
 
 class TransportResponseType(Const):
     express = ('express', 0)
     ems = ('ems', 1)
     post = ('post', 2)
+    by_self = ('self', 3)
 
 
 class TransportRequestType(Const):
     express = (0, 'express')
     ems = (1, 'ems')
     post = (2, 'post')
+    by_self = (3, 'self')
 
 
 class WechatUserRegisterType(Const):

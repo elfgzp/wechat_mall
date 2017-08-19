@@ -119,6 +119,7 @@ class GoodsDetail(http.Controller):
                         ],
                         "logistics": {
                             "isFree": goods.logistics_id.free,
+                            "by_self": goods.logistics_id.by_self,
                             "feeType": defs.LogisticsValuationResponseType.attrs[goods.logistics_id.valuation_type],
                             "feeTypeStr": defs.LogisticsValuationType.attrs[goods.logistics_id.valuation_type],
                             "details": [

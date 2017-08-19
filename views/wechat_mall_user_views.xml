@@ -28,7 +28,7 @@
             <field name="model">wechat_mall.user</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                <form string="微信用户" version="7.0" create="0" delete="0" duplicate="0">
+                <form string="微信用户" version="7.0" create="0" delete="0" edit="false" save="false" cancel="false" duplicate="0">
                     <sheet>
                         <group>
                             <field name="register_type" readonly="1"/>

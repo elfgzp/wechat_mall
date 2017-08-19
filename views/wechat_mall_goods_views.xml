@@ -18,9 +18,9 @@
                     <field name="original_price"/>
                     <field name="min_price"/>
                     <field name="views"/>
-                    <field name="number_fav"/>
+                    <field name="number_fav" invisible="1"/>
                     <field name="number_order"/>
-                    <field name="number_good_reputation"/>
+                    <field name="number_good_reputation" invisible="1"/>
                 </tree>
             </field>
         </record>
@@ -119,8 +119,8 @@
                             <field name="characteristic"/>
                             <field name="content"/>
                             <field name="views" readonly="1"/>
-                            <field name="number_fav" readonly="1"/>
-                            <field name="number_good_reputation" readonly="1"/>
+                            <field name="number_fav" readonly="1" invisible="1"/>
+                            <field name="number_good_reputation" readonly="1" invisible="1"/>
                             <field name="number_order"/>
                             <field name="sort"/>
                         </group>

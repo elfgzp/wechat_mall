@@ -42,6 +42,7 @@
         'views/wechat_mall_order_views.xml',
         'views/wechat_mall_shipper_views.xml',
         'data/order_num_sequence.xml',
+        'data/mail_template.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

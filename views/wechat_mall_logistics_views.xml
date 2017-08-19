@@ -9,6 +9,7 @@
             <field name="arch" type="xml">
                 <tree string="物流">
                     <field name="name"/>
+                    <field name="by_self"/>
                     <field name="free"/>
                     <field name="valuation_type"/>
                     <field name="transportation_ids"/>
@@ -26,6 +27,7 @@
                             <field name="name" class="oe_inline"/>
                         </group>
                         <group colspan="1">
+                            <field name="by_self"/>
                             <field name="free"/>
                         </group>
                         <group colspan="1">
@@ -148,7 +150,7 @@
             <field name="domain">[('create_uid', '=', uid)]</field>
         </record>
 
-        <menuitem action="wechat_mall_logistics_action_88" id="wechat_mall_logistics_menuitem_76" name="物流"
+        <menuitem action="wechat_mall_logistics_action_88" id="wechat_mall_logistics_menuitem_76" name="物流模版"
                   parent="parent_menu_wechat_mall" sequence="5" groups="wechat_mall.group_wechat_mall_user"/>
 
     </data>

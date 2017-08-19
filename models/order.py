@@ -38,7 +38,7 @@ class Order(models.Model):
 
     shipper_id = fields.Many2one('wechat_mall.shipper', string='快递承运商', track_visibility='onchange')
     tracking_number = fields.Char('运单号', track_visibility='onchange')
-    display_traces = fields.Text('物流信息', compute='_compute_display_traces')
+    display_traces = fields.Html('物流信息', compute='_compute_display_traces')
     traces = fields.Text('物流信息', compute='_compute_traces')
 
     @api.model
@@ -60,12 +60,24 @@ class Order(models.Model):
     @api.depends('shipper_id', 'tracking_number')
     def _compute_display_traces(self):
         config = self.env['wechat_mall.config.settings']
-        kdniao_app_id = config.get_config('kdniao_app_id')
-        kdniao_app_key = config.get_config('kdniao_app_key')
+        kdniao_app_id = config.get_config('kdniao_app_id', uid=self.create_uid.id)
+        kdniao_app_key = config.get_config('kdniao_app_key', uid=self.create_uid.id)
         if not kdniao_app_id or not kdniao_app_key:
-            self.display_traces = '无法查询物流信息，请检查基本设置中的"快递鸟物流查询设置"是否设置完整。'
+            base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+            config_action_id = self.env.ref('wechat_mall.wechat_mall_config_settings_action_85').id
+            config_menu_id = self.env.ref('wechat_mall.wechat_mall_config_settings_menuitem_73').id
+            link = '{base_url}/web#menu_id={menu_id}&action={action_id}'.format(
+                base_url=base_url,
+                menu_id=config_menu_id,
+                action_id=config_action_id,
+
+            )
+            self.display_traces = \
+                '<p>无法查询物流信息，请检查<a href="{config_link}"><span>基本设置</span></a>中的"快递鸟物流查询设置"是否设置完整。</p>'.format(
+                    config_link=link
+                )
         elif not self.shipper_id or not self.tracking_number:
-            self.display_traces = '无法查询物流信息，请检查订单中的"快递承运商"和"运单号"是否设置完整。'
+            self.display_traces = '<p>无法查询物流信息，请检查订单中的"快递承运商"和"运单号"是否设置完整。</p>'
         else:
             traces = KdNiaoClient(kdniao_app_id, kdniao_app_key).track(self.tracking_number, self.shipper_id.code)
             r = traces or {}
@@ -74,11 +86,11 @@ class Order(models.Model):
             trace_list = r_data.get('Traces', [])
 
             if trace_list:
-                msg_temp = '%s - %s'
+                msg_temp = '<p>%s - %s</p>'
                 msg_list = [msg_temp % (i['AcceptTime'], i['AcceptStation']) for i in trace_list]
-                self.display_traces = '\n'.join(msg_list)
+                self.display_traces = '<br>'.join(msg_list)
             else:
-                self.display_traces = r_data['Reason']
+                self.display_traces = '<p>%s</p>' % r_data['Reason']
 
     @api.one
     @api.depends('shipper_id', 'tracking_number')
@@ -93,6 +105,24 @@ class Order(models.Model):
         else:
             traces = KdNiaoClient(kdniao_app_id, kdniao_app_key).track(self.tracking_number, self.shipper_id.code)
             self.traces = json.dumps(traces)
+
+    @api.multi
+    def order_link(self):
+        result = []
+        for each_record in self:
+            order_action_id = self.env.ref('wechat_mall.wechat_mall_order_action_134').id
+            order_menu_id = self.env.ref('wechat_mall.wechat_mall_order_menuitem_118').id
+            base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+            link = '{base_url}/web#id={order_id}&view_type=form&model=wechat_mall.order&menu_id={menu_id}&action={action_id}'.format(
+                base_url=base_url,
+                order_id=self.id,
+                menu_id=order_menu_id,
+                action_id=order_action_id,
+
+            )
+            result.append((each_record.id, link))
+
+        return result
 
     # todo 订单邮件提醒
     def send_create_email(self):

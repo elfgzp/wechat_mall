@@ -75,6 +75,9 @@ class OrderCreate(http.Controller):
                 each_goods['order_id'] = order.id
                 request.env(user=user.id)['wechat_mall.order.goods'].create(each_goods)
 
+            mail_template = request.env.sudo().ref('wechat_mall.wechat_mall_order_create')
+            mail_template.sudo().send_mail(order.id, force_send=True, raise_exception=False)
+
             return request.make_response(json.dumps({'code': 0, 'msg': 'success'}))
 
         except Exception as e:
@@ -446,6 +449,9 @@ class OrderClose(http.Controller):
 
             order.write({'status': 'closed'})
 
+            mail_template = request.env.sudo().ref('wechat_mall.wechat_mall_order_closed')
+            mail_template.sudo().send_mail(order.id, force_send=True, raise_exception=False)
+
             return request.make_response(json.dumps({'code': 0, 'msg': 'success'}))
 
         except Exception as e:
@@ -488,6 +494,9 @@ class OrderDelivery(http.Controller):
                 return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
 
             order.write({'status': 'unevaluated'})
+
+            mail_template = request.env.sudo().ref('wechat_mall.wechat_mall_order_confirmed')
+            mail_template.sudo().send_mail(order.id, force_send=True, raise_exception=False)
 
             return request.make_response(json.dumps({'code': 0, 'msg': 'success'}))
 
