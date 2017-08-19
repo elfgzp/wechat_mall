@@ -15,8 +15,8 @@
                     <field name="status"/>
                     <field name="recommend_status"/>
                     <field name="stores"/>
-                    <field name="original_price"/>
-                    <field name="min_price"/>
+                    <field name="original_price" string="价格"/>
+                    <field name="min_price" invisible="1"/>
                     <field name="views"/>
                     <field name="number_fav" invisible="1"/>
                     <field name="number_order"/>
@@ -37,11 +37,6 @@
                             <field name="subshop_id" domain="[('create_uid', '=', uid)]" groups="base.group_system"/>
                             <field name="status"/>
                             <field name="recommend_status"/>
-                            <field name="stores"/>
-                            <field name="original_price"/>
-                            <field name="min_price"/>
-                            <field name="weight"
-                                   attrs="{'invisible': [('logistics_valuation_type', '!=', 'by_weight')]}"/>
                             <field name="logistics_id" domain="[('create_uid', '=', uid)]"/>
                             <field name="logistics_valuation_type" invisible="1"/>
                             <field name="property_ids" domain="[('create_uid', '=', uid)]">
@@ -83,19 +78,25 @@
                             <field name="price_ids" attrs="{'invisible': [('price_ids', '=', [])]}">
                                 <tree editable="button" create="false" delete="false">
                                     <field name="name"/>
-                                    <field name="original_price"/>
-                                    <field name="price"/>
+                                    <field name="original_price" invisible="1"/>
+                                    <field name="price" string="价格"/>
                                     <field name="stores"/>
                                 </tree>
                                 <form>
                                     <group>
                                         <field name="name" string="规格名称"/>
-                                        <field name="original_price" string="原价"/>
-                                        <field name="price" string="现价"/>
+                                        <field name="original_price" string="原价" invisible="1"/>
+                                        <field name="price" string="价格"/>
                                         <field name="stores" string="库存"/>
                                     </group>
                                 </form>
                             </field>
+                            <field name="stores"/>
+                            <field name="original_price" string="价格"/>
+                            <field name="min_price" invisible="1"/>
+                            <field name="weight"
+                                   attrs="{'invisible': [('logistics_valuation_type', '!=', 'by_weight')]}"/>
+
                             <field name="pic" domain="[('create_uid', '=', uid)]">
                                 <tree>
                                     <field name="name"/>
@@ -107,13 +108,15 @@
                                     <field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
                                 </tree>
                                 <form>
-                                    <field name="name"/>
-                                    <field name="type"/>
-                                    <field name="datas" filename="datas_fname"
-                                           attrs="{'invisible':[('type','=','url')]}"/>
-                                    <field name="datas_fname" invisible="1"
-                                           attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
-                                    <field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
+                                    <group>
+                                        <field name="name"/>
+                                        <field name="type"/>
+                                        <field name="datas" filename="datas_fname"
+                                               attrs="{'invisible':[('type','=','url')]}"/>
+                                        <field name="datas_fname" invisible="1"
+                                               attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
+                                        <field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
+                                    </group>
                                 </form>
                             </field>
                             <field name="characteristic"/>

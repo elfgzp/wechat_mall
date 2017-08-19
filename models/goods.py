@@ -25,8 +25,8 @@ class Goods(models.Model):
     recommend_status = fields.Boolean('是否推荐')
     status = fields.Boolean('是否上架', default=True)
     display_pic = fields.Html('图片', compute='_compute_display_pic')
-    pic = fields.Many2many('ir.attachment', string='图片')
-    content = fields.Html('详细介绍')
+    pic = fields.Many2many('ir.attachment', string='图片', required=True)
+    content = fields.Html('详细介绍', required=True)
     property_ids = fields.Many2many('wechat_mall.goods.property', string='商品规格')
     price_ids = fields.One2many('wechat_mall.goods.property_child.price', 'goods_id', string='商品不同规格价格',
                                 compute='_compute_property_ids', readonly=False, store=True)

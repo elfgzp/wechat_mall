@@ -75,7 +75,7 @@ class OrderCreate(http.Controller):
                 each_goods['order_id'] = order.id
                 request.env(user=user.id)['wechat_mall.order.goods'].create(each_goods)
 
-            mail_template = request.env.sudo().ref('wechat_mall.wechat_mall_order_create')
+            mail_template = request.env.ref('wechat_mall.wechat_mall_order_create')
             mail_template.sudo().send_mail(order.id, force_send=True, raise_exception=False)
 
             return request.make_response(json.dumps({'code': 0, 'msg': 'success'}))
@@ -103,7 +103,7 @@ class OrderCreate(http.Controller):
             raise exceptions.ValidationError('订单中存在已下架的商品，请重新下单。')
 
         for each_goods in goods_json:
-            property_child_ids = each_goods['property_child_ids']
+            property_child_ids = each_goods.get('property_child_ids')
             amount = each_goods['amount']
             transport_type = each_goods['transport_type']
 
@@ -128,7 +128,7 @@ class OrderCreate(http.Controller):
 
         return goods_price, logistics_price, goods_price + logistics_price, goods_list
 
-    def _count_goods_price(self, goods, amount, property_child_ids):
+    def _count_goods_price(self, goods, amount, property_child_ids=None):
         """
         计算商品价格
         :param goods: model('wechat_mall.goods')
@@ -136,19 +136,35 @@ class OrderCreate(http.Controller):
         :param property_child_ids: string
         :return: price, total, property_str
         """
-        property_child = goods.price_ids.filtered(lambda r: r.property_child_ids == property_child_ids)
-        price = property_child.price
-        property_str = property_child.name
-        total = price * amount
-        stores = property_child.stores - amount
-        if stores < 0:
-            raise exceptions.ValidationError('库存不足请重新下单！')
+        property_str = ''
 
-        if stores == 0:
-            # todo 发送库存空邮件
-            pass
+        if property_child_ids:
+            property_child = goods.price_ids.filtered(lambda r: r.property_child_ids == property_child_ids)
+            price = property_child.price
+            property_str = property_child.name
+            total = price * amount
+            stores = property_child.stores - amount
+            if stores < 0:
+                raise exceptions.ValidationError('库存不足请重新下单！')
 
-        property_child.sudo().write({'stores': stores})
+            if stores == 0:
+                # todo 发送库存空邮件
+                pass
+
+            property_child.sudo().write({'stores': stores})
+        else:
+            price = goods.original_price
+            total = price * amount
+
+            stores = goods.stores - amount
+            if stores < 0:
+                raise exceptions.ValidationError('库存不足请重新下单！')
+
+            if stores == 0:
+                # todo 发送库存空邮件
+                pass
+
+            goods.sudo().write({'stores': stores})
 
         return price, total, property_str
 
@@ -397,7 +413,7 @@ class OrderDetail(http.Controller):
             }
             traces_list = traces.get('Traces')
             if traces_list:
-                data["logisticsTraces"] = traces_list
+                data["data"]["logisticsTraces"] = traces_list
 
             response = request.make_response(
                 headers={
@@ -449,7 +465,7 @@ class OrderClose(http.Controller):
 
             order.write({'status': 'closed'})
 
-            mail_template = request.env.sudo().ref('wechat_mall.wechat_mall_order_closed')
+            mail_template = request.env.ref('wechat_mall.wechat_mall_order_closed')
             mail_template.sudo().send_mail(order.id, force_send=True, raise_exception=False)
 
             return request.make_response(json.dumps({'code': 0, 'msg': 'success'}))
@@ -495,7 +511,7 @@ class OrderDelivery(http.Controller):
 
             order.write({'status': 'unevaluated'})
 
-            mail_template = request.env.sudo().ref('wechat_mall.wechat_mall_order_confirmed')
+            mail_template = request.env.ref('wechat_mall.wechat_mall_order_confirmed')
             mail_template.sudo().send_mail(order.id, force_send=True, raise_exception=False)
 
             return request.make_response(json.dumps({'code': 0, 'msg': 'success'}))

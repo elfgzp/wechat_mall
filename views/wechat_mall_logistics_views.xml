@@ -150,8 +150,8 @@
             <field name="domain">[('create_uid', '=', uid)]</field>
         </record>
 
-        <menuitem action="wechat_mall_logistics_action_88" id="wechat_mall_logistics_menuitem_76" name="物流模版"
-                  parent="parent_menu_wechat_mall" sequence="5" groups="wechat_mall.group_wechat_mall_user"/>
+        <menuitem action="wechat_mall_logistics_action_88" id="wechat_mall_logistics_menuitem_76" name="物流设置"
+                  parent="parent_menu_wechat_mall" sequence="1" groups="wechat_mall.group_wechat_mall_user"/>
 
     </data>
 </odoo>

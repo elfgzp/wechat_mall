@@ -90,99 +90,103 @@ class GoodsDetail(http.Controller):
             if goods.create_uid.id != user.id or not goods.status:
                 return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
 
+            data = {
+                "code": 0,
+                "data": {
+                    "category": {
+                        "dateAdd": goods.category_id.create_date,
+                        "dateUpdate": goods.category_id.write_date,
+                        "icon": goods.category_id.icon.static_link() if goods.category_id.icon else '',
+                        "id": goods.category_id.id,
+                        "isUse": goods.category_id.is_use,
+                        "key": goods.category_id.key,
+                        "name": goods.category_id.name,
+                        "paixu": goods.category_id.sort or 0,
+                        "pid": goods.category_id.pid.id if goods.category_id.pid else 0,
+                        "type": goods.category_id.category_type,
+                        "userId": goods.category_id.create_uid.id
+                    },
+                    "pics": [
+                        {
+                            "goodsId": goods.id,
+                            "id": each_pic.id,
+                            "pic": each_pic.static_link()
+                        } for each_pic in goods.pic
+                    ],
+                    "logistics": {
+                        "logisticsBySelf": goods.logistics_id.by_self,
+                        "isFree": goods.logistics_id.free,
+                        "by_self": goods.logistics_id.by_self,
+                        "feeType": defs.LogisticsValuationResponseType.attrs[goods.logistics_id.valuation_type],
+                        "feeTypeStr": defs.LogisticsValuationType.attrs[goods.logistics_id.valuation_type],
+                        "details": [
+                            {
+                                "addAmount": each_transportation.increase_price,
+                                "addNumber": each_transportation.increase_amount,
+                                "firstAmount": each_transportation.less_price,
+                                "firstNumber": each_transportation.less_amount,
+                                "type": defs.TransportResponseType.attrs[each_transportation.transport_type]
+                            } for each_transportation in goods.logistics_id.transportation_ids
+                        ]
+                    },
+                    "content": convert_static_link(request, goods.content) if goods.content else '',
+                    "basicInfo": {
+                        "categoryId": goods.category_id.id,
+                        "characteristic": goods.characteristic or '',
+                        "dateAdd": goods.create_date,
+                        "dateUpdate": goods.write_date,
+                        "id": goods.id,
+                        "logisticsId": goods.logistics_id.id or 0,
+                        "minPrice": goods.min_price,
+                        "name": goods.name,
+                        "numberFav": goods.number_fav,
+                        "numberGoodReputation": goods.number_good_reputation,
+                        "numberOrders": goods.number_order,
+                        "originalPrice": goods.original_price,
+                        "paixu": goods.sort or 0,
+                        "pic": goods.pic[0].static_link() if goods.pic else '',
+                        "recommendStatus": 0 if not goods.recommend_status else 1,
+                        "recommendStatusStr": defs.GoodsRecommendStatus.attrs[goods.recommend_status],
+                        "shopId": goods.subshop_id.id if goods.subshop_id else 0,
+                        "status": 0 if goods.status else 1,
+                        "statusStr": defs.GoodsStatus.attrs[goods.status],
+                        "stores": goods.stores,
+                        "userId": goods.create_uid.id,
+                        "views": goods.views,
+                        "weight": goods.weight
+                    }
+                },
+                "msg": "success"
+            }
+            if goods.property_ids:
+                data["data"]["properties"] = [
+                    {
+                        "childsCurGoods": [
+                            {
+                                "dateAdd": each_child.create_date,
+                                "dateUpdate": each_child.write_date,
+                                "id": each_child.id,
+                                "name": each_child.name,
+                                "paixu": each_child.sort,
+                                "propertyId": each_property.id,
+                                "remark": each_child.remark or '',
+                                "userId": each_child.create_uid.id
+                            } for each_child in each_property.child_ids
+                        ],
+                        "dateAdd": each_property.create_date,
+                        "dateUpdate": each_property.write_date,
+                        "id": each_property.id,
+                        "name": each_property.name,
+                        "paixu": each_property.sort or 0,
+                        "userId": each_property.create_uid.id
+                    } for each_property in goods.property_ids if each_property.child_ids
+                ]
+
             response = request.make_response(
                 headers={
                     "Content-Type": "json"
                 },
-                data=json.dumps({
-                    "code": 0,
-                    "data": {
-                        "category": {
-                            "dateAdd": goods.category_id.create_date,
-                            "dateUpdate": goods.category_id.write_date,
-                            "icon": goods.category_id.icon.static_link() if goods.category_id.icon else '',
-                            "id": goods.category_id.id,
-                            "isUse": goods.category_id.is_use,
-                            "key": goods.category_id.key,
-                            "name": goods.category_id.name,
-                            "paixu": goods.category_id.sort or 0,
-                            "pid": goods.category_id.pid.id if goods.category_id.pid else 0,
-                            "type": goods.category_id.category_type,
-                            "userId": goods.category_id.create_uid.id
-                        },
-                        "pics": [
-                            {
-                                "goodsId": goods.id,
-                                "id": each_pic.id,
-                                "pic": each_pic.static_link()
-                            } for each_pic in goods.pic
-                        ],
-                        "logistics": {
-                            "isFree": goods.logistics_id.free,
-                            "by_self": goods.logistics_id.by_self,
-                            "feeType": defs.LogisticsValuationResponseType.attrs[goods.logistics_id.valuation_type],
-                            "feeTypeStr": defs.LogisticsValuationType.attrs[goods.logistics_id.valuation_type],
-                            "details": [
-                                {
-                                    "addAmount": each_transportation.increase_price,
-                                    "addNumber": each_transportation.increase_amount,
-                                    "firstAmount": each_transportation.less_price,
-                                    "firstNumber": each_transportation.less_amount,
-                                    "type": defs.TransportResponseType.attrs[each_transportation.transport_type]
-                                } for each_transportation in goods.logistics_id.transportation_ids
-                            ]
-                        },
-                        "content": convert_static_link(request, goods.content) if goods.content else '',
-                        "properties": [
-                            {
-                                "childsCurGoods": [
-                                    {
-                                        "dateAdd": each_child.create_date,
-                                        "dateUpdate": each_child.write_date,
-                                        "id": each_child.id,
-                                        "name": each_child.name,
-                                        "paixu": each_child.sort,
-                                        "propertyId": each_property.id,
-                                        "remark": each_child.remark or '',
-                                        "userId": each_child.create_uid.id
-                                    } for each_child in each_property.child_ids
-                                ],
-                                "dateAdd": each_property.create_date,
-                                "dateUpdate": each_property.write_date,
-                                "id": each_property.id,
-                                "name": each_property.name,
-                                "paixu": each_property.sort or 0,
-                                "userId": each_property.create_uid.id
-                            } for each_property in goods.property_ids if each_property.child_ids
-                        ],
-                        "basicInfo": {
-                            "categoryId": goods.category_id.id,
-                            "characteristic": goods.characteristic or '',
-                            "dateAdd": goods.create_date,
-                            "dateUpdate": goods.write_date,
-                            "id": goods.id,
-                            "logisticsId": goods.logistics_id.id,
-                            "minPrice": goods.min_price,
-                            "name": goods.name,
-                            "numberFav": goods.number_fav,
-                            "numberGoodReputation": goods.number_good_reputation,
-                            "numberOrders": goods.number_order,
-                            "originalPrice": goods.original_price,
-                            "paixu": goods.sort or 0,
-                            "pic": goods.pic[0].static_link() if goods.pic else '',
-                            "recommendStatus": 0 if not goods.recommend_status else 1,
-                            "recommendStatusStr": defs.GoodsRecommendStatus.attrs[goods.recommend_status],
-                            "shopId": goods.subshop_id.id if goods.subshop_id else 0,
-                            "status": 0 if goods.status else 1,
-                            "statusStr": defs.GoodsStatus.attrs[goods.status],
-                            "stores": goods.stores,
-                            "userId": goods.create_uid.id,
-                            "views": goods.views,
-                            "weight": goods.weight
-                        }
-                    },
-                    "msg": "success"
-                })
+                data=json.dumps(data)
             )
 
             goods.sudo().write({'views': goods.views + 1})

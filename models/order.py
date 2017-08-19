@@ -33,7 +33,7 @@ class Order(models.Model):
     city_id = fields.Many2one('wechat_mall.city', string='市', required=True)
     district_id = fields.Many2one('wechat_mall.district', string='区')
     address = fields.Char('详细地址')
-    full_address = fields.Char('联系人地址', compute='_compute_full_address')
+    full_address = fields.Char('联系人地址', compute='_compute_full_address', store=True)
     postcode = fields.Char('邮政编码', requried=True)
 
     shipper_id = fields.Many2one('wechat_mall.shipper', string='快递承运商', track_visibility='onchange')
@@ -124,18 +124,58 @@ class Order(models.Model):
 
         return result
 
-    # todo 订单邮件提醒
-    def send_create_email(self):
-        pass
+    def paid(self):
+        self.ensure_one()
+        self.write({'status': 'pending'})
 
-    def send_closed_email(self):
-        pass
+    def deliver(self):
+        context = self._context.copy() or {}
+        context['default_order_id'] = self.id
+        context['default_status'] = 'unconfirmed'
+        return {
+            'name': u'发货信息设置',
+            'type': 'ir.actions.act_window',
+            'res_model': 'wechat_mall.deliver.wizard',
+            'view_mode': 'form',
+            'view_type': 'form',
+            'target': 'new',
+            'context': context,
+        }
 
-    def send_paid_email(self):
-        pass
+    def confirm(self):
+        self.ensure_one()
+        self.write({'status': 'completed'})
 
-    def send_confirmed_email(self):
-        pass
+    def cancel(self):
+        self.ensure_one()
+        self.write({'status': 'closed'})
+
+    def modify_price(self):
+        context = self._context.copy() or {}
+        context['default_order_id'] = self.id
+        return {
+            'name': u'订单价格修改',
+            'type': 'ir.actions.act_window',
+            'res_model': 'wechat_mall.modify.price.wizard',
+            'view_mode': 'form',
+            'view_type': 'form',
+            'target': 'new',
+            'context': context,
+        }
+
+    def modify_logistics_info(self):
+        context = self._context.copy() or {}
+        context['default_order_id'] = self.id
+        context['default_status'] = self.status
+        return {
+            'name': u'发货信息修改',
+            'type': 'ir.actions.act_window',
+            'res_model': 'wechat_mall.deliver.wizard',
+            'view_mode': 'form',
+            'view_type': 'form',
+            'target': 'new',
+            'context': context,
+        }
 
 
 class OrderGoods(models.Model):
@@ -163,3 +203,42 @@ class OrderGoods(models.Model):
                 """.format(pic=each_record.pic[0].static_link())
             else:
                 each_record.display_pic = False
+
+
+class ModifyPriceWizard(models.TransientModel):
+    _name = 'wechat_mall.modify.price.wizard'
+    _description = u'修改价格'
+
+    order_id = fields.Many2one('wechat_mall.order', string='订单', required=True)
+    total = fields.Float('金额', required=True)
+
+    @api.model
+    def create(self, vals):
+        order = self.env['wechat_mall.order'].browse(vals.pop('order_id'))
+        order.write(vals)
+        return super(ModifyPriceWizard, self).create(vals)
+
+    @api.multi
+    def apply(self):
+        return {'type': 'ir.actions.client', 'tag': 'reload'}
+
+
+class DeliverWizard(models.TransientModel):
+    _name = 'wechat_mall.deliver.wizard'
+    _description = u'发货'
+
+    order_id = fields.Many2one('wechat_mall.order', string='订单', required=True)
+    shipper_id = fields.Many2one('wechat_mall.shipper', string='快递承运商', required=True)
+    tracking_number = fields.Char('运单号', required=True)
+    status = fields.Char('状态', required=True)
+
+    @api.model
+    def create(self, vals):
+        order = self.env['wechat_mall.order'].browse(vals.pop('order_id'))
+        vals['tracking_number'] = vals['tracking_number'].replace(' ', '')
+        order.write(vals)
+        return super(DeliverWizard, self).create(vals)
+
+    @api.multi
+    def apply(self):
+        return {'type': 'ir.actions.client', 'tag': 'reload'}
