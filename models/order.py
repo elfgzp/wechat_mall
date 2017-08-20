@@ -49,7 +49,7 @@ class Order(models.Model):
     @api.one
     @api.depends('province_id', 'city_id', 'district_id', 'address')
     def _compute_full_address(self):
-        self.full_address = '{province_name} {city_name} {district_name} {address}'.format(
+        self.full_address = u'{province_name} {city_name} {district_name} {address}'.format(
             province_name=self.province_id.name,
             city_name=self.city_id.name,
             district_name=self.district_id.name or '',
