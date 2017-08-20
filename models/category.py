@@ -6,7 +6,7 @@ from odoo import models, fields, api
 class Category(models.Model):
     _name = 'wechat_mall.category'
     _description = u'商品分类'
-    _order = 'sort'
+    _order = 'level,sort'
 
     name = fields.Char(string='名称', required=True)
     category_type = fields.Char(string='类型')
