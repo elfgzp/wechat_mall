@@ -16,8 +16,6 @@
                     <field name="city"/>
                     <field name="avatar"/>
                     <field name="create_date" string="注册时间"/>
-                    <field name="register_ip"/>
-                    <field name="ip"/>
                     <field name="last_login"/>
                     <field name="status"/>
                 </tree>
@@ -39,8 +37,6 @@
                             <field name="city" readonly="1"/>
                             <field name="avatar" readonly="1"/>
                             <field name="create_date" string="注册时间" readonly="1"/>
-                            <field name="register_ip" readonly="1"/>
-                            <field name="ip" readonly="1"/>
                             <field name="last_login" readonly="1"/>
                             <field name="status" readonly="1"/>
                         </group>

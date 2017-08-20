@@ -8,13 +8,13 @@
             <field name="type">tree</field>
             <field name="arch" type="xml">
                 <tree string="商品分类">
+                    <field name="key" invisible="1"/>
                     <field name="name"/>
-                    <field name="key"/>
-                    <field name="category_type"/>
-                    <field name="icon"/>
-                    <field name="is_use"/>
-                    <field name="level"/>
                     <field name="pid"/>
+                    <field name="level"/>
+                    <field name="category_type" invisible="1"/>
+                    <field name="icon" invisible="1"/>
+                    <field name="is_use"/>
                     <field name="sort"/>
                 </tree>
             </field>
@@ -30,12 +30,12 @@
                             <field name="name"/>
                             <field name="pid"
                                    domain="['|', ('pid', '!=', id), ('pid', '=', False), ('id', '!=', id), ('create_uid', '=', uid)]"/>
-                            <field name="key"/>
-                            <field name="category_type"/>
-                            <field name="icon" domain="[('create_uid', '=', uid)]"/>
-                            <field name="is_use"/>
                             <field name="level"/>
+                            <field name="is_use"/>
                             <field name="sort"/>
+                            <field name="key" invisible="1"/>
+                            <field name="category_type" invisible="1"/>
+                            <field name="icon" domain="[('create_uid', '=', uid)]" invisible=""/>
                         </group>
                     </sheet>
                 </form>

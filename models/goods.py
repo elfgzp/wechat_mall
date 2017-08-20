@@ -142,7 +142,7 @@ class PropertyChild(models.Model):
     _order = 'sort'
 
     name = fields.Char('规格子属性名称', required=True)
-    property_id = fields.Many2one('wechat_mall.goods.property', string='商品规格', required=True)
+    property_id = fields.Many2one('wechat_mall.goods.property', string='商品规格', required=True, ondelete='cascade')
     sort = fields.Integer('排序', default=0)
     remark = fields.Char('备注')
 
@@ -184,11 +184,11 @@ class PropertyChildPrice(models.Model):
             name = ''
             for property_child_tuple in property_child_list:
                 if not name:
-                    name = '{}({})'.format(
+                    name = u'{}({})'.format(
                         self.env['wechat_mall.goods.property'].browse(property_child_tuple[0]).name,
                         self.env['wechat_mall.goods.property_child'].browse(property_child_tuple[1]).name)
                 else:
-                    name += ' - {}({})'.format(
+                    name += u' - {}({})'.format(
                         self.env['wechat_mall.goods.property'].browse(property_child_tuple[0]).name,
                         self.env['wechat_mall.goods.property_child'].browse(property_child_tuple[1]).name)
 
