@@ -18,6 +18,8 @@ class Category(models.Model):
     is_use = fields.Boolean(string='是否启用', default=True, required=True)
     sort = fields.Integer(string='排序')
 
+    goods_ids = fields.One2many('wechat_mall.goods', 'category_id', '商品')
+
     @api.one
     @api.depends('pid')
     def _compute_level(self):

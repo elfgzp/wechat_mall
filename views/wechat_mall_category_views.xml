@@ -16,6 +16,7 @@
                     <field name="icon" invisible="1"/>
                     <field name="is_use"/>
                     <field name="sort"/>
+                    <field name="goods_ids"/>
                 </tree>
             </field>
         </record>
@@ -36,6 +37,7 @@
                             <field name="key" invisible="1"/>
                             <field name="category_type" invisible="1"/>
                             <field name="icon" domain="[('create_uid', '=', uid)]" invisible=""/>
+                            <field name="goods_ids"/>
                         </group>
                     </sheet>
                 </form>
