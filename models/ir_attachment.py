@@ -6,6 +6,17 @@ from odoo import models, fields, api
 class IrAttachment(models.Model):
     _inherit = 'ir.attachment'
 
+    display_pic = fields.Html('图片', compute='_compute_display_pic')
+
+    def _compute_display_pic(self):
+        for each_record in self:
+            if each_record.pic:
+                each_record.display_pic = """
+                    <img src="{pic}" style="max-width:100px;">
+                    """.format(pic=each_record.static_link())
+            else:
+                each_record.display_pic = False
+
     @api.model
     def search_read(self, domain=None, fields=None, offset=0, limit=None, order=None):
         domain = domain if domain else []

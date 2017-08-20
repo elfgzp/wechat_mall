@@ -10,7 +10,6 @@
                 <tree string="横幅">
                     <field name="id" string="编号"/>
                     <field name="title"/>
-                    <field name="display_pic"/>
                     <field name="business_id"/>
                     <field name="status"/>
                     <field name="create_date" string="添加时间"/>
@@ -28,6 +27,7 @@
                         <group>
                             <field name="title"/>
                             <field name="business_id"/>
+                            <field name="display_pic" attrs="{'invisible':[('pic','=',False)]}"/>
                             <field name="pic" domain="[('create_uid', '=', uid)]"/>
                             <field name="remark"/>
                             <field name="status"/>
