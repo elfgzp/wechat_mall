@@ -209,8 +209,12 @@ class OrderCreate(http.Controller):
         if amount <= transport.less_amount:
             return transport.less_price
         else:
-            return transport.less_price + \
-                   int(((amount - transport.less_amount) / transport.increase_amount)) * transport.increase_price
+            if transport.increase_amount:
+                increase_price = \
+                    int(((amount - transport.less_amount) / transport.increase_amount)) * transport.increase_price
+            else:
+                increase_price = 0
+            return transport.less_price + increase_price
 
 
 class OrderStatistics(http.Controller):
