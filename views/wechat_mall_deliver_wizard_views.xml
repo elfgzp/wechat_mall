@@ -13,6 +13,7 @@
                             <field name="shipper_id"/>
                             <field name="tracking_number"/>
                             <field name="status" invisible="1"/>
+                            <p>发货信息在发货后可以修改，商户配送可以不设置快递信息。</p>
                         </group>
                     </sheet>
                     <footer>

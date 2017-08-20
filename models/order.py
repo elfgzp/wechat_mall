@@ -227,15 +227,16 @@ class DeliverWizard(models.TransientModel):
     _name = 'wechat_mall.deliver.wizard'
     _description = u'发货'
 
-    order_id = fields.Many2one('wechat_mall.order', string='订单', required=True)
-    shipper_id = fields.Many2one('wechat_mall.shipper', string='快递承运商', required=True)
-    tracking_number = fields.Char('运单号', required=True)
+    order_id = fields.Many2one('wechat_mall.order', string='订单')
+    shipper_id = fields.Many2one('wechat_mall.shipper', string='快递承运商')
+    tracking_number = fields.Char('运单号')
     status = fields.Char('状态', required=True)
 
     @api.model
     def create(self, vals):
         order = self.env['wechat_mall.order'].browse(vals.pop('order_id'))
-        vals['tracking_number'] = vals['tracking_number'].replace(' ', '')
+        vals['tracking_number'] = vals.get('tracking_number').replace(' ', '') if vals.get(
+            'tracking_number') is not False else ''
         order.write(vals)
         return super(DeliverWizard, self).create(vals)
 
