@@ -27,7 +27,7 @@
                         <group>
                             <field name="title"/>
                             <field name="business_id"/>
-                            <field name="display_pic" attrs="{'invisible':[('pic','=',False)]}"/>
+                            <field string="图片预览" name="display_pic" attrs="{'invisible':[('pic','=',False)]}"/>
                             <field name="pic" domain="[('create_uid', '=', uid)]"/>
                             <field name="remark"/>
                             <field name="status"/>

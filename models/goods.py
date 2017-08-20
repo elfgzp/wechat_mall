@@ -25,6 +25,7 @@ class Goods(models.Model):
     recommend_status = fields.Boolean('是否推荐')
     status = fields.Boolean('是否上架', default=True)
     display_pic = fields.Html('图片', compute='_compute_display_pic')
+    display_all_pic = fields.Html('图片预览', compute='_compute_display_all_pic')
     pic = fields.Many2many('ir.attachment', string='图片', required=True)
     content = fields.Html('详细介绍', required=True)
     property_ids = fields.Many2many('wechat_mall.goods.property', string='商品规格')
@@ -56,6 +57,17 @@ class Goods(models.Model):
                 """.format(pic=each_record.pic[0].static_link())
             else:
                 each_record.display_pic = False
+
+    @api.depends('pic')
+    @api.onchange('pic')
+    def _compute_display_all_pic(self):
+        self.ensure_one()
+        display_all_pic = ''
+        for pic in self.pic:
+            display_all_pic += """
+                <img src="{pic}" style="max-width:100px;">
+                """.format(pic=pic.static_link())
+        self.display_all_pic = display_all_pic
 
     @api.depends('order_ids')
     def _compute_number_order(self):

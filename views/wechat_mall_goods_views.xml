@@ -96,7 +96,7 @@
                             <field name="min_price" invisible="1"/>
                             <field name="weight"
                                    attrs="{'invisible': [('logistics_valuation_type', '!=', 'by_weight')]}"/>
-
+                            <field name="display_all_pic" attrs="{'invisible': [('pic', '=', [])]}"/>
                             <field name="pic" domain="[('create_uid', '=', uid)]">
                                 <tree>
                                     <field name="name"/>
