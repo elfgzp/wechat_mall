@@ -9,6 +9,11 @@ from .. import defs
 from .error_code import error_code
 
 
+import logging
+
+_logger = logging.getLogger(__name__)
+
+
 class AllCategory(http.Controller):
     @http.route('/<string:sub_domain>/shop/goods/category/all', auth='public', methods=['GET'])
     def get(self, sub_domain):
@@ -53,4 +58,5 @@ class AllCategory(http.Controller):
 
             return response
         except Exception as e:
+            _logger.exception(e)
             return request.make_response(json.dumps({'code': -1, 'msg': error_code[-1], 'data': e.message}))

@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
 
+import logging
+
+_logger = logging.getLogger(__name__)
+
+
 error_code = {
     -1: u'服务器内部错误',
     0: u'接口调用成功',

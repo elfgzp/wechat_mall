@@ -8,6 +8,10 @@ from odoo.http import request
 from .error_code import error_code
 from .. import defs
 
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 class AddressList(http.Controller):
     @http.route('/<string:sub_domain>/user/shipping-address/list', auth='public', methods=['GET'])
@@ -71,6 +75,7 @@ class AddressList(http.Controller):
             return response
 
         except Exception as e:
+            _logger.exception(e)
             return request.make_response(json.dumps({'code': -1, 'msg': error_code[-1], 'data': e.message}))
 
 
@@ -130,6 +135,7 @@ class AddressAdd(http.Controller):
             return request.make_response(json.dumps({'code': 0, 'msg': 'success'}))
 
         except Exception as e:
+            _logger.exception(e)
             return request.make_response(json.dumps({'code': -1, 'msg': error_code[-1], 'data': e.message}))
 
 
@@ -192,6 +198,7 @@ class AddressUpdate(http.Controller):
             return request.make_response(json.dumps({'code': 0, 'msg': 'success'}))
 
         except Exception as e:
+            _logger.exception(e)
             return request.make_response(json.dumps({'code': -1, 'msg': error_code[-1], 'data': e.message}))
 
 
@@ -241,6 +248,7 @@ class AddressDelete(http.Controller):
             return request.make_response(json.dumps({'code': 0, 'msg': 'success'}))
 
         except Exception as e:
+            _logger.exception(e)
             return request.make_response(json.dumps({'code': -1, 'msg': error_code[-1], 'data': e.message}))
 
 
@@ -312,6 +320,7 @@ class AddressDefault(http.Controller):
             return response
 
         except Exception as e:
+            _logger.exception(e)
             return request.make_response(json.dumps({'code': -1, 'msg': error_code[-1], 'data': e.message}))
 
 
@@ -375,4 +384,5 @@ class AddressDetail(http.Controller):
             return response
 
         except Exception as e:
+            _logger.exception(e)
             return request.make_response(json.dumps({'code': -1, 'msg': error_code[-1], 'data': e.message}))

@@ -9,6 +9,10 @@ from .error_code import error_code
 from .. import defs
 from ..tools import convert_static_link
 
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 class GoodsList(http.Controller):
     @http.route('/<string:sub_domain>/shop/goods/list', auth='public', methods=['GET'])
@@ -68,6 +72,7 @@ class GoodsList(http.Controller):
             return response
 
         except Exception as e:
+            _logger.exception(e)
             return request.make_response(json.dumps({'code': -1, 'msg': error_code[-1], 'data': e.message}))
 
 
@@ -194,6 +199,7 @@ class GoodsDetail(http.Controller):
             return response
 
         except Exception as e:
+            _logger.exception(e)
             return request.make_response(json.dumps({'code': -1, 'msg': error_code[-1], 'data': e.message}))
 
 
@@ -249,6 +255,7 @@ class GoodsPrice(http.Controller):
             return response
 
         except Exception as e:
+            _logger.exception(e)
             return request.make_response(json.dumps({'code': -1, 'msg': error_code[-1], 'data': e.message}))
 
 
@@ -305,4 +312,5 @@ class GoodsPriceFreight(http.Controller):
             return response
 
         except Exception as e:
+            _logger.exception(e)
             return request.make_response(json.dumps({'code': -1, 'msg': error_code[-1], 'data': e.message}))

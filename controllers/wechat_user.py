@@ -10,6 +10,10 @@ from .. import defs
 from .error_code import error_code
 from ..tools import get_wechat_session_info, get_wechat_user_info
 
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 class WechatUserCheckToken(http.Controller):
     @http.route('/<string:sub_domain>/user/check-token', auth='public', methods=['GET'])
@@ -33,6 +37,7 @@ class WechatUserCheckToken(http.Controller):
             return request.make_response(json.dumps({'code': 0, 'msg': 'success'}))
 
         except Exception as e:
+            _logger.exception(e)
             return request.make_response(json.dumps({'code': -1, 'msg': error_code[-1], 'data': e.message}))
 
 
@@ -98,6 +103,7 @@ class WeChatUserLogin(http.Controller):
             return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
 
         except Exception as e:
+            _logger.exception(e)
             return request.make_response(json.dumps({'code': -1, 'msg': error_code[-1], 'data': e.message}))
 
 
@@ -145,4 +151,5 @@ class WeChatUserRegisterComplex(http.Controller):
             return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
 
         except Exception as e:
+            _logger.exception(e)
             return request.make_response(json.dumps({'code': -1, 'msg': error_code[-1], 'data': e.message}))

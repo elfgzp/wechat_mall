@@ -8,6 +8,12 @@ from odoo.http import request
 from .error_code import error_code
 
 
+import logging
+
+_logger = logging.getLogger(__name__)
+
+
+
 class ConfigGetValue(http.Controller):
     @http.route('/<string:sub_domain>/config/get_value', auth='public', methods=['GET'])
     def get(self, sub_domain, key=None):
@@ -48,4 +54,5 @@ class ConfigGetValue(http.Controller):
             return request.make_response(json.dumps({'code': 404, 'msg': error_code[404]}))
 
         except Exception as e:
+            _logger.exception(e)
             return request.make_response(json.dumps({'code': -1, 'msg': error_code[-1], 'data': e.message}))

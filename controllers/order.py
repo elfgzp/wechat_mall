@@ -8,6 +8,10 @@ from odoo.http import request
 from .error_code import error_code
 from .. import defs
 
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 class OrderCreate(http.Controller):
     @http.route('/<string:sub_domain>/order/create',
@@ -81,6 +85,7 @@ class OrderCreate(http.Controller):
             return request.make_response(json.dumps({'code': 0, 'msg': 'success'}))
 
         except Exception as e:
+            _logger.exception(e)
             return request.make_response(json.dumps({'code': -1, 'msg': error_code[-1], 'data': e.message}))
 
     def _handle_goods_json(self, goods_json, province_id, city_id, district_id):
@@ -257,6 +262,7 @@ class OrderStatistics(http.Controller):
             return response
 
         except Exception as e:
+            _logger.exception(e)
             return request.make_response(json.dumps({'code': -1, 'msg': error_code[-1], 'data': e.message}))
 
 
@@ -323,6 +329,7 @@ class OrderList(http.Controller):
             return response
 
         except Exception as e:
+            _logger.exception(e)
             return request.make_response(json.dumps({'code': -1, 'msg': error_code[-1], 'data': e.message}))
 
 
@@ -425,6 +432,7 @@ class OrderDetail(http.Controller):
             return response
 
         except Exception as e:
+            _logger.exception(e)
             return request.make_response(json.dumps({'code': -1, 'msg': error_code[-1], 'data': e.message}))
 
 
@@ -471,6 +479,7 @@ class OrderClose(http.Controller):
             return request.make_response(json.dumps({'code': 0, 'msg': 'success'}))
 
         except Exception as e:
+            _logger.exception(e)
             return request.make_response(json.dumps({'code': -1, 'msg': error_code[-1], 'data': e.message}))
 
 
@@ -517,6 +526,7 @@ class OrderDelivery(http.Controller):
             return request.make_response(json.dumps({'code': 0, 'msg': 'success'}))
 
         except Exception as e:
+            _logger.exception(e)
             return request.make_response(json.dumps({'code': -1, 'msg': error_code[-1], 'data': e.message}))
 
 
@@ -560,5 +570,6 @@ class OrderReputation(http.Controller):
             return request.make_response(json.dumps({'code': 0, 'msg': 'success'}))
 
         except Exception as e:
+            _logger.exception(e)
             return request.make_response(json.dumps({'code': -1, 'msg': error_code[-1], 'data': e.message}))
 

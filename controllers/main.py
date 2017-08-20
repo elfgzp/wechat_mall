@@ -5,6 +5,11 @@ from odoo.http import request
 
 from odoo.addons.web.controllers.main import Home
 
+import logging
+
+_logger = logging.getLogger(__name__)
+
+
 class WechatMallHome(Home):
     @http.route('/', type='http', auth="none")
     def index(self, s_action=None, db=None, **kw):

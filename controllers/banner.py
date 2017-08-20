@@ -8,6 +8,10 @@ from odoo.http import request
 from .. import defs
 from .error_code import error_code
 
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 class BannerList(http.Controller):
     @http.route('/<string:sub_domain>/banner/list', auth='public', methods=['GET'])
@@ -81,4 +85,5 @@ class BannerList(http.Controller):
             return response
 
         except Exception as e:
+            _logger.exception(e)
             return request.make_response(json.dumps({'code': -1, 'msg': error_code[-1], 'data': e.message}))
