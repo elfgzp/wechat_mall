@@ -200,7 +200,7 @@ class OrderGoods(models.Model):
             if each_record.pic:
                 each_record.display_pic = """
                 <img src="{pic}" style="max-width:100px;">
-                """.format(pic=each_record.pic[0].static_link())
+                """.format(pic=each_record.pic.static_link())
             else:
                 each_record.display_pic = False
 

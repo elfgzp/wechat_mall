@@ -24,9 +24,10 @@ class Goods(models.Model):
     sort = fields.Integer('排序', default=0)
     recommend_status = fields.Boolean('是否推荐')
     status = fields.Boolean('是否上架', default=True)
-    display_pic = fields.Html('图片', compute='_compute_display_pic')
+    display_pic = fields.Html('封面图片预览', compute='_compute_display_pic')
     display_all_pic = fields.Html('图片预览', compute='_compute_display_all_pic')
     pic = fields.Many2many('ir.attachment', string='图片', required=True)
+    cover_pic = fields.Many2one('ir.attachment', string='封面图片', required=True)
     content = fields.Html('详细介绍', required=True)
     property_ids = fields.Many2many('wechat_mall.goods.property', string='商品规格')
     price_ids = fields.One2many('wechat_mall.goods.property_child.price', 'goods_id', string='商品不同规格价格',
@@ -48,13 +49,14 @@ class Goods(models.Model):
 
         return result
 
-    @api.depends('pic')
+    @api.depends('cover_pic')
+    @api.onchange('cover_pic')
     def _compute_display_pic(self):
         for each_record in self:
-            if each_record.pic:
+            if each_record.cover_pic:
                 each_record.display_pic = """
                 <img src="{pic}" style="max-width:100px;">
-                """.format(pic=each_record.pic[0].static_link())
+                """.format(pic=each_record.cover_pic.static_link())
             else:
                 each_record.display_pic = False
 
