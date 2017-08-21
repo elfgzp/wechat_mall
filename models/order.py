@@ -41,6 +41,12 @@ class Order(models.Model):
     display_traces = fields.Html('物流信息', compute='_compute_display_traces')
     traces = fields.Text('物流信息', compute='_compute_traces')
 
+    _sql_constraints = [(
+        'wechat_mall_order_order_num_unique',
+        'UNIQUE (order_num)',
+        'wechat order order_num is existed！'
+    )]
+
     @api.model
     def create(self, vals):
         vals['order_num'] = self.env['ir.sequence'].next_by_code('wechat_mall.order_num')

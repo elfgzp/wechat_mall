@@ -19,3 +19,4 @@ from . import address
 from . import confirm_wizard
 from . import shipper
 from . import mail_template
+from . import payment

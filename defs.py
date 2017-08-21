@@ -97,3 +97,9 @@ class OrderResponseStatus(Const):
     unconfirmed = ('unconfirmed', 2)
     unevaluated = ('unevaluated', 3)
     completed = ('completed', 4)
+
+
+class PaymentStatus(Const):
+    unpaid = ('unpaid', '未支付')
+    success = ('success', '成功')
+    fail = ('fail', '失败')

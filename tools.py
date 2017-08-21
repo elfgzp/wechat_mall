@@ -36,37 +36,3 @@ def get_wechat_user_info(app_id, secret, code, encrypted_data, iv):
     user_info = crypt.decrypt(encrypted_data, iv)
     return session_key, user_info
 
-# def verify_wxapp(encrypted_data, iv, code):
-#     user_info = get_wechat_user_info(encrypted_data, iv, code)
-#     # 获取 openid
-#     openid = user_info.get('openId', None)
-#     if openid:
-#         auth = Account.get_by_wxapp(openid)
-#         if not auth:
-#             raise Unauthorized('wxapp_not_registered')
-#         return auth
-#     raise Unauthorized('invalid_wxapp_code')
-#
-# def create_token(request):
-#     # verify basic token
-#     approach = request.json.get('auth_approach')
-#     username = request.json['username']
-#     password = request.json['password']
-#     if approach == 'password':
-#         account = verify_password(username, password)
-#     elif approach == 'wxapp':
-#         account = verify_wxapp(username, password, request.args.get('code'))
-#     if not account:
-#         return False, {}
-#     payload = {
-#         "iss": Config.ISS,
-#         "iat": int(time.time()),
-#         "exp": int(time.time()) + 86400 * 7,
-#         "aud": Config.AUDIENCE,
-#         "sub": str(account['_id']),
-#         "nickname": account['nickname'],
-#         "scopes": ['open']
-#     }
-#     token = jwt.encode(payload, 'secret', algorithm='HS256')
-#     # 由于 account 中 _id 是一个 object 需要转化成字符串
-#     return True, {'access_token': token, 'account_id': str(account['_id'])}

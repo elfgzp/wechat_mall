@@ -45,6 +45,7 @@
         'views/wechat_mall_deliver_wizard_views.xml',
         'views/webclient_templates.xml',
         'data/order_num_sequence.xml',
+        'data/payment_num_sequence.xml',
         'data/mail_template.xml',
     ],
     # only loaded in demonstration mode
