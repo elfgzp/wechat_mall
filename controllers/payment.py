@@ -122,10 +122,11 @@ class MakePayment(http.Controller):
                 )
             else:
                 if unified_order['err_code'] == 'ORDERPAID':
-                    payment.order_id.write({'status': 'pending'})
+                    order = payment.order_id
+                    order.write({'status': 'pending'})
                     mail_template = request.env.ref('wechat_mall.wechat_mall_order_paid')
-                    mail_template.sudo().send_mail(payment.order_id.id, force_send=True, raise_exception=False)
-                    payment.unlink()
+                    mail_template.sudo().send_mail(order.id, force_send=True, raise_exception=False)
+                    payment.sudo().unlink()
                 return request.make_response(
                     json.dumps({'code': -1, 'msg': unified_order.get('err_code_des', unified_order['return_msg'])})
                 )
