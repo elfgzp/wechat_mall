@@ -12,7 +12,7 @@ class Payment(models.Model):
     order_id = fields.Many2one('wechat_mall.order', string='订单')
     payment_number = fields.Char('支付单号', index=True)
     wechat_user_id = fields.Many2one('wechat_mall.user', string='微信用户')
-    price = fields.Float('支付金额')
+    price = fields.Float('支付金额(元)')
     status = fields.Selection(defs.PaymentStatus.attrs.items(), '状态',
                               default=defs.PaymentStatus.unpaid)
 
@@ -39,5 +39,5 @@ class Payment(models.Model):
 
     @api.model
     def create(self, vals):
-        vals['payment_num'] = self.env['ir.sequence'].next_by_code('wechat_mall.payment_num')
+        vals['payment_number'] = self.env['ir.sequence'].next_by_code('wechat_mall.payment_num')
         return super(Payment, self).create(vals)

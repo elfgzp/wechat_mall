@@ -13,6 +13,7 @@ class Order(models.Model):
     _description = u'订单'
     _inherit = ['mail.thread']
     _rec_name = 'order_num'
+    _order = 'create_date desc'
 
     wechat_user_id = fields.Many2one('wechat_mall.user', string='微信用户')
     order_num = fields.Char('订单号', index=True)
