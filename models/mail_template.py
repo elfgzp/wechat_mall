@@ -44,9 +44,6 @@ class SpeMailTemplate(models.Model):
         try:
             return super(SpeMailTemplate, mail_template).send_mail(res_id, force_send, raise_exception, email_values)
         except MailDeliveryException as e:
-            warning_info = u"{}的邮件投递失败。\n请检查邮件设置是否正确，或者联系管理员。".format(context.get("email_to") or "")
-            self.env.user.notify_warning(message=warning_info, title="提醒邮件发送失败", sticky=True)
             logging.error(e)
         except Exception as e:
-            self.env.user.notify_warning(message=u"邮箱发送失败，请联系管理员。", title="提醒邮件发送失败", sticky=True)
             logging.error(e)
