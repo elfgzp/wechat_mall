@@ -165,7 +165,8 @@ class WechatPaymentNotify(http.Controller):
                     ('payment_number', '=', data['out_trade_no'])
                 ])
                 payment.write(data)
-                payment.order_id.write({'status': defs.OrderStatus.pending})
+                order = payment.order_id
+                order.write({'status': 'pending'})
                 mail_template = request.env.ref('wechat_mall.wechat_mall_order_paid')
                 mail_template.sudo().send_mail(payment.order_id.id, force_send=True, raise_exception=False)
             else:
