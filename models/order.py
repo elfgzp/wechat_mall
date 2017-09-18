@@ -42,6 +42,8 @@ class Order(models.Model):
     display_traces = fields.Html('物流信息', compute='_compute_display_traces')
     traces = fields.Text('物流信息', compute='_compute_traces')
 
+    payment_ids = fields.One2many('wechat_mall.payment', 'order_id', '支付记录')
+
     _sql_constraints = [(
         'wechat_mall_order_order_num_unique',
         'UNIQUE (order_num)',

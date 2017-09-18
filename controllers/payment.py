@@ -126,7 +126,7 @@ class MakePayment(http.Controller):
                     order.write({'status': 'pending'})
                     mail_template = request.env.ref('wechat_mall.wechat_mall_order_paid')
                     mail_template.sudo().send_mail(order.id, force_send=True, raise_exception=False)
-                    payment.write({'status': 'success'})
+                    payment.unlink()
                 return request.make_response(
                     json.dumps({'code': -1, 'msg': unified_order.get('err_code_des', unified_order['return_msg'])})
                 )
@@ -161,20 +161,20 @@ class WechatPaymentNotify(http.Controller):
             data = xmltodict.parse(xml_data)['xml']
             if data['return_code'] == 'SUCCESS':
                 data.update({'status': defs.PaymentStatus.success})
-                payment = request.env(user=user.id)['wechat_mall.payment'].search([
-                    ('payment_number', '=', data['out_trade_no'])
+                order = request.env(user=user.id)['wechat_mall.order'].search([
+                    ('order_num', '=', data['out_trade_no'])
                 ])
-                payment.write(data)
-                order = payment.order_id
+                order.payment_ids.write(data)
                 order.write({'status': 'pending'})
                 mail_template = request.env.ref('wechat_mall.wechat_mall_order_paid')
                 mail_template.sudo().send_mail(order.id, force_send=True, raise_exception=False)
             else:
                 data.update({'status': defs.PaymentStatus.fail})
-                payment = request.env(user=user.id)['wechat_mall.payment'].search([
-                    ('payment_number', '=', data['out_trade_no'])
+                order = request.env(user=user.id)['wechat_mall.order'].search([
+                    ('order_num', '=', data['out_trade_no'])
                 ])
-                payment.write(data)
+                order.payment_ids.write(data)
+                order.write({'status': 'pending'})
 
             response = request.make_response(
                 headers={
