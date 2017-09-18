@@ -126,7 +126,7 @@ class MakePayment(http.Controller):
                     order.write({'status': 'pending'})
                     mail_template = request.env.ref('wechat_mall.wechat_mall_order_paid')
                     mail_template.sudo().send_mail(order.id, force_send=True, raise_exception=False)
-                    payment.sudo().unlink()
+                    payment.write({'status': 'success'})
                 return request.make_response(
                     json.dumps({'code': -1, 'msg': unified_order.get('err_code_des', unified_order['return_msg'])})
                 )
@@ -168,7 +168,7 @@ class WechatPaymentNotify(http.Controller):
                 order = payment.order_id
                 order.write({'status': 'pending'})
                 mail_template = request.env.ref('wechat_mall.wechat_mall_order_paid')
-                mail_template.sudo().send_mail(payment.order_id.id, force_send=True, raise_exception=False)
+                mail_template.sudo().send_mail(order.id, force_send=True, raise_exception=False)
             else:
                 data.update({'status': defs.PaymentStatus.fail})
                 payment = request.env(user=user.id)['wechat_mall.payment'].search([
