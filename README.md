@@ -1,9 +1,14 @@
 # wechat_mall
 odoo微信小程序商城后台
 #### Environment
-> Python 2.7
-> Odoo 10
-> postgresql >= 9.5
+
+> Python 2.7  
+
+> Odoo 10  
+
+> postgresql >= 9.5  
+
+
 项目有具体实例
 
 ![深圳实丽礼仪花店](http://ogaxrnolm.bkt.clouddn.com/qrcode.jpeg)
