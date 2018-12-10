@@ -8,10 +8,6 @@ odoo微信小程序商城后台
 
 > postgresql >= 9.5  
 
-
-
-![后台截图1](http://ogaxrnolm.bkt.clouddn.com/07A1FE08-57B2-4953-9DB8-B2037CC9CED1.png)
-
 微信小程序 参考https://github.com/EastWorld/wechat-app-mall 
 将接口改为odoo微信小程序商城后台接口即可
 
