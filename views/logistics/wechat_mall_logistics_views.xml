@@ -21,7 +21,7 @@
             <field name="model">wechat_mall.logistics</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                <form string="物流" version="7.0" duplicate="0">
+                <form string="物流" version="7.0" duplicate="false">
                     <sheet>
                         <group colspan="2">
                             <field name="name" class="oe_inline"/>
@@ -94,19 +94,19 @@
                                                 <form>
                                                     <group string="区域设置">
                                                         <div>
-                                                            <field name="area" invisible="1"/>
+                                                            <field name="area" invisible="True"/>
                                                             <label for="province_id" string="省"/>
                                                             <field name="province_id"
                                                                    options="{'no_open': True, 'no_create': True}"
                                                                    class="oe_inline"/>
-                                                            <field name="city_domain_ids" invisible="1"/>
+                                                            <field name="city_domain_ids" invisible="True"/>
                                                             <label for="city_id" string=" 市"
                                                                    attrs="{'invisible': [('city_domain_ids', '=', [])]}"/>
                                                             <field name="city_id"
                                                                    attrs="{'invisible': [('city_domain_ids', '=', [])]}"
                                                                    options="{'no_open': True, 'no_create': True}"
                                                                    class="oe_inline"/>
-                                                            <field name="district_domain_ids" invisible="1"/>
+                                                            <field name="district_domain_ids" invisible="True"/>
                                                             <label for="city_id" string=" 区"
                                                                    attrs="{'invisible': [('district_domain_ids', '=', [])]}"/>
                                                             <field name="district_id"
@@ -150,8 +150,7 @@
             <field name="domain">[('create_uid', '=', uid)]</field>
         </record>
 
-        <menuitem action="wechat_mall_logistics_action_88" id="wechat_mall_logistics_menuitem_76" name="物流设置"
-                  parent="parent_menu_wechat_mall" sequence="1" groups="wechat_mall.group_wechat_mall_user"/>
+
 
     </data>
 </odoo>

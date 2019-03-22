@@ -14,7 +14,7 @@ class WechatUser(models.Model):
     union_id = fields.Char('UnionId')
     gender = fields.Integer('gender')
     language = fields.Char('语言')
-    register_type = fields.Selection(defs.WechatUserRegisterType.attrs.items(), string='注册来源',
+    register_type = fields.Selection(list(defs.WechatUserRegisterType.attrs.items()), string='注册来源',
                                      default=defs.WechatUserRegisterType.app)
     phone = fields.Char('手机号码')
     country = fields.Char('国家')
@@ -25,7 +25,7 @@ class WechatUser(models.Model):
     register_ip = fields.Char('注册IP')
     last_login = fields.Datetime('登陆时间')
     ip = fields.Char('登陆IP')
-    status = fields.Selection(defs.WechatUserStatus.attrs.items(), string='状态',
+    status = fields.Selection(list(defs.WechatUserStatus.attrs.items()), string='状态',
                               default=defs.WechatUserStatus.default)
 
     address_ids = fields.One2many('wechat_mall.address', 'wechat_user_id', string='收货地址')

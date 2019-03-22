@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem action="wechat_mall_category_action_83" id="wechat_mall_category_menuitem_71" name="商品分类"
+                  parent="wechat_mall_menu_product" sequence="0" groups="wechat_mall.group_wechat_mall_user"/>
+
+        <menuitem action="wechat_mall_goods_property_action_1" id="wechat_mall_goods_property_menuitem_1" name="商品规格"
+                  parent="wechat_mall_menu_product" sequence="3" groups="wechat_mall.group_wechat_mall_user"/>
+
+        <menuitem action="wechat_mall_goods_action_87" id="wechat_mall_goods_menuitem_75" name="商品"
+                  parent="wechat_mall_menu_product" sequence="6" groups="wechat_mall.group_wechat_mall_user"/>
+
+        <menuitem action="wechat_mall_subshop_action_90" id="wechat_mall_subshop_menuitem_78" name="商铺"
+                  parent="wechat_mall_menu_product" sequence="9" groups="base.group_system"/>
+    </data>
+</odoo>

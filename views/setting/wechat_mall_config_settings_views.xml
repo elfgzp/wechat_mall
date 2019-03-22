@@ -51,8 +51,5 @@
             <field name="context">{'no_view_cache': True}</field>
         </record>
 
-        <menuitem action="wechat_mall_config_settings_action_85" id="wechat_mall_config_settings_menuitem_73"
-                  name="基本设置" parent="parent_menu_wechat_mall" sequence="-1"/>
-
     </data>
 </odoo>

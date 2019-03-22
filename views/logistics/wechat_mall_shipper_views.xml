@@ -7,7 +7,7 @@
             <field name="model">wechat_mall.shipper</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
-                <tree string="承运商" create="0" delete="0">
+                <tree string="承运商" create="false" delete="false">
                     <field name="code"/>
                     <field name="name"/>
                 </tree>
@@ -18,7 +18,7 @@
             <field name="model">wechat_mall.shipper</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                <form string="承运商" version="7.0" create="false" delete="0" edit="false" save="false" cancel="false" duplicate="0">
+                <form string="承运商" version="7.0" create="false" delete="false" edit="false" save="false" cancel="false" duplicate="false">
                     <sheet>
                         <group>
                             <field name="code" readonly="1"/>
@@ -28,6 +28,7 @@
                 </form>
             </field>
         </record>
+
         <record id="wechat_mall_shipper_action_117" model="ir.actions.act_window">
             <field name="name">承运商</field>
             <field name="res_model">wechat_mall.shipper</field>
@@ -35,9 +36,6 @@
             <field name="view_mode">tree,form</field>
             <field name="target">current</field>
         </record>
-
-        <menuitem action="wechat_mall_shipper_action_117" id="wechat_mall_shipper_menuitem_97" name="承运商"
-                  parent="parent_menu_wechat_mall" sequence="10" groups="base.group_system"/>
 
     </data>
 </openerp>

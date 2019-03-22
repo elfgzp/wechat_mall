@@ -2,9 +2,9 @@
 odoo微信小程序商城后台
 #### Environment
 
-> Python 2.7  
+> Python 3.6.7  
 
-> Odoo 10  
+> Odoo 12  
 
 > postgresql >= 9.5  
 

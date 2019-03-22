@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem action="wechat_mall_district_action_86" id="wechat_mall_district_menuitem_74" name="区"
+                  parent="wechat_mall_menu_logistics" sequence="0" groups="base.group_system"/>
+
+        <menuitem action="wechat_mall_city_action_84" id="wechat_mall_city_menuitem_72" name="市"
+                  parent="wechat_mall_menu_logistics" sequence="3" groups="base.group_system"/>
+
+        <menuitem action="wechat_mall_province_action_89" id="wechat_mall_province_menuitem_77" name="省"
+                  parent="wechat_mall_menu_logistics" sequence="6"
+                  groups="base.group_system"/>
+
+        <menuitem action="wechat_mall_shipper_action_117" id="wechat_mall_shipper_menuitem_97" name="承运商"
+                  parent="wechat_mall_menu_logistics" sequence="98" groups="base.group_system"/>
+
+        <menuitem action="wechat_mall_logistics_action_88" id="wechat_mall_logistics_menuitem_76" name="物流设置"
+                  parent="wechat_mall_menu_logistics" sequence="99" groups="wechat_mall.group_wechat_mall_user"/>
+    </data>
+</odoo>

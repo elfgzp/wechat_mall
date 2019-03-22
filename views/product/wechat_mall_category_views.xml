@@ -8,12 +8,12 @@
             <field name="type">tree</field>
             <field name="arch" type="xml">
                 <tree string="商品分类">
-                    <field name="key" invisible="1"/>
-                    <field name="level" invisible="1"/>
+                    <field name="key" invisible="True"/>
+                    <field name="level" invisible="True"/>
                     <field name="name"/>
-                    <field name="pid" invisible="1"/>
-                    <field name="category_type" invisible="1"/>
-                    <field name="icon" invisible="1"/>
+                    <field name="pid" invisible="True"/>
+                    <field name="category_type" invisible="True"/>
+                    <field name="icon" invisible="True"/>
                     <field name="is_use"/>
                     <field name="sort"/>
                     <field name="goods_ids"/>
@@ -25,17 +25,17 @@
             <field name="model">wechat_mall.category</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                <form string="商品分类" version="7.0" duplicate="0">
+                <form string="商品分类" version="7.0" duplicate="false">
                     <sheet>
                         <group>
-                            <field name="level" invisible="1"/>
+                            <field name="level" invisible="True"/>
                             <field name="name"/>
-                            <field name="pid" invisible="1"
+                            <field name="pid" invisible="True"
                                    domain="['|', ('pid', '!=', id), ('pid', '=', False), ('id', '!=', id), ('create_uid', '=', uid)]"/>
                             <field name="is_use"/>
                             <field name="sort"/>
-                            <field name="key" invisible="1"/>
-                            <field name="category_type" invisible="1"/>
+                            <field name="key" invisible="True"/>
+                            <field name="category_type" invisible="True"/>
                             <field name="icon" domain="[('create_uid', '=', uid)]" invisible=""/>
                             <field name="goods_ids"/>
                         </group>
@@ -51,9 +51,6 @@
             <field name="target">current</field>
             <field name="domain">[('create_uid', '=', uid)]</field>
         </record>
-
-        <menuitem action="wechat_mall_category_action_83" id="wechat_mall_category_menuitem_71" name="商品分类"
-                  parent="parent_menu_wechat_mall" sequence="2" groups="wechat_mall.group_wechat_mall_user"/>
 
     </data>
 </odoo>

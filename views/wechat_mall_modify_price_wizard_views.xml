@@ -6,16 +6,16 @@
             <field name="model">wechat_mall.modify.price.wizard</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                <form string="订单价格修改" class="oe_form_configuration">
+                <form string="订单价格修改">
                     <sheet>
                         <group>
-                            <field name="order_id" invisible="1"/>
+                            <field name="order_id" invisible="True"/>
                             <field name="total"/>
                         </group>
                     </sheet>
                     <footer>
-                        <button string="确定" name="apply" type="object" class="oe_highlight"/>
-                        <button string="放弃" class="oe_link" special="cancel" readonly="0"/>
+                        <button string="确定" name="apply" type="object" class="btn-primary"/>
+                        <button string="放弃" special="cancel" class="btn-secondary" readonly="False"/>
                     </footer>
                 </form>
             </field>

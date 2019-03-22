@@ -1,6 +1,6 @@
 # -*-coding: utf-8 -*-
 # !/usr/bin/env python
-
+from __future__ import unicode_literals
 
 """
 File:   client.py
@@ -35,7 +35,7 @@ error_dict = {
 
 
 if PY2:
-    text_type = str
+    text_type = unicode
     iteritems = lambda d, *args, **kwargs: d.iteritems(*args, **kwargs)
 
     def to_native(x, charset=sys.getdefaultencoding(), errors='strict'):
@@ -226,7 +226,7 @@ Apply force_text in Python 3 and force_bytes in Python 2.
 
 
 def genarate_js_signature(params):
-    keys = list(params.keys())
+    keys = params.keys()
     keys.sort()
     params_str = b''
     for key in keys:
@@ -236,7 +236,7 @@ def genarate_js_signature(params):
 
 
 def genarate_signature(params):
-    sorted_params = sorted([v for k, v in list(params.items())])
+    sorted_params = sorted([v for k, v in params.items()])
     params_str = smart_str(''.join(sorted_params))
     return sha1(str(params_str).encode('utf-8')).hexdigest()
 

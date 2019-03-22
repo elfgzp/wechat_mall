@@ -13,7 +13,7 @@ class Payment(models.Model):
     payment_number = fields.Char('支付单号', index=True)
     wechat_user_id = fields.Many2one('wechat_mall.user', string='微信用户')
     price = fields.Float('支付金额(元)')
-    status = fields.Selection(defs.PaymentStatus.attrs.items(), '状态',
+    status = fields.Selection(list(defs.PaymentStatus.attrs.items()), '状态',
                               default=defs.PaymentStatus.unpaid)
 
     # 微信notify返回参数

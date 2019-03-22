@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <record id="wechat_mall_order_view_tree" model="ir.ui.view">
+        <field name="name">wechat_mall.order.view_tree</field>
+        <field name="model">wechat_mall.order</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="订单" create="false" delete="false">
+                <field name="wechat_user_id"/>
+                <field name="order_num"/>
+                <field name="number_goods"/>
+                <field name="status"/>
+                <field name="goods_price"/>
+                <field name="logistics_price"/>
+                <field name="total"/>
+                <field name="create_date"/>
+                <field name="write_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="wechat_mall_order_view_form" model="ir.ui.view">
+        <field name="name">wechat_mall.order.view_form</field>
+        <field name="model">wechat_mall.order</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="订单" version="7.0" create="false" delete="false" edit="false" save="false" cancel="false" duplicate="false">
+                <header>
+                    <button class="oe_highlight" name="paid" string="确认已付款" type="object"
+                            confirm="订单确认已付款后将变为待发货状态，是否继续？" attrs="{'invisible': [('status', '!=', 'unpaid')]}"
+                            groups="wechat_mall.group_wechat_mall_user"/>
+                    <button class="oe_highlight" name="deliver" string="发货" type="object"
+                            attrs="{'invisible': [('status', '!=', 'pending')]}"
+                            groups="wechat_mall.group_wechat_mall_user"/>
+                    <button class="oe_highlight" name="confirm" string="确认完成" type="object"
+                            confirm="订单确认已完成后将变为完成状态，是否继续？" attrs="{'invisible': [('status', '!=', 'unconfirmed')]}"
+                            groups="wechat_mall.group_wechat_mall_user"/>
+                    <button name="cancel" string="取消订单" type="object" confirm="订单取消后无法恢复，确定要取消订单么？"
+                            groups="wechat_mall.group_wechat_mall_user" attrs="{'invisible': [('status', 'in', ['completed', 'closed'])]}"/>
+                </header>
+                <sheet>
+                    <group colspan="2" string="订单信息">
+                        <field name="wechat_user_id" readonly="1"/>
+                        <field name="order_num" attrs="{'invisible': [('order_num', '=', False)]}" readonly="1"/>
+                        <field name="number_goods" readonly="1"/>
+                        <field name="order_goods_ids" readonly="1">
+                            <tree>
+                                <field name="display_pic"/>
+                                <field name="name"/>
+                                <field name="property_str"/>
+                                <field name="amount"/>
+                                <field name="total"/>
+                            </tree>
+                        </field>
+                        <field name="status" readonly="1"/>
+                        <field name="create_date" string="下单时间" attrs="{'invisible': [('create_date', '=', False)]}"
+                               readonly="1"/>
+                        <field name="write_date" string="最后更新" attrs="{'invisible': [('write_date', '=', False)]}"
+                               readonly="1"/>
+                        <field name="goods_price" readonly="1"/>
+                        <field name="logistics_price" readonly="1"/>
+                        <field name="total" readonly="1"/>
+                        <button colspan="2" name="modify_price" string="修改价格" type="object" class="oe_highlight"
+                                attrs="{'invisible': [('status', '!=', 'unpaid')]}"/>
+                    </group>
+                    <group colspan="2" string="联系人信息">
+                        <field name="wechat_user_id" readonly="1"/>
+                        <field name="linkman" readonly="1"/>
+                        <field name="phone" readonly="1"/>
+                        <field name="full_address" readonly="1"/>
+                        <field name="postcode" readonly="1"/>
+                    </group>
+                    <group colspan="2" string="发货信息"
+                           attrs="{'invisible': ['|', ('shipper_id', '=', False), ('tracking_number', '=', False), ('status', 'not in', ['unconfirmed', 'unevaluated', 'completed'])]}">
+                        <field name="shipper_id" options="{'no_open': True, 'no_create': True}" readonly="1"/>
+                        <field name="tracking_number" readonly="1"/>
+                        <button colspan="2" name="modify_logistics_info" string="信息修改" type="object"
+                                class="oe_highlight" attrs="{'invisible': [('status', '!=', 'unconfirmed')]}"/>
+                    </group>
+                    <group colspan="2" string="订单追踪"
+                           attrs="{'invisible': ['|', ('shipper_id', '=', False), ('tracking_number', '=', False), ('status', 'not in', ['unconfirmed', 'unevaluated', 'completed'])]}">
+                        <field name="display_traces" readonly="1"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="wechat_mall_order_search_view" model="ir.ui.view">
+        <field name="name">wechat_mall.order.filter</field>
+        <field name="model">wechat_mall.order</field>
+        <field name="arch" type="xml">
+            <search string="订单过滤器">
+                <field name="order_num" string="订单号"/>
+                <field name="wechat_user_id" string="微信用户"/>
+                <field name="linkman" string="联系人"/>
+                <field name="phone" string="联系人号码"/>
+                <field name="full_address" string="联系人地址"/>
+                <filter string="已关闭" name="filter_closed_order" domain="[('status', '=', 'closed')]"/>
+                <filter string="待支付" name="filter_unpaid_order" domain="[('status', '=', 'unpaid')]"/>
+                <filter string="待发货" name="filter_pending_order" domain="[('status', '=', 'pending')]"/>
+                <filter string="待收货" name="filter_unconfirmed_order" domain="[('status', '=', 'unconfirmed')]"/>
+                <filter string="已完成" name="filter_completed_order" domain="[('status', '=', 'completed')]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="wechat_mall_order_action_134" model="ir.actions.act_window">
+        <field name="name">订单</field>
+        <field name="res_model">wechat_mall.order</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="target">current</field>
+        <field name="domain">[('create_uid', '=', uid)]</field>
+        <field name="context">{"search_default_filter_pending_order":1, "search_default_filter_unpaid_order": 1}
+        </field>
+    </record>
+
+</data>

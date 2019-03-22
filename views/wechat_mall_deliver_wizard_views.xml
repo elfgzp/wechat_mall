@@ -9,16 +9,16 @@
                 <form string="发货信息设置" class="oe_form_configuration">
                     <sheet>
                         <group>
-                            <field name="order_id" invisible="1"/>
+                            <field name="order_id" invisible="True"/>
                             <field name="shipper_id"/>
                             <field name="tracking_number"/>
-                            <field name="status" invisible="1"/>
+                            <field name="status" invisible="True"/>
                             <p>发货信息在发货后可以修改，商户配送可以不设置快递信息。</p>
                         </group>
                     </sheet>
                     <footer>
-                        <button string="确定" name="apply" type="object" class="oe_highlight"/>
-                        <button string="放弃" class="oe_link" special="cancel" readonly="0"/>
+                        <button string="确定" name="apply" type="object" class="btn-primary"/>
+                        <button string="放弃" class="btn-secondary" special="cancel" readonly="False"/>
                     </footer>
                 </form>
             </field>

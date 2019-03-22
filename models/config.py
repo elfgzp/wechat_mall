@@ -2,8 +2,6 @@
 
 from odoo import models, fields, api
 
-from custom_model import CustomModel
-
 
 class ConfigSettingWizard(models.TransientModel):
     _name = 'wechat_mall.config.settings'
@@ -75,7 +73,7 @@ class ConfigSettingWizard(models.TransientModel):
             return False
 
 
-class ConfigSettings(CustomModel, models.Model):
+class ConfigSettings(models.Model):
     _name = 'wechat_mall.config'
     _description = u'基本设置'
 

@@ -7,7 +7,7 @@
             <field name="model">wechat_mall.address</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
-                <tree string="用户收货地址" create="0" delete="0">
+                <tree string="用户收货地址" create="false" delete="false">
                     <field name="id" string="编号"/>
                     <field name="wechat_user_id"/>
                     <field name="is_default"/>
@@ -29,7 +29,7 @@
             <field name="model">wechat_mall.address</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                <form string="用户收货地址" version="7.0" create="false" delete="0" edit="false" save="false" cancel="false" duplicate="0">
+                <form string="用户收货地址" version="7.0" create="false" delete="false" edit="false" save="false" cancel="false" duplicate="false">
                     <sheet>
                         <group>
                             <group colspan="2" string="所在地">
@@ -37,12 +37,12 @@
                                     <field name="province_id"
                                            options="{'no_open': True, 'no_create': True}"
                                            class="oe_inline"/>
-                                    <field name="city_domain_ids" invisible="1"/>
+                                    <field name="city_domain_ids" invisible="True"/>
                                     <field name="city_id"
                                            attrs="{'invisible': [('city_domain_ids', '=', [])]}"
                                            options="{'no_open': True, 'no_create': True}"
                                            class="oe_inline"/>
-                                    <field name="district_domain_ids" invisible="1"/>
+                                    <field name="district_domain_ids" invisible="True"/>
                                     <field name="district_id"
                                            attrs="{'invisible': [('district_domain_ids', '=', [])]}"
                                            options="{'no_open': True, 'no_create': True}"
@@ -70,9 +70,6 @@
             <field name="target">current</field>
             <field name="domain">[('create_uid', '=', uid)]</field>
         </record>
-
-        <menuitem action="wechat_mall_address_action_98" id="wechat_mall_address_menuitem_95" name="用户收货地址"
-                  parent="parent_menu_wechat_mall" sequence="8"/>
 
     </data>
 </openerp>

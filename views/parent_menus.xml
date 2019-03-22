@@ -5,5 +5,17 @@
         <menuitem id="parent_menu_wechat_mall" name="微信小程序商城管理" parent="" sequence="0" icon=""
                   groups="wechat_mall.group_wechat_mall_user"/>
 
+        <menuitem id="wechat_mall_menu_order" name="订单" parent="parent_menu_wechat_mall" sequence="3" icon=""
+                  groups="wechat_mall.group_wechat_mall_user"/>
+
+        <menuitem id="wechat_mall_menu_product" name="商品" parent="parent_menu_wechat_mall" sequence="6" icon=""
+                  groups="wechat_mall.group_wechat_mall_user"/>
+
+        <menuitem id="wechat_mall_menu_logistics" name="物流" parent="parent_menu_wechat_mall" sequence="9" icon=""
+                  groups="wechat_mall.group_wechat_mall_user"/>
+
+        <menuitem id="wechat_mall_menu_setting" name="设置" parent="parent_menu_wechat_mall" sequence="12" icon=""
+                  groups="wechat_mall.group_wechat_mall_user"/>
+
     </data>
 </odoo>

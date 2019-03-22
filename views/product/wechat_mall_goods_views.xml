@@ -16,11 +16,11 @@
                     <field name="recommend_status"/>
                     <field name="stores"/>
                     <field name="original_price" string="价格"/>
-                    <field name="min_price" invisible="1"/>
+                    <field name="min_price" invisible="True"/>
                     <field name="views"/>
-                    <field name="number_fav" invisible="1"/>
+                    <field name="number_fav" invisible="True"/>
                     <field name="number_order"/>
-                    <field name="number_good_reputation" invisible="1"/>
+                    <field name="number_good_reputation" invisible="True"/>
                 </tree>
             </field>
         </record>
@@ -38,7 +38,7 @@
                             <field name="status"/>
                             <field name="recommend_status"/>
                             <field name="logistics_id" domain="[('create_uid', '=', uid)]"/>
-                            <field name="logistics_valuation_type" invisible="1"/>
+                            <field name="logistics_valuation_type" invisible="True"/>
                             <field name="property_ids" domain="[('create_uid', '=', uid)]">
                                 <tree>
                                     <field name="name"/>
@@ -78,14 +78,14 @@
                             <field name="price_ids" attrs="{'invisible': [('price_ids', '=', [])]}">
                                 <tree editable="button" create="false" delete="false">
                                     <field name="name"/>
-                                    <field name="original_price" invisible="1"/>
+                                    <field name="original_price" invisible="True"/>
                                     <field name="price" string="价格"/>
                                     <field name="stores"/>
                                 </tree>
                                 <form>
                                     <group>
                                         <field name="name" string="规格名称"/>
-                                        <field name="original_price" string="原价" invisible="1"/>
+                                        <field name="original_price" string="原价" invisible="True"/>
                                         <field name="price" string="价格"/>
                                         <field name="stores" string="库存"/>
                                     </group>
@@ -93,7 +93,7 @@
                             </field>
                             <field name="original_price" string="价格"/>
                             <field name="stores"/>
-                            <field name="min_price" invisible="1"/>
+                            <field name="min_price" invisible="True"/>
                             <field name="weight"
                                    attrs="{'invisible': [('logistics_valuation_type', '!=', 'by_weight')]}"/>
                             <field name="display_pic" attrs="{'invisible': [('cover_pic', '=', False)]}"/>
@@ -105,7 +105,7 @@
                                     <field name="type"/>
                                     <field name="datas" filename="datas_fname"
                                            attrs="{'invisible':[('type','=','url')]}"/>
-                                    <field name="datas_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}"
+                                    <field name="datas_fname" invisible="True" attrs="{'invisible':[('type','=','url')]}"
                                            class="oe_inline oe_right"/>
                                     <field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
                                 </tree>
@@ -115,7 +115,7 @@
                                         <field name="type"/>
                                         <field name="datas" filename="datas_fname"
                                                attrs="{'invisible':[('type','=','url')]}"/>
-                                        <field name="datas_fname" invisible="1"
+                                        <field name="datas_fname" invisible="True"
                                                attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
                                         <field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
                                     </group>
@@ -124,8 +124,8 @@
                             <field name="characteristic"/>
                             <field name="content"/>
                             <field name="views" readonly="1"/>
-                            <field name="number_fav" readonly="1" invisible="1"/>
-                            <field name="number_good_reputation" readonly="1" invisible="1"/>
+                            <field name="number_fav" readonly="1" invisible="True"/>
+                            <field name="number_good_reputation" readonly="1" invisible="True"/>
                             <field name="number_order"/>
                             <field name="sort"/>
                         </group>
@@ -190,11 +190,6 @@
             <field name="target">current</field>
             <field name="domain">[('create_uid', '=', uid)]</field>
         </record>
-
-        <menuitem action="wechat_mall_goods_action_87" id="wechat_mall_goods_menuitem_75" name="商品"
-                  parent="parent_menu_wechat_mall" sequence="3" groups="wechat_mall.group_wechat_mall_user"/>
-        <menuitem action="wechat_mall_goods_property_action_1" id="wechat_mall_goods_property_menuitem_1" name="商品规格"
-                  parent="parent_menu_wechat_mall" sequence="4" groups="wechat_mall.group_wechat_mall_user"/>
 
     </data>
 </odoo>

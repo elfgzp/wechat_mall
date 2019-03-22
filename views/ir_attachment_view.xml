@@ -15,7 +15,7 @@
                         <group>
                             <field name="type"/>
                             <field name="datas" filename="datas_fname" attrs="{'invisible':[('type','=','url')]}"/>
-                            <field name="datas_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
+                            <field name="datas_fname" invisible="True" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
                             <field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
                         </group>
                     </group>

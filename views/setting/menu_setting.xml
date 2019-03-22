@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem action="wechat_mall_config_settings_action_85" id="wechat_mall_config_settings_menuitem_73"
+                  name="基本设置" parent="wechat_mall_menu_setting" sequence="-1"/>
+
+        <menuitem action="wechat_mall_banner_action_82" id="wechat_mall_banner_menuitem_70" name="横幅"
+                  parent="wechat_mall_menu_setting" sequence="0" groups="wechat_mall.group_wechat_mall_user"/>
+
+        <menuitem action="wechat_mall_user_action_96" id="wechat_mall_user_menuitem_93" name="微信用户"
+                  parent="wechat_mall_menu_setting" sequence="3"/>
+
+        <menuitem action="wechat_mall_address_action_98" id="wechat_mall_address_menuitem_95" name="用户收货地址"
+                  parent="wechat_mall_menu_setting" sequence="6"/>
+
+    </data>
+</odoo>

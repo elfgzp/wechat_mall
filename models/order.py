@@ -24,7 +24,7 @@ class Order(models.Model):
     goods_price = fields.Float('商品总金额', requried=True, default=0)
     logistics_price = fields.Float('物流费用', requried=True, default=0)
     total = fields.Float('实际支付', requried=True, default=0, track_visibility='onchange')
-    status = fields.Selection(defs.OrderStatus.attrs.items(), default=defs.OrderStatus.unpaid,
+    status = fields.Selection(list(defs.OrderStatus.attrs.items()), default=defs.OrderStatus.unpaid,
                               required=True, string='状态', track_visibility='onchange')
 
     remark = fields.Char('备注')

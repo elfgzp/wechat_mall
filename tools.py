@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from weixin.lib.wxcrypt import WXBizDataCrypt
-from weixin import WXAPPAPI
-from weixin.oauth2 import OAuth2AuthExchangeError
+from .weixin.lib.wxcrypt import WXBizDataCrypt
+from .weixin import WXAPPAPI
+from .weixin.oauth2 import OAuth2AuthExchangeError
 
 
 def convert_static_link(request, html):

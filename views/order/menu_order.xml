@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem action="wechat_mall_order_action_134" id="wechat_mall_order_menuitem_118" name="订单"
+              parent="wechat_mall_menu_order" sequence="0"/>
+    </data>
+</odoo>

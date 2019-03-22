@@ -10,9 +10,9 @@ class Transportation(models.Model):
     _description = u'运输费'
 
     logistics_id = fields.Many2one('wechat_mall.logistics', string='物流', required=True, ondelete='cascade')
-    transport_type = fields.Selection(defs.TransportType.attrs.items(), string='运输方式',
+    transport_type = fields.Selection(list(defs.TransportType.attrs.items()), string='运输方式',
                                       default='express', required=True)
-    unit = fields.Selection(defs.TransportationUnit.attrs.items(), string='单位', compute='_compute_unit')
+    unit = fields.Selection(list(defs.TransportationUnit.attrs.items()), string='单位', compute='_compute_unit')
     less_amount = fields.Integer('数量', required=True, default=0)
     less_price = fields.Float('数量内价格', required=True, default=0)
     increase_amount = fields.Integer('超过数量', required=True, default=0)
@@ -44,9 +44,9 @@ class DistrictTransportation(models.Model):
     default_transportation_id = fields.Many2one('wechat_mall.transportation', string='默认运输费'
                                                 , required=True, ondelete='cascade')
 
-    transport_type = fields.Selection(defs.TransportType.attrs.items(), string='运输方式',
+    transport_type = fields.Selection(list(defs.TransportType.attrs.items()), string='运输方式',
                                       compute='_compute_transport_type', store=True)
-    unit = fields.Selection(defs.TransportationUnit.attrs.items(), string='单位',
+    unit = fields.Selection(list(defs.TransportationUnit.attrs.items()), string='单位',
                             related='default_transportation_id.unit')
     area = fields.Char('地区', compute='_compute_area')
     province_id = fields.Many2one('wechat_mall.province', string='省', required=True)
